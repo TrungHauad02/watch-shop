@@ -2,7 +2,7 @@ import { Checkbox, Stack, Typography } from "@mui/material";
 
 interface WSCheckboxWithLabelProps {
   checked: boolean;
-  onChange: (e) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   label: string;
   name: string;
   textColor?: string;

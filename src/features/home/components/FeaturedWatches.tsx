@@ -2,8 +2,13 @@ import { Box, Grid, Paper, Typography } from "@mui/material";
 import { motion } from "framer-motion";
 import { useDarkMode } from "hooks/useDarkMode";
 import useColor from "theme/useColor";
+import { Watch } from "interfaces/Watch";
 
-const FeaturedWatches = ({ watches }) => {
+interface FeaturedWatchesProps {
+  watches: Watch[];
+}
+
+const FeaturedWatches: React.FC<FeaturedWatchesProps> = ({ watches }) => {
   const { isDarkMode } = useDarkMode();
   const color = useColor();
 

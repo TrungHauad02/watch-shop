@@ -2,7 +2,6 @@ import React from "react";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Box, Typography, Link, Stack } from "@mui/material";
-import { motion } from "framer-motion";
 import WSLoadingButton from "components/Button/WSLoadingButton";
 import useColor from "theme/useColor";
 import { useDarkMode } from "hooks/useDarkMode";
@@ -23,7 +22,7 @@ const LoginForm = () => {
     remember: false,
   });
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     try {
@@ -52,7 +51,7 @@ const LoginForm = () => {
 
   return (
     <Box
-      component={motion.div}
+      component="form"
       onSubmit={handleSubmit}
       sx={{
         width: "100%",
