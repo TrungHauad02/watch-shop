@@ -1,22 +1,18 @@
 import {
   AppBar,
   Toolbar,
-  Typography,
-  Button,
-  IconButton,
-  Badge,
-  Box,
   useScrollTrigger,
   Container,
+  Stack,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { Watch, ShoppingCart, User, Sun, Moon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { toggleTheme } from "../../redux/slices/themeSlice";
 import { useCartStore } from "utils/cartStore";
 import useColor from "theme/useColor";
 import { useDarkMode } from "hooks/useDarkMode";
+import React from "react";
+import { Actions, DrawerMenu, Logo, MenuItems } from "./common";
 
 const MENU_ITEMS = [
   { path: "/", label: "Trang chủ" },
@@ -26,10 +22,7 @@ const MENU_ITEMS = [
 
 const StyledAppBar = styled(AppBar)(({ theme }) => ({
   transition: "all 0.3s",
-  backgroundColor:
-    theme.palette.mode === "dark"
-      ? "rgba(18, 18, 18, 0.95)"
-      : "rgba(255, 255, 255, 0.95)",
+  backgroundColor: theme.palette.mode === "dark" ? "#03071295" : "#ffffff95",
   backdropFilter: "blur(8px)",
   boxShadow:
     theme.palette.mode === "dark"
@@ -42,12 +35,11 @@ export function Header() {
   const dispatch = useDispatch();
   const { isDarkMode } = useDarkMode();
   const colors = useColor();
-  const trigger = useScrollTrigger({
-    disableHysteresis: true,
-    threshold: 50,
-  });
-
+  const trigger = useScrollTrigger({ disableHysteresis: true, threshold: 50 });
   const totalItems = useCartStore((state) => state.getTotalItems());
+  const [drawerOpen, setDrawerOpen] = React.useState(false);
+
+  const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
 
   return (
     <StyledAppBar
@@ -57,114 +49,34 @@ export function Header() {
     >
       <Container maxWidth="lg">
         <Toolbar sx={{ justifyContent: "space-between" }}>
-          {/* Logo và Menu bên trái */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 3 }}>
-            <Box
-              sx={{
-                display: "flex",
-                alignItems: "center",
-                cursor: "pointer",
-              }}
-              onClick={() => navigate("/")}
-            >
-              <Watch
-                size={32}
-                color={isDarkMode ? colors.amber400 : colors.amber600}
-              />
-              <Typography
-                variant="h5"
-                sx={{
-                  ml: 1,
-                  fontFamily: "serif",
-                  fontWeight: "bold",
-                  letterSpacing: 1,
-                  fontSize: "1.5rem",
-                  color: isDarkMode ? colors.white : colors.black,
-                }}
-              >
-                Shop Đồng Hồ
-              </Typography>
-            </Box>
-
-            <Box sx={{ display: { xs: "none", md: "flex" }, gap: 2 }}>
-              {MENU_ITEMS.map((item) => (
-                <Button
-                  key={item.path}
-                  color="inherit"
-                  onClick={() => navigate(item.path)}
-                  sx={{
-                    fontSize: "1rem",
-                    color: isDarkMode ? colors.white : colors.black,
-                  }}
-                >
-                  {item.label}
-                </Button>
-              ))}
-            </Box>
-          </Box>
-
-          {/* Actions bên phải */}
-          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-            <IconButton
-              onClick={() => navigate("/cart")}
-              sx={{ position: "relative" }}
-            >
-              <Badge
-                badgeContent={totalItems}
-                color="warning"
-                sx={{
-                  "& .MuiBadge-badge": {
-                    backgroundColor: colors.amber500,
-                  },
-                }}
-              >
-                <ShoppingCart size={20} />
-              </Badge>
-            </IconButton>
-
-            <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
-              <Button
-                color="inherit"
-                onClick={() => navigate("/login")}
-                sx={{ color: isDarkMode ? colors.white : colors.black }}
-              >
-                Đăng nhập
-              </Button>
-              <Button
-                variant="contained"
-                sx={{
-                  color: isDarkMode ? colors.black : colors.white,
-                  bgcolor: colors.amber500,
-                  "&:hover": { bgcolor: colors.amber600 },
-                }}
-                onClick={() => navigate("/register")}
-              >
-                Đăng ký
-              </Button>
-            </Box>
-
-            <IconButton
-              sx={{ display: { xs: "flex", md: "none" } }}
-              onClick={() => navigate("/login")}
-            >
-              <User size={20} />
-            </IconButton>
-
-            <IconButton
-              onClick={() => dispatch(toggleTheme())}
-              sx={{
-                bgcolor: isDarkMode ? "grey.800" : "grey.100",
-                color: isDarkMode ? colors.amber400 : colors.amber600,
-                "&:hover": {
-                  bgcolor: isDarkMode ? "grey.700" : "grey.200",
-                },
-              }}
-            >
-              {isDarkMode ? <Sun size={20} /> : <Moon size={20} />}
-            </IconButton>
-          </Box>
+          <Stack direction={"row"} spacing={2}>
+            <Logo isDarkMode={isDarkMode} colors={colors} navigate={navigate} />
+            <MenuItems
+              items={MENU_ITEMS}
+              isDarkMode={isDarkMode}
+              colors={colors}
+              navigate={navigate}
+            />
+          </Stack>
+          <Actions
+            isDarkMode={isDarkMode}
+            colors={colors}
+            totalItems={totalItems}
+            navigate={navigate}
+            dispatch={dispatch}
+            handleDrawerToggle={handleDrawerToggle}
+          />
         </Toolbar>
       </Container>
+      <DrawerMenu
+        drawerOpen={drawerOpen}
+        handleDrawerToggle={handleDrawerToggle}
+        isDarkMode={isDarkMode}
+        colors={colors}
+        MENU_ITEMS={MENU_ITEMS}
+        navigate={navigate}
+        dispatch={dispatch}
+      />
     </StyledAppBar>
   );
 }

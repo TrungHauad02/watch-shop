@@ -14,7 +14,7 @@ const AuthLayout = () => {
         alignItems: "center",
         justifyContent: "center",
         bgcolor: (theme) =>
-          theme.palette.mode === "dark" ? "grey.900" : "grey.100",
+          theme.palette.mode === "dark" ? color.gray900 : "grey.100",
         px: { xs: 2, sm: 4 },
       }}
     >
