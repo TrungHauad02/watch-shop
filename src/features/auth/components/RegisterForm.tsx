@@ -1,3 +1,3 @@
 export default function RegisterForm() {
-  return <></>;
+  return <div>Register form</div>;
 }
