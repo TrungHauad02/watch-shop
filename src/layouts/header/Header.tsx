@@ -31,12 +31,16 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
       ? "rgba(18, 18, 18, 0.95)"
       : "rgba(255, 255, 255, 0.95)",
   backdropFilter: "blur(8px)",
+  boxShadow:
+    theme.palette.mode === "dark"
+      ? "0px 2px 1px #ffffff10"
+      : "0px 2px 1px #00000020",
 }));
 
 export function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isDarkMode = useDarkMode();
+  const { isDarkMode } = useDarkMode();
   const colors = useColor();
   const trigger = useScrollTrigger({
     disableHysteresis: true,
@@ -75,6 +79,7 @@ export function Header() {
                   fontWeight: "bold",
                   letterSpacing: 1,
                   fontSize: "1.5rem",
+                  color: isDarkMode ? colors.white : colors.black,
                 }}
               >
                 Shop Đồng Hồ
@@ -87,7 +92,10 @@ export function Header() {
                   key={item.path}
                   color="inherit"
                   onClick={() => navigate(item.path)}
-                  sx={{ fontSize: "1rem" }}
+                  sx={{
+                    fontSize: "1rem",
+                    color: isDarkMode ? colors.white : colors.black,
+                  }}
                 >
                   {item.label}
                 </Button>
@@ -115,12 +123,17 @@ export function Header() {
             </IconButton>
 
             <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
-              <Button color="inherit" onClick={() => navigate("/login")}>
+              <Button
+                color="inherit"
+                onClick={() => navigate("/login")}
+                sx={{ color: isDarkMode ? colors.white : colors.black }}
+              >
                 Đăng nhập
               </Button>
               <Button
                 variant="contained"
                 sx={{
+                  color: isDarkMode ? colors.black : colors.white,
                   bgcolor: colors.amber500,
                   "&:hover": { bgcolor: colors.amber600 },
                 }}
