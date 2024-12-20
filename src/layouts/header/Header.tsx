@@ -4,6 +4,7 @@ import {
   useScrollTrigger,
   Container,
   Stack,
+  AppBarProps,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
@@ -11,7 +12,7 @@ import { useDispatch } from "react-redux";
 import { useCartStore } from "utils/cartStore";
 import useColor from "theme/useColor";
 import { useDarkMode } from "hooks/useDarkMode";
-import React, { useState } from "react";
+import { useState } from "react";
 import { Actions, DrawerMenu, Logo, MenuItems } from "./common";
 
 const MENU_ITEMS = [
@@ -20,7 +21,7 @@ const MENU_ITEMS = [
   { path: "/about", label: "Giới thiệu" },
 ];
 
-const StyledAppBar = styled(AppBar)(({ theme }) => ({
+const StyledAppBar = styled(AppBar)<AppBarProps>(({ theme }) => ({
   transition: "all 0.3s",
   backgroundColor: theme.palette.mode === "dark" ? "#03071295" : "#ffffff95",
   backdropFilter: "blur(8px)",
