@@ -9,7 +9,7 @@ const LoginPage = () => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        p: 4,
+        padding: { xs: "2rem 0rem", sm: 4 },
         width: "100%",
         maxWidth: "400px",
       }}

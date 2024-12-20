@@ -12,11 +12,11 @@ import {
 import { styled } from "@mui/material/styles";
 import { Watch, ShoppingCart, User, Sun, Moon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { toggleTheme } from "../../redux/slices/themeSlice";
-import { RootState } from "../../redux/types";
 import { useCartStore } from "utils/cartStore";
 import useColor from "theme/useColor";
+import { useDarkMode } from "hooks/useDarkMode";
 
 const MENU_ITEMS = [
   { path: "/", label: "Trang chủ" },
@@ -36,7 +36,7 @@ const StyledAppBar = styled(AppBar)(({ theme }) => ({
 export function Header() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const isDarkMode = useSelector((state: RootState) => state.theme.isDarkMode);
+  const isDarkMode = useDarkMode();
   const colors = useColor();
   const trigger = useScrollTrigger({
     disableHysteresis: true,
