@@ -22,8 +22,7 @@ const LoginForm = () => {
     remember: false,
   });
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const handleSubmit = async () => {
     setLoading(true);
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
@@ -51,8 +50,6 @@ const LoginForm = () => {
 
   return (
     <Box
-      component="form"
-      onSubmit={handleSubmit}
       sx={{
         width: "100%",
         maxWidth: { xs: "300px", sm: "450px" },
@@ -71,7 +68,7 @@ const LoginForm = () => {
         Chào mừng trở lại
       </Typography>
 
-      <Box component="form" onSubmit={handleSubmit}>
+      <Box>
         <Stack spacing={2}>
           <WSTextField
             label="Email"
@@ -125,6 +122,7 @@ const LoginForm = () => {
             textTransform: "capitalize",
             fontSize: "0.95rem",
           }}
+          onClick={handleSubmit}
         >
           Đăng nhập
         </WSLoadingButton>
