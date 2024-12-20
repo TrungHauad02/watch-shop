@@ -1,6 +1,5 @@
 import { Box } from "@mui/material";
 import LoginForm from "../components/LoginForm";
-import { Header } from "layouts/header/Header";
 
 const LoginPage = () => {
   return (
@@ -14,7 +13,6 @@ const LoginPage = () => {
         maxWidth: "400px",
       }}
     >
-      <Header />
       <LoginForm />
     </Box>
   );

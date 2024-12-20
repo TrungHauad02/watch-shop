@@ -2,6 +2,8 @@ import { Box, Container } from "@mui/material";
 import { useDarkMode } from "hooks/useDarkMode";
 import { Outlet } from "react-router-dom";
 import useColor from "theme/useColor";
+import { Footer } from "./footer/Footer";
+import { Header } from "./header/Header";
 
 const AuthLayout = () => {
   const { isDarkMode } = useDarkMode();
@@ -11,6 +13,7 @@ const AuthLayout = () => {
       sx={{
         minHeight: "100vh",
         display: "flex",
+        flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
         bgcolor: (theme) =>
@@ -18,12 +21,14 @@ const AuthLayout = () => {
         px: { xs: 2, sm: 4 },
       }}
     >
+      <Header />
       <Container
         maxWidth="sm"
         sx={{
           display: "flex",
           justifyContent: "center",
           py: { xs: 2, sm: 4 },
+          mt: { xs: 6, sm: 8 },
         }}
       >
         <Box
@@ -41,6 +46,7 @@ const AuthLayout = () => {
           <Outlet />
         </Box>
       </Container>
+      <Footer />
     </Box>
   );
 };

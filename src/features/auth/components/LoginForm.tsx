@@ -6,11 +6,14 @@ import WSLoadingButton from "components/Button/WSLoadingButton";
 import useColor from "theme/useColor";
 import { useDarkMode } from "hooks/useDarkMode";
 import { WSCheckboxWithLabel, WSTextField } from "components/Input";
+import { useDispatch } from "react-redux";
+import { login } from "../../../redux/slices/authSlice";
 
 const LoginForm = () => {
   const color = useColor();
   const { isDarkMode } = useDarkMode();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
@@ -24,6 +27,14 @@ const LoginForm = () => {
     setLoading(true);
     try {
       await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      dispatch(
+        login({
+          id: "generated-id",
+          name: formData.email.split("@")[0],
+          email: formData.email,
+        })
+      );
       navigate("/");
     } finally {
       setLoading(false);

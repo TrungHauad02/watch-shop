@@ -31,6 +31,7 @@ export default function useColor() {
 
     black: "#000000",
     white: "#ffffff",
+    transparent: "#00000000",
 
     // Màu vàng
     yellow50: "#fefce8",
