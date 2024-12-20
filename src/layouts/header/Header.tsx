@@ -11,7 +11,7 @@ import { useDispatch } from "react-redux";
 import { useCartStore } from "utils/cartStore";
 import useColor from "theme/useColor";
 import { useDarkMode } from "hooks/useDarkMode";
-import React from "react";
+import React, { useState } from "react";
 import { Actions, DrawerMenu, Logo, MenuItems } from "./common";
 
 const MENU_ITEMS = [
@@ -37,7 +37,7 @@ export function Header() {
   const colors = useColor();
   const trigger = useScrollTrigger({ disableHysteresis: true, threshold: 50 });
   const totalItems = useCartStore((state) => state.getTotalItems());
-  const [drawerOpen, setDrawerOpen] = React.useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
 
