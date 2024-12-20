@@ -8,6 +8,7 @@ interface WSLoadingButtonProps {
   bgcolor?: string;
   hoverBgcolor?: string;
   color?: string;
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
 const WSLoadingButton = ({
@@ -18,6 +19,7 @@ const WSLoadingButton = ({
   bgcolor,
   hoverBgcolor,
   color,
+  onClick,
 }: WSLoadingButtonProps) => {
   const complexSx = {
     mt: 3,
@@ -36,6 +38,7 @@ const WSLoadingButton = ({
       variant={variant}
       loading={loading}
       sx={complexSx}
+      onClick={onClick}
     >
       {children}
     </LoadingButton>
