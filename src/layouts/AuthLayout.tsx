@@ -1,7 +1,11 @@
 import { Box, Container } from "@mui/material";
+import { useDarkMode } from "hooks/useDarkMode";
 import { Outlet } from "react-router-dom";
+import useColor from "theme/useColor";
 
 const AuthLayout = () => {
+  const { isDarkMode } = useDarkMode();
+  const color = useColor();
   return (
     <Box
       sx={{
@@ -10,7 +14,8 @@ const AuthLayout = () => {
         alignItems: "center",
         justifyContent: "center",
         bgcolor: (theme) =>
-          theme.palette.mode === "dark" ? "grey.900" : "grey.100",
+          theme.palette.mode === "dark" ? color.gray900 : "grey.100",
+        px: { xs: 2, sm: 4 },
       }}
     >
       <Container
@@ -18,15 +23,15 @@ const AuthLayout = () => {
         sx={{
           display: "flex",
           justifyContent: "center",
-          py: 4,
+          py: { xs: 2, sm: 4 },
         }}
       >
         <Box
           sx={{
             width: "100%",
-            bgcolor: "background.paper",
-            borderRadius: 2,
-            p: 4,
+            bgcolor: isDarkMode ? color.gray800 : color.gray50,
+            borderRadius: { xs: 1, sm: 2 },
+            p: { xs: 1, sm: 4 },
             boxShadow: (theme) =>
               theme.palette.mode === "dark"
                 ? "0 0 10px rgba(0,0,0,0.5)"
