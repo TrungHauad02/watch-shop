@@ -5,6 +5,7 @@
     "paths": {
       "*": ["*"]
     },
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true
   }
 }
