@@ -13,21 +13,21 @@ export default function HomePage() {
     {
       id: 1,
       name: "Royal Oak Chronograph",
-      price: "14,000,000 vnđ",
+      price: "14000000",
       image:
         "https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?auto=format&fit=crop&w=800&q=80",
     },
     {
       id: 2,
       name: "Nautilus Blue Dial",
-      price: "25,600,000 vnđ",
+      price: "25600000",
       image:
         "https://images.unsplash.com/photo-1594534475808-b18fc33b045e?auto=format&fit=crop&w=800&q=80",
     },
     {
       id: 3,
       name: "Daytona Platinum",
-      price: "42,000,000 vnđ",
+      price: "42000000",
       image:
         "https://images.unsplash.com/photo-1622434641406-a158123450f9?auto=format&fit=crop&w=800&q=80",
     },

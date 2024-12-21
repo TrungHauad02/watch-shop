@@ -3,6 +3,7 @@ import { motion } from "framer-motion";
 import { useDarkMode } from "hooks/useDarkMode";
 import useColor from "theme/useColor";
 import { Watch } from "interfaces/Watch";
+import { formatMoney } from "utils/format";
 
 interface FeaturedWatchesProps {
   watches: Watch[];
@@ -78,7 +79,7 @@ const FeaturedWatches: React.FC<FeaturedWatchesProps> = ({ watches }) => {
                       color: isDarkMode ? color.gray300 : color.gray700,
                     }}
                   >
-                    {watch.price}
+                    {formatMoney(watch.price)}
                   </Typography>
                 </Box>
               </Paper>
