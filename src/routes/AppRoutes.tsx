@@ -22,6 +22,14 @@ const AppRoutes = () => {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/products"
+          element={
+            <ProtectedRoute>
+              <Pages.ProductPage />
+            </ProtectedRoute>
+          }
+        />
       </Route>
     </Routes>
   );
