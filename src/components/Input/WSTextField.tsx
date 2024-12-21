@@ -18,6 +18,7 @@ interface WSTextFieldProps {
   setShowPassword?: (show: boolean) => void;
   name?: string;
   sx?: any;
+  required?: boolean;
 }
 
 const WSTextField = ({
@@ -29,6 +30,7 @@ const WSTextField = ({
   setShowPassword,
   name,
   sx,
+  required,
 }: WSTextFieldProps) => {
   const color = useColor();
   const { isDarkMode } = useDarkMode();
@@ -58,7 +60,7 @@ const WSTextField = ({
       </Typography>
       <TextField
         margin="normal"
-        required
+        required={required}
         fullWidth
         type={type}
         value={value}

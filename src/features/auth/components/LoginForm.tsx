@@ -1,52 +1,14 @@
-import React from "react";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import { Box, Typography, Link, Stack } from "@mui/material";
 import WSLoadingButton from "components/Button/WSLoadingButton";
 import useColor from "theme/useColor";
 import { useDarkMode } from "hooks/useDarkMode";
 import { WSCheckboxWithLabel, WSTextField } from "components/Input";
-import { useDispatch } from "react-redux";
-import { login } from "../../../redux/slices/authSlice";
+import useLoginForm from "../hooks/useLoginForm";
 
 const LoginForm = () => {
   const color = useColor();
   const { isDarkMode } = useDarkMode();
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
-  const [loading, setLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-    remember: false,
-  });
-
-  const handleSubmit = async () => {
-    setLoading(true);
-    try {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      dispatch(
-        login({
-          id: "generated-id",
-          name: formData.email.split("@")[0],
-          email: formData.email,
-        })
-      );
-      navigate("/");
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value, type, checked } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: type === "checkbox" ? checked : value,
-    }));
-  };
+  const loginForm = useLoginForm();
 
   return (
     <Box
@@ -73,18 +35,20 @@ const LoginForm = () => {
           <WSTextField
             label="Email"
             type="email"
-            value={formData.email}
-            onChange={handleChange}
+            value={loginForm.formData.email}
+            onChange={loginForm.handleChange}
             name="email"
+            required
           />
           <WSTextField
             label="Mật khẩu"
-            type={showPassword ? "text" : "password"}
-            value={formData.password}
-            onChange={handleChange}
+            type={loginForm.showPassword ? "text" : "password"}
+            value={loginForm.formData.password}
+            onChange={loginForm.handleChange}
             name="password"
-            showPassword={showPassword}
-            setShowPassword={setShowPassword}
+            showPassword={loginForm.showPassword}
+            setShowPassword={loginForm.setShowPassword}
+            required
           />
           <Stack
             direction={"row"}
@@ -92,8 +56,8 @@ const LoginForm = () => {
             alignItems={"center"}
           >
             <WSCheckboxWithLabel
-              checked={formData.remember}
-              onChange={handleChange}
+              checked={loginForm.formData.remember}
+              onChange={loginForm.handleChange}
               label="Ghi nhớ đăng nhập"
               name="remember"
               textColor={isDarkMode ? color.white : color.black}
@@ -101,7 +65,7 @@ const LoginForm = () => {
               checkedColor={color.amber600}
             />
             <Link
-              href="#"
+              onClick={loginForm.handleForgetPass}
               variant="body2"
               fontWeight="600"
               sx={{
@@ -115,14 +79,14 @@ const LoginForm = () => {
         </Stack>
         <WSLoadingButton
           color={isDarkMode ? color.white : color.black}
-          loading={loading}
+          loading={loginForm.loading}
           bgcolor={color.amber500}
           hoverBgcolor={color.amber600}
           sx={{
             textTransform: "capitalize",
             fontSize: "0.95rem",
           }}
-          onClick={handleSubmit}
+          onClick={loginForm.handleSubmit}
         >
           Đăng nhập
         </WSLoadingButton>
@@ -148,7 +112,7 @@ const LoginForm = () => {
           <Link
             component="button"
             variant="body2"
-            onClick={() => navigate("/register")}
+            onClick={loginForm.handleRegister}
             fontWeight="600"
             sx={{
               color: isDarkMode ? color.amber600 : color.amber500,
