@@ -1,14 +1,10 @@
 import { Box, Container } from "@mui/material";
-import { useDarkMode } from "hooks/useDarkMode";
 import HeroSection from "../components/HeroSection";
 import FeaturesSection from "../components/FeaturesSection";
 import FeaturedWatches from "../components/FeaturedWatches";
 import AboutSection from "../components/AboutSection";
-import useColor from "theme/useColor";
 
 export default function HomePage() {
-  const { isDarkMode } = useDarkMode();
-  const color = useColor();
   const featuredWatches = [
     {
       id: 1,
@@ -36,7 +32,6 @@ export default function HomePage() {
   return (
     <Box
       sx={{
-        bgcolor: isDarkMode ? color.gray900 : color.gray100,
         mb: { xs: 2, sm: 4 },
       }}
     >

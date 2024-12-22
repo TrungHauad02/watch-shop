@@ -5,15 +5,17 @@ export interface Product {
   type: string;
   brand: string;
   description: string;
-  specifications: {
-    movement: string;
-    caseSize: string;
-    caseMaterial: string;
-    waterResistance: string;
-    crystal: string;
-    powerReserve: string;
-  };
+  specifications: Specification;
   images: string[];
+}
+
+export interface Specification {
+  movement: string;
+  caseSize: string;
+  caseMaterial: string;
+  waterResistance: string;
+  crystal: string;
+  powerReserve: string;
 }
 
 export interface SortOption {

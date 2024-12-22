@@ -6,6 +6,8 @@ import { ThemeProvider } from "@mui/material";
 import theme from "./theme";
 import "react-toastify/dist/ReactToastify.css";
 import { BrowserRouter } from "react-router-dom";
+import "swiper/css";
+import "swiper/css/pagination";
 
 function App() {
   const isDarkMode = useSelector((state: RootState) => state.theme.isDarkMode);
