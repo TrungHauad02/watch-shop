@@ -27,6 +27,19 @@ const QuickView = ({ open, onClose, product }: QuickViewProps) => {
                 height={300}
                 style={{ objectFit: "cover" }}
               />
+              <Typography
+                sx={{
+                  px: 2,
+                  position: "absolute",
+                  right: 0,
+                  top: 0,
+                  color: color.white,
+                  bgcolor: color.slate800 + "99",
+                  borderRadius: "0 0 0 8px",
+                }}
+              >
+                {index + 1}/{product.images.length}
+              </Typography>
             </SwiperSlide>
           ))}
         </Swiper>

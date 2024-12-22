@@ -1,34 +1,16 @@
-import { IconButton, Box, Badge, Button } from "@mui/material";
-import { ShoppingCart, Sun, Moon, Menu } from "lucide-react";
+import { IconButton, Box, Button } from "@mui/material";
+import { Sun, Moon, Menu } from "lucide-react";
 import { toggleTheme } from "../../../redux/slices/themeSlice";
 
 export default function Actions({
   isDarkMode,
   colors,
-  totalItems,
   navigate,
   dispatch,
   handleDrawerToggle,
 }: any) {
   return (
     <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-      <IconButton
-        onClick={() => navigate("/cart")}
-        sx={{ position: "relative" }}
-      >
-        <Badge
-          badgeContent={totalItems}
-          color="warning"
-          sx={{
-            "& .MuiBadge-badge": {
-              backgroundColor: colors.amber500,
-            },
-          }}
-        >
-          <ShoppingCart size={20} />
-        </Badge>
-      </IconButton>
-
       <Box sx={{ display: { xs: "none", md: "flex" }, gap: 1 }}>
         <Button
           color="inherit"
