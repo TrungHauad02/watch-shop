@@ -115,6 +115,10 @@ const getAllProduct = ({
     });
 };
 
+const getProductById = (id: string) => {
+  return mockProducts.find((p) => p.id === id) || null;
+};
+
 const getAllBrands = () => {
   return [...new Set(mockProducts.map((p) => p.brand))];
 };
@@ -132,4 +136,5 @@ export const productService = {
   getAllBrands,
   getAllTypes,
   getMaxPrice,
+  getProductById,
 };

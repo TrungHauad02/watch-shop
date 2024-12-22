@@ -33,7 +33,6 @@ const ProductCard = ({ product }: ProductCardProps) => {
   return (
     <>
       <Box
-        onClick={onViewDetail}
         sx={{
           borderRadius: 2,
           boxShadow: 3,
@@ -56,7 +55,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           height={200}
           style={{ objectFit: "cover" }}
         />
-        <Box sx={{ p: 2 }}>
+        <Box sx={{ p: 2 }} onClick={onViewDetail}>
           <Typography variant="h6" noWrap>
             {product.name}
           </Typography>
