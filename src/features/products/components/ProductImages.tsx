@@ -14,7 +14,7 @@ export default function ProductImages({ images }: { images: string[] }) {
     dots: false,
     infinite: false,
     speed: 400,
-    slidesToShow: 4,
+    slidesToShow: 3,
     slidesToScroll: 1,
     prevArrow: <PrevArrow />,
     nextArrow: <NextArrow />,
@@ -22,7 +22,7 @@ export default function ProductImages({ images }: { images: string[] }) {
       {
         breakpoint: 1024,
         settings: {
-          slidesToShow: 4,
+          slidesToShow: 3,
         },
       },
       {
