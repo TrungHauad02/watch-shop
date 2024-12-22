@@ -9,7 +9,6 @@ import {
 import { styled } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { useCartStore } from "utils/cartStore";
 import useColor from "theme/useColor";
 import { useDarkMode } from "hooks/useDarkMode";
 import { useState } from "react";
@@ -37,7 +36,6 @@ export function Header() {
   const { isDarkMode } = useDarkMode();
   const colors = useColor();
   const trigger = useScrollTrigger({ disableHysteresis: true, threshold: 50 });
-  const totalItems = useCartStore((state) => state.getTotalItems());
   const [drawerOpen, setDrawerOpen] = useState(false);
 
   const handleDrawerToggle = () => setDrawerOpen(!drawerOpen);
@@ -62,7 +60,6 @@ export function Header() {
           <Actions
             isDarkMode={isDarkMode}
             colors={colors}
-            totalItems={totalItems}
             navigate={navigate}
             dispatch={dispatch}
             handleDrawerToggle={handleDrawerToggle}
