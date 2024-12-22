@@ -4,16 +4,27 @@ import { Box, Stack } from "@mui/material";
 import { useDarkMode } from "hooks/useDarkMode";
 import useColor from "theme/useColor";
 import FilterSection from "../components/FilterSection";
-import ProductBreadcrumb from "../components/ProductBreadcrumb";
 import SearchSortSection from "../components/SearchSortSection";
 import ProductGrid from "../components/ProductGrid";
 import { productService } from "../service/ProductService";
+import WSBreadcrumb from "components/Breadcrumb/WSBreadcrumb";
 
 const sortOptions: SortOption[] = [
   { label: "Giá: Thấp đến Cao", value: "price-asc" },
   { label: "Giá: Cao đến Thấp", value: "price-desc" },
   { label: "Tên: A đến Z", value: "name-asc" },
   { label: "Tên: Z đến A", value: "name-desc" },
+];
+
+const itemBreadcrumb = [
+  {
+    path: "/",
+    label: "Trang chủ",
+  },
+  {
+    path: "/products",
+    label: "Sản phẩm",
+  },
 ];
 
 export default function ProductPage() {
@@ -55,7 +66,7 @@ export default function ProductPage() {
       >
         {/* Breadcrumb */}
         <Box sx={{ mb: 2 }}>
-          <ProductBreadcrumb />
+          <WSBreadcrumb items={itemBreadcrumb} />
         </Box>
 
         <Stack direction={"row"} justifyContent={"space-between"}>
