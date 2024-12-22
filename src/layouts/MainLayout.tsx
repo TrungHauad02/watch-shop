@@ -15,7 +15,7 @@ const MainLayout = () => {
         alignItems: "center",
         justifyContent: "center",
         bgcolor: (theme) =>
-          theme.palette.mode === "dark" ? color.gray900 : "grey.100",
+          theme.palette.mode === "dark" ? color.gray900 : color.gray200,
         px: { xs: 2, sm: 4 },
       }}
     >

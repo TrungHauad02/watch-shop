@@ -3,8 +3,6 @@ import { formatMoney } from "utils/format";
 import { Product } from "../utils/types";
 import useColor from "theme/useColor";
 import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
-import "swiper/css/pagination";
 import { useNavigate } from "react-router-dom";
 
 interface QuickViewProps {

@@ -18,7 +18,7 @@ export function Footer() {
       sx={{
         mt: "auto",
         borderTop: 1,
-        borderColor: isDarkMode ? color.gray100 : color.gray200,
+        borderColor: isDarkMode ? color.gray300 : color.gray400,
         backgroundColor: color.transparent,
         color: isDarkMode ? color.gray400 : color.gray600,
       }}

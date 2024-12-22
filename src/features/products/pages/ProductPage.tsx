@@ -55,7 +55,6 @@ export default function ProductPage() {
     <Box
       sx={{
         minHeight: "100vh",
-        backgroundColor: isDarkMode ? color.gray900 : color.gray100,
         color: isDarkMode ? color.white : color.black,
         mt: 7,
         width: "100%",
