@@ -6,6 +6,7 @@ import { useState } from "react";
 import { Product } from "../utils/types";
 import { formatMoney } from "utils/format";
 import QuickView from "./QuizView";
+import { useNavigate } from "react-router-dom";
 
 interface ProductCardProps {
   product: Product;
@@ -14,6 +15,7 @@ interface ProductCardProps {
 const ProductCard = ({ product }: ProductCardProps) => {
   const { isDarkMode } = useDarkMode();
   const color = useColor();
+  const navigate = useNavigate();
   const [showQuickView, setShowQuickView] = useState(false);
 
   const onQuickView = () => {
@@ -22,6 +24,10 @@ const ProductCard = ({ product }: ProductCardProps) => {
 
   const closeQuickView = () => {
     setShowQuickView(false);
+  };
+
+  const onViewDetail = () => {
+    navigate(`/products/${product.id}`);
   };
 
   return (
@@ -49,7 +55,7 @@ const ProductCard = ({ product }: ProductCardProps) => {
           height={200}
           style={{ objectFit: "cover" }}
         />
-        <Box sx={{ p: 2 }}>
+        <Box sx={{ p: 2 }} onClick={onViewDetail}>
           <Typography variant="h6" noWrap>
             {product.name}
           </Typography>

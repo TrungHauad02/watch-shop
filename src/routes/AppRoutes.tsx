@@ -1,5 +1,4 @@
 import { Routes, Route } from "react-router-dom";
-import ProtectedRoute from "./ProtectedRoute";
 import * as Layouts from "layouts";
 import * as Pages from "pages";
 
@@ -14,23 +13,11 @@ const AppRoutes = () => {
 
       {/* Protected routes */}
       <Route element={<Layouts.MainLayout />}>
-        <Route
-          path="/"
-          element={
-            <ProtectedRoute>
-              <Pages.HomePage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
-          path="/products"
-          element={
-            <ProtectedRoute>
-              <Pages.ProductPage />
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/" element={<Pages.HomePage />} />
+        <Route path="/products" element={<Pages.ProductPage />} />
+        <Route path="/products/:id" element={<Pages.ProductDetailPage />} />
       </Route>
+      <Route path="*" element={<Pages.ErrorPage />} />
     </Routes>
   );
 };

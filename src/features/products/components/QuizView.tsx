@@ -5,6 +5,7 @@ import useColor from "theme/useColor";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/pagination";
+import { useNavigate } from "react-router-dom";
 
 interface QuickViewProps {
   open: boolean;
@@ -14,6 +15,11 @@ interface QuickViewProps {
 
 const QuickView = ({ open, onClose, product }: QuickViewProps) => {
   const color = useColor();
+  const navigate = useNavigate();
+  const onViewDetail = () => {
+    navigate(`/products/${product.id}`);
+  };
+
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
       <Box sx={{ p: 3 }}>
@@ -91,20 +97,36 @@ const QuickView = ({ open, onClose, product }: QuickViewProps) => {
             </Typography>
           </Stack>
         </Box>
-        <Button
-          variant="contained"
-          fullWidth
-          onClick={onClose}
-          sx={{
-            mt: 3,
-            color: color.slate900,
-            bgcolor: color.slate200,
-            fontSize: "1.02rem",
-            fontWeight: "bold",
-          }}
-        >
-          Đóng
-        </Button>
+        <Stack direction={"row"} spacing={2} sx={{ mt: 2 }}>
+          <Button
+            variant="contained"
+            fullWidth
+            onClick={onClose}
+            sx={{
+              mt: 3,
+              color: color.slate900,
+              bgcolor: color.slate200,
+              fontSize: "1.02rem",
+              fontWeight: "bold",
+            }}
+          >
+            Đóng
+          </Button>
+          <Button
+            variant="contained"
+            fullWidth
+            onClick={onViewDetail}
+            sx={{
+              mt: 3,
+              color: color.slate800,
+              bgcolor: color.amber400,
+              fontSize: "1.02rem",
+              fontWeight: "bold",
+            }}
+          >
+            Xem chi tiết
+          </Button>
+        </Stack>
       </Box>
     </Dialog>
   );
