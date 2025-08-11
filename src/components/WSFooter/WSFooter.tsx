@@ -1,44 +1,34 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { BRAND_COLORS } from '@/styles/colors';
 import {
   Box,
   Container,
-  Typography,
-  Link,
-  IconButton,
-  Divider,
-  Stack,
-  useTheme,
   Grid,
+  IconButton,
+  Link,
+  Stack,
+  SxProps,
+  Theme,
+  Typography,
+  Divider,
+  alpha,
 } from '@mui/material';
 import {
-  Facebook,
-  Instagram,
-  Twitter,
-  YouTube,
   Email,
   Phone,
   LocationOn,
   Schedule,
+  Facebook,
+  Instagram,
+  YouTube,
+  Twitter,
 } from '@mui/icons-material';
-import { BRAND_COLORS } from '../../styles/colors';
-import { SxProps, Theme } from '@mui/material/styles';
+import { useNavigate } from 'react-router-dom';
 
-// ==============================================
-// TYPES
-// ==============================================
-
-export interface WSFooterProps {
-  /** Additional styles */
+interface WSFooterProps {
   sx?: SxProps<Theme>;
 }
 
-// ==============================================
-// COMPONENT
-// ==============================================
-
-const WSFooter: React.FC<WSFooterProps> = ({ sx = {} }) => {
-  const theme = useTheme();
+export default function WSFooter({ sx }: WSFooterProps) {
   const navigate = useNavigate();
 
   // ==============================================
@@ -62,35 +52,10 @@ const WSFooter: React.FC<WSFooterProps> = ({ sx = {} }) => {
     ],
     company: [
       { label: 'Về chúng tôi', path: '/about' },
-      { label: 'Tuyển dụng', path: '/careers' },
-      { label: 'Tin tức', path: '/news' },
       { label: 'Liên hệ', path: '/contact' },
       { label: 'Chính sách bảo mật', path: '/policy/privacy' },
     ],
   };
-
-  const socialLinks = [
-    {
-      icon: <Facebook />,
-      url: 'https://facebook.com/watchstore',
-      label: 'Facebook',
-    },
-    {
-      icon: <Instagram />,
-      url: 'https://instagram.com/watchstore',
-      label: 'Instagram',
-    },
-    {
-      icon: <Twitter />,
-      url: 'https://twitter.com/watchstore',
-      label: 'Twitter',
-    },
-    {
-      icon: <YouTube />,
-      url: 'https://youtube.com/watchstore',
-      label: 'YouTube',
-    },
-  ];
 
   const contactInfo = [
     {
@@ -112,6 +77,29 @@ const WSFooter: React.FC<WSFooterProps> = ({ sx = {} }) => {
       icon: <Schedule />,
       title: 'Giờ làm việc',
       content: '8:00 - 22:00 (T2-CN)',
+    },
+  ];
+
+  const socialLinks = [
+    {
+      icon: <Facebook />,
+      name: 'Facebook',
+      url: 'https://facebook.com/watchstore',
+    },
+    {
+      icon: <Instagram />,
+      name: 'Instagram',
+      url: 'https://instagram.com/watchstore',
+    },
+    {
+      icon: <YouTube />,
+      name: 'YouTube',
+      url: 'https://youtube.com/watchstore',
+    },
+    {
+      icon: <Twitter />,
+      name: 'Twitter',
+      url: 'https://twitter.com/watchstore',
     },
   ];
 
@@ -140,14 +128,26 @@ const WSFooter: React.FC<WSFooterProps> = ({ sx = {} }) => {
         variant="h6"
         gutterBottom
         sx={{
-          fontWeight: 600,
+          fontWeight: 700,
           color: 'text.primary',
-          mb: 2,
+          mb: 3,
+          position: 'relative',
+          fontSize: '1.1rem',
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            bottom: '-8px',
+            left: 0,
+            width: '40px',
+            height: '3px',
+            backgroundColor: BRAND_COLORS.secondary,
+            borderRadius: '2px',
+          },
         }}
       >
         {title}
       </Typography>
-      <Stack spacing={1}>
+      <Stack spacing={1.5}>
         {links.map((link) => (
           <Link
             key={link.path}
@@ -157,16 +157,35 @@ const WSFooter: React.FC<WSFooterProps> = ({ sx = {} }) => {
               textAlign: 'left',
               color: 'text.secondary',
               textDecoration: 'none',
-              fontSize: '0.875rem',
+              fontSize: '0.9rem',
               border: 'none',
               background: 'none',
               cursor: 'pointer',
-              padding: 0,
+              padding: '6px 0',
+              borderRadius: '4px',
+              transition: 'all 0.3s ease',
+              position: 'relative',
               '&:hover': {
-                color: BRAND_COLORS.secondary,
-                textDecoration: 'underline',
+                color: BRAND_COLORS.accent,
+                transform: 'translateX(8px)',
+                '&::before': {
+                  opacity: 1,
+                  transform: 'scaleX(1)',
+                },
               },
-              transition: 'color 0.2s ease',
+              '&::before': {
+                content: '""',
+                position: 'absolute',
+                left: '-12px',
+                top: '50%',
+                transform: 'translateY(-50%) scaleX(0)',
+                width: '4px',
+                height: '4px',
+                backgroundColor: BRAND_COLORS.accent,
+                borderRadius: '50%',
+                transition: 'all 0.3s ease',
+                opacity: 0,
+              },
             }}
           >
             {link.label}
@@ -182,37 +201,119 @@ const WSFooter: React.FC<WSFooterProps> = ({ sx = {} }) => {
         variant="h6"
         gutterBottom
         sx={{
-          fontWeight: 600,
+          fontWeight: 700,
           color: 'text.primary',
-          mb: 2,
+          mb: 3,
+          position: 'relative',
+          fontSize: '1.1rem',
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            bottom: '-8px',
+            left: 0,
+            width: '40px',
+            height: '3px',
+            backgroundColor: BRAND_COLORS.secondary,
+            borderRadius: '2px',
+          },
         }}
       >
         Thông tin liên hệ
       </Typography>
-      <Stack spacing={2}>
+
+      <Stack
+        spacing={{ xs: 2.5, md: 2, lg: 2.5 }}
+        direction={{ xs: 'column', md: 'row', lg: 'column' }}
+        sx={{
+          width: '100%',
+          // Trong trường hợp md, đảm bảo items không wrap
+          flexWrap: 'nowrap',
+        }}
+      >
         {contactInfo.map((info, index) => (
           <Box
             key={index}
-            sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}
+            sx={{
+              display: 'flex',
+              alignItems: { xs: 'flex-start', md: 'center', lg: 'flex-start' },
+              justifyContent: {
+                xs: 'flex-start',
+                md: 'center',
+                lg: 'flex-start',
+              },
+              flexDirection: { xs: 'row', md: 'column', lg: 'row' },
+              gap: { xs: 2, md: 1, lg: 2.5 },
+              p: { xs: 2, md: 1.5, lg: 2.5 },
+              borderRadius: 2,
+              backgroundColor: alpha(BRAND_COLORS.secondary, 0.05),
+              border: `1px solid ${alpha(BRAND_COLORS.secondary, 0.1)}`,
+              transition: 'all 0.2s ease',
+              textAlign: { xs: 'left', md: 'center', lg: 'left' },
+              minHeight: { md: '100px' },
+              // Mỗi item chiếm 1/4 width trong md
+              flex: { md: '1 1 0%' },
+              minWidth: { md: 0 },
+              '&:hover': {
+                backgroundColor: alpha(BRAND_COLORS.secondary, 0.08),
+                borderColor: alpha(BRAND_COLORS.secondary, 0.15),
+              },
+            }}
           >
-            <IconButton
-              size="small"
+            <Box
               sx={{
-                color: BRAND_COLORS.secondary,
-                p: 0,
-                '&:hover': { backgroundColor: 'transparent' },
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: { xs: 40, md: 32, lg: 44 },
+                height: { xs: 40, md: 32, lg: 44 },
+                borderRadius: 2,
+                backgroundColor: BRAND_COLORS.secondary,
+                color: BRAND_COLORS.primary,
+                flexShrink: 0,
+                mb: { xs: 0, md: 1, lg: 0 },
               }}
             >
               {info.icon}
-            </IconButton>
-            <Box>
+            </Box>
+
+            <Box
+              sx={{
+                flex: 1,
+                minWidth: 0,
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: {
+                  xs: 'flex-start',
+                  md: 'center',
+                  lg: 'flex-start',
+                },
+              }}
+            >
               <Typography
                 variant="subtitle2"
-                sx={{ fontWeight: 600, color: 'text.primary' }}
+                sx={{
+                  fontWeight: 600,
+                  color: 'text.primary',
+                  mb: 0.5,
+                  fontSize: { xs: '0.9rem', md: '0.8rem', lg: '0.95rem' },
+                  lineHeight: 1.2,
+                  textAlign: { xs: 'left', md: 'center', lg: 'left' },
+                }}
               >
                 {info.title}
               </Typography>
-              <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+              <Typography
+                variant="body2"
+                sx={{
+                  color: 'text.secondary',
+                  fontWeight: 500,
+                  lineHeight: 1.3,
+                  fontSize: { xs: '0.85rem', md: '0.75rem', lg: '0.9rem' },
+                  textAlign: { xs: 'left', md: 'center', lg: 'left' },
+                  wordBreak: 'break-word',
+                  hyphens: 'auto',
+                }}
+              >
                 {info.content}
               </Typography>
             </Box>
@@ -222,165 +323,177 @@ const WSFooter: React.FC<WSFooterProps> = ({ sx = {} }) => {
     </Box>
   );
 
-  const renderNewsletter = () => (
-    <Box
-      sx={{
-        backgroundColor:
-          theme.palette.mode === 'dark'
-            ? 'rgba(254,231,21,0.05)'
-            : 'rgba(16,24,32,0.03)',
-        p: 3,
-        borderRadius: 2,
-        border: `1px solid ${
-          theme.palette.mode === 'dark'
-            ? 'rgba(254,231,21,0.2)'
-            : 'rgba(16,24,32,0.1)'
-        }`,
-      }}
-    >
-      <Typography
-        variant="h6"
-        gutterBottom
-        sx={{
-          fontWeight: 600,
-          color: 'text.primary',
-          mb: 1,
-        }}
-      >
-        Đăng ký nhận tin
-      </Typography>
-      <Typography variant="body2" sx={{ color: 'text.secondary', mb: 2 }}>
-        Nhận thông tin về sản phẩm mới và ưu đãi đặc biệt
-      </Typography>
-
-      {/* Newsletter form will be implemented later */}
-      <Box
-        sx={{
-          display: 'flex',
-          gap: 1,
-          mt: 2,
-          p: 2,
-          backgroundColor: 'background.paper',
-          borderRadius: 1,
-          border: '1px solid',
-          borderColor: 'divider',
-        }}
-      >
-        <Typography variant="body2" color="text.secondary">
-          Form đăng ký sẽ được triển khai sau
-        </Typography>
-      </Box>
-    </Box>
-  );
-
-  // ==============================================
-  // MAIN RENDER
-  // ==============================================
-
   return (
     <Box
       component="footer"
       sx={{
         backgroundColor: 'background.paper',
-        borderTop: '1px solid',
-        borderColor: 'divider',
+        borderTop: `3px solid ${BRAND_COLORS.secondary}`,
         mt: 'auto',
         width: '100%',
+        position: 'relative',
+        overflow: 'hidden',
+        boxShadow: `0 -4px 20px ${alpha(BRAND_COLORS.primary, 0.08)}`,
         ...sx,
       }}
     >
-      <Container maxWidth="lg" sx={{ width: '100%' }}>
-        {/* Main Footer Content */}
-        <Box sx={{ py: 5 }}>
+      <Container maxWidth="xl" sx={{ position: 'relative', zIndex: 1 }}>
+        {/* Main footer content */}
+        <Box sx={{ py: 8 }}>
           <Grid container spacing={4}>
-            {/* Company Info & Newsletter */}
-            <Grid size={{ xs: 12, md: 4 }}>
-              <Box sx={{ mb: 3 }}>
+            {/* Company info */}
+            <Grid size={{ xs: 12, md: 6, lg: 4 }}>
+              <Box sx={{ mb: 4 }}>
                 <Typography
-                  variant="h5"
+                  variant="h4"
                   sx={{
-                    fontWeight: 700,
-                    color: BRAND_COLORS.primary,
-                    mb: 1,
+                    fontWeight: 800,
+                    background: `linear-gradient(135deg, ${BRAND_COLORS.primary} 0%, ${BRAND_COLORS.accent} 100%)`,
+                    backgroundClip: 'text',
+                    WebkitBackgroundClip: 'text',
+                    WebkitTextFillColor: 'transparent',
+                    mb: 3,
+                    fontSize: { xs: '1.8rem', md: '2.2rem' },
                   }}
                 >
-                  WatchStore
+                  Minh Nhật Watch Shop
                 </Typography>
                 <Typography
-                  variant="body2"
-                  sx={{ color: 'text.secondary', lineHeight: 1.6, mb: 3 }}
+                  variant="body1"
+                  sx={{
+                    color: 'text.secondary',
+                    lineHeight: 1.8,
+                    mb: 4,
+                    fontSize: '1.05rem',
+                    fontWeight: 400,
+                  }}
                 >
                   Chuyên cung cấp đồng hồ chính hãng, cao cấp với chất lượng
-                  tuyệt vời và dịch vụ khách hàng tận tâm. Mang đến cho bạn
-                  những trải nghiệm mua sắm tuyệt vời nhất.
+                  tuyệt vời và dịch vụ khách hàng tận tâm. Hơn 10 năm kinh
+                  nghiệm trong ngành đồng hồ cao cấp.
                 </Typography>
+
+                {/* Social media */}
+                <Box>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{
+                      fontWeight: 600,
+                      color: 'text.primary',
+                      mb: 2,
+                    }}
+                  >
+                    Kết nối với chúng tôi
+                  </Typography>
+                  <Stack direction="row" spacing={2}>
+                    {socialLinks.map((social) => (
+                      <IconButton
+                        key={social.name}
+                        onClick={() => handleSocialClick(social.url)}
+                        sx={{
+                          backgroundColor: alpha(BRAND_COLORS.primary, 0.1),
+                          color: BRAND_COLORS.primary,
+                          width: 48,
+                          height: 48,
+                          borderRadius: '12px',
+                          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+                          '&:hover': {
+                            backgroundColor: BRAND_COLORS.secondary,
+                            color: BRAND_COLORS.primary,
+                            transform: 'translateY(-6px) scale(1.1)',
+                            boxShadow: `0 10px 25px ${alpha(BRAND_COLORS.secondary, 0.4)}`,
+                          },
+                        }}
+                      >
+                        {social.icon}
+                      </IconButton>
+                    ))}
+                  </Stack>
+                </Box>
               </Box>
-              {renderNewsletter()}
             </Grid>
 
-            {/* Product Links */}
+            {/* Product */}
             <Grid size={{ xs: 12, sm: 6, md: 2 }}>
               {renderLinkSection('Sản phẩm', footerLinks.products)}
             </Grid>
 
-            {/* Support Links */}
+            {/* Support */}
             <Grid size={{ xs: 12, sm: 6, md: 2 }}>
               {renderLinkSection('Hỗ trợ', footerLinks.support)}
             </Grid>
 
-            {/* Company Links */}
+            {/* Company */}
             <Grid size={{ xs: 12, sm: 6, md: 2 }}>
               {renderLinkSection('Công ty', footerLinks.company)}
             </Grid>
 
-            {/* Contact Info */}
-            <Grid size={{ xs: 12, sm: 6, md: 2 }}>{renderContactInfo()}</Grid>
+            {/* Contact */}
+            <Grid size={{ xs: 12, sm: 6, md: 12, lg: 2 }}>
+              {renderContactInfo()}
+            </Grid>
           </Grid>
         </Box>
 
-        <Divider />
+        <Divider
+          sx={{
+            borderColor: alpha(BRAND_COLORS.secondary, 0.2),
+            borderWidth: '1px',
+          }}
+        />
 
         {/* Bottom Footer */}
         <Box
           sx={{
-            py: 3,
+            py: 4,
             display: 'flex',
-            flexDirection: { xs: 'column', md: 'row' },
+            flexDirection: { xs: 'column', sm: 'row' },
             justifyContent: 'space-between',
             alignItems: 'center',
             gap: 2,
           }}
         >
-          <Typography variant="body2" color="text.secondary">
+          <Typography
+            variant="body2"
+            sx={{
+              color: 'text.secondary',
+              fontWeight: 500,
+              fontSize: '0.95rem',
+            }}
+          >
             © {new Date().getFullYear()} WatchStore. Tất cả quyền được bảo lưu.
           </Typography>
-
-          {/* Social Links */}
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Typography variant="body2" color="text.secondary" sx={{ mr: 1 }}>
-              Theo dõi:
-            </Typography>
-            {socialLinks.map((social) => (
-              <IconButton
-                key={social.label}
-                onClick={() => handleSocialClick(social.url)}
-                size="small"
-                sx={{
-                  color: 'text.secondary',
-                  '&:hover': {
-                    color: BRAND_COLORS.secondary,
-                  },
-                }}
-                aria-label={social.label}
-              >
-                {social.icon}
-              </IconButton>
-            ))}
-          </Box>
+          <Stack
+            direction="row"
+            spacing={3}
+            sx={{
+              '& button': {
+                color: 'text.secondary',
+                textDecoration: 'none',
+                fontSize: '0.9rem',
+                fontWeight: 500,
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                padding: '4px 8px',
+                borderRadius: '6px',
+                transition: 'all 0.2s ease',
+                '&:hover': {
+                  color: BRAND_COLORS.accent,
+                  backgroundColor: alpha(BRAND_COLORS.accent, 0.1),
+                },
+              },
+            }}
+          >
+            <button onClick={() => handleLinkClick('/policy/privacy')}>
+              Chính sách bảo mật
+            </button>
+            <button onClick={() => handleLinkClick('/policy/terms')}>
+              Điều khoản sử dụng
+            </button>
+          </Stack>
         </Box>
       </Container>
     </Box>
   );
-};
-
-export default WSFooter;
+}
