@@ -7,9 +7,9 @@ export { default as WSFooter } from './WSFooter';
 
 // Display Components
 export { default as WSLoading } from './WSLoading';
+export { default as WSButton } from './WSButton';
 
 // Export types for all components
 export type * from './WSLayout/WSLayout.types';
-export type * from './WSHeader/WSHeader.types';
-export type * from './WSFooter/WSFooter.types';
+
 // More type exports will be added as components are created
