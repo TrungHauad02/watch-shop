@@ -60,6 +60,36 @@ const router = createBrowserRouter([
           },
         ],
       },
+      {
+        path: 'test',
+        element: <WSLayout />,
+        children: [
+          {
+            path: 'ws-button-demo',
+            element: (
+              <Suspense
+                fallback={
+                  <Pages.LoadingPage message="Đang tải trang test..." />
+                }
+              >
+                <Pages.WSButtonDemoPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'ws-input-demo',
+            element: (
+              <Suspense
+                fallback={
+                  <Pages.LoadingPage message="Đang tải trang test..." />
+                }
+              >
+                <Pages.WSInputDemoPage />
+              </Suspense>
+            ),
+          },
+        ],
+      },
     ],
   },
 ]);
