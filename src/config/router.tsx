@@ -100,6 +100,18 @@ const router = createBrowserRouter([
               </Suspense>
             ),
           },
+          {
+            path: 'ws-loading-demo',
+            element: (
+              <Suspense
+                fallback={
+                  <Pages.LoadingPage message="Đang tải trang test..." />
+                }
+              >
+                <Pages.WSLoadingDemoPage />
+              </Suspense>
+            ),
+          },
         ],
       },
     ],

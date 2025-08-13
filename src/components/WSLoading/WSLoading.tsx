@@ -1,309 +1,180 @@
-// src/components/WSLoading/WSLoading.tsx
-
-import React from 'react';
+import { Portal, Typography } from '@mui/material';
+import { WSLoadingProps, WS_LOADING_DEFAULTS } from './WSLoading.types';
 import {
-  Box,
-  CircularProgress,
-  Typography,
-  Fade,
-  LinearProgress,
-  Skeleton,
-  useTheme,
-} from '@mui/material';
-import { SxProps, Theme } from '@mui/material/styles';
-import { BRAND_COLORS } from '../../styles/colors';
+  LoadingContainer,
+  Spinner,
+  Dots,
+  Pulse,
+  StyledCircularProgress,
+  StyledLinearProgress,
+  LoadingMessage,
+} from './WSLoading.styles';
 
 // ==============================================
-// TYPES
+// WS LOADING COMPONENT - SIMPLIFIED
 // ==============================================
 
-export interface WSLoadingProps {
-  /** Loading variant */
-  variant?: 'circular' | 'linear' | 'page' | 'skeleton' | 'dots';
+// CUSTOMIZE: Bạn có thể chỉnh sửa variant (spinner, dots, pulse, circular, linear),
+// size (small, medium, large), color (primary, secondary, success, warning, error, info) để tùy chỉnh loading
+export default function WSLoading({
+  // Core styling props
+  variant = WS_LOADING_DEFAULTS.variant,
+  size = WS_LOADING_DEFAULTS.size,
+  color = WS_LOADING_DEFAULTS.color,
 
-  /** Loading size */
-  size?: 'small' | 'medium' | 'large';
-
-  /** Loading message */
-  message?: string;
-
-  /** Show progress value */
-  progress?: number;
-
-  /** Minimum height for page variant */
-  minHeight?: string;
-
-  /** Custom color */
-  color?: 'primary' | 'secondary' | 'inherit';
-
-  /** Additional styles */
-  sx?: SxProps<Theme>;
-
-  /** Whether to show fade in animation */
-  fadeIn?: boolean;
-
-  /** Custom loading icon */
-  icon?: React.ReactNode;
-}
-
-// ==============================================
-// COMPONENT
-// ==============================================
-
-const WSLoading: React.FC<WSLoadingProps> = ({
-  variant = 'circular',
-  size = 'medium',
+  // Content and messaging
+  loading = WS_LOADING_DEFAULTS.loading,
   message,
+  children,
+
+  // Progress indication
   progress,
-  minHeight = '300px',
-  color = 'primary',
-  sx = {},
-  fadeIn = true,
-  icon,
-}) => {
-  const theme = useTheme();
 
+  // Sizing
+  width,
+  height,
+
+  // Visibility and overlay
+  fullScreen = WS_LOADING_DEFAULTS.fullScreen,
+  backdrop = WS_LOADING_DEFAULTS.backdrop,
+
+  // Custom styling
+  sx,
+  className,
+
+  // Accessibility
+  ariaLabel,
+
+  // Forward all other props
+  ...otherProps
+}: WSLoadingProps) {
   // ==============================================
-  // SIZE CONFIGURATIONS
-  // ==============================================
-
-  const getSizeConfig = () => {
-    const configs = {
-      small: {
-        circular: 24,
-        fontSize: '0.875rem',
-        spacing: 1,
-      },
-      medium: {
-        circular: 40,
-        fontSize: '1rem',
-        spacing: 2,
-      },
-      large: {
-        circular: 56,
-        fontSize: '1.125rem',
-        spacing: 3,
-      },
-    };
-
-    return configs[size];
-  };
-
-  const sizeConfig = getSizeConfig();
-
-  // ==============================================
-  // COLOR CONFIGURATIONS
+  // RENDER HELPERS
   // ==============================================
 
-  const getColor = () => {
-    switch (color) {
-      case 'primary':
-        return theme.palette.primary.main;
-      case 'secondary':
-        return BRAND_COLORS.secondary;
-      case 'inherit':
-        return 'inherit';
-      default:
-        return theme.palette.primary.main;
-    }
-  };
+  const renderLoadingIndicator = () => {
+    const sizeValue = size === 'small' ? 20 : size === 'medium' ? 32 : 48;
 
-  // ==============================================
-  // LOADING VARIANTS
-  // ==============================================
-
-  const renderCircularLoading = () => (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: sizeConfig.spacing,
-        ...sx,
-      }}
-    >
-      {icon || (
-        <CircularProgress
-          size={sizeConfig.circular}
-          sx={{ color: getColor() }}
-          variant={progress !== undefined ? 'determinate' : 'indeterminate'}
-          value={progress ?? 0}
-        />
-      )}
-      {message && (
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          sx={{ fontSize: sizeConfig.fontSize, textAlign: 'center' }}
-        >
-          {message}
-        </Typography>
-      )}
-      {progress !== undefined && (
-        <Typography variant="caption" color="text.secondary">
-          {Math.round(progress)}%
-        </Typography>
-      )}
-    </Box>
-  );
-
-  const renderLinearLoading = () => (
-    <Box sx={{ width: '100%', ...sx }}>
-      <LinearProgress
-        variant={progress !== undefined ? 'determinate' : 'indeterminate'}
-        value={progress ?? 0}
-        sx={{
-          height: size === 'small' ? 4 : size === 'large' ? 8 : 6,
-          borderRadius: 1,
-          backgroundColor: 'rgba(0,0,0,0.1)',
-          '& .MuiLinearProgress-bar': {
-            backgroundColor: getColor(),
-          },
-        }}
-      />
-      {message && (
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          sx={{
-            mt: 1,
-            fontSize: sizeConfig.fontSize,
-            textAlign: 'center',
-          }}
-        >
-          {message}
-        </Typography>
-      )}
-    </Box>
-  );
-
-  const renderPageLoading = () => (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: minHeight,
-        width: '100%',
-        gap: sizeConfig.spacing,
-        ...sx,
-      }}
-    >
-      {icon || (
-        <CircularProgress
-          size={sizeConfig.circular}
-          sx={{ color: getColor() }}
-        />
-      )}
-      {message && (
-        <Typography
-          variant="body1"
-          color="text.secondary"
-          sx={{ fontSize: sizeConfig.fontSize, textAlign: 'center' }}
-        >
-          {message}
-        </Typography>
-      )}
-    </Box>
-  );
-
-  const renderSkeletonLoading = () => (
-    <Box sx={{ width: '100%', ...sx }}>
-      <Skeleton
-        variant="rectangular"
-        height={size === 'small' ? 120 : size === 'large' ? 200 : 160}
-        sx={{ borderRadius: 1, mb: 1 }}
-      />
-      <Skeleton variant="text" height={24} width="60%" sx={{ mb: 0.5 }} />
-      <Skeleton variant="text" height={20} width="40%" />
-      {message && (
-        <Typography
-          variant="caption"
-          color="text.secondary"
-          sx={{ mt: 1, display: 'block' }}
-        >
-          {message}
-        </Typography>
-      )}
-    </Box>
-  );
-
-  const renderDotsLoading = () => (
-    <Box
-      sx={{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 0.5,
-        ...sx,
-      }}
-    >
-      {[0, 1, 2].map((index) => (
-        <Box
-          key={index}
-          sx={{
-            width: size === 'small' ? 6 : size === 'large' ? 12 : 8,
-            height: size === 'small' ? 6 : size === 'large' ? 12 : 8,
-            borderRadius: '50%',
-            backgroundColor: getColor(),
-            animation: 'dotPulse 1.4s ease-in-out infinite both',
-            animationDelay: `${index * 0.16}s`,
-            '@keyframes dotPulse': {
-              '0%, 80%, 100%': {
-                transform: 'scale(0)',
-                opacity: 0.5,
-              },
-              '40%': {
-                transform: 'scale(1)',
-                opacity: 1,
-              },
-            },
-          }}
-        />
-      ))}
-      {message && (
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          sx={{ ml: 2, fontSize: sizeConfig.fontSize }}
-        >
-          {message}
-        </Typography>
-      )}
-    </Box>
-  );
-
-  // ==============================================
-  // RENDER MAIN COMPONENT
-  // ==============================================
-
-  const renderLoadingVariant = () => {
     switch (variant) {
-      case 'linear':
-        return renderLinearLoading();
-      case 'page':
-        return renderPageLoading();
-      case 'skeleton':
-        return renderSkeletonLoading();
+      case 'spinner':
+        return <Spinner wsSize={size} wsColor={color} />;
+
       case 'dots':
-        return renderDotsLoading();
+        return (
+          <Dots wsSize={size} wsColor={color}>
+            <div className="dot" />
+            <div className="dot" />
+            <div className="dot" />
+          </Dots>
+        );
+
+      case 'pulse':
+        return <Pulse wsSize={size} wsColor={color} />;
+
       case 'circular':
+        return (
+          <StyledCircularProgress
+            wsColor={color}
+            size={sizeValue}
+            thickness={size === 'small' ? 2 : size === 'medium' ? 4 : 6}
+            variant={progress !== undefined ? 'determinate' : 'indeterminate'}
+            {...(progress !== undefined && { value: progress })}
+          />
+        );
+
+      case 'linear':
+        return (
+          <StyledLinearProgress
+            wsColor={color}
+            variant={progress !== undefined ? 'determinate' : 'indeterminate'}
+            {...(progress !== undefined && { value: progress })}
+            sx={{
+              width: width || '200px',
+              height: size === 'small' ? 4 : size === 'medium' ? 6 : 8,
+              borderRadius: 4,
+            }}
+          />
+        );
+
       default:
-        return renderCircularLoading();
+        return <Spinner wsSize={size} wsColor={color} />;
     }
   };
 
-  const loadingComponent = renderLoadingVariant();
+  const renderMessage = () => {
+    if (!message) return null;
 
-  return fadeIn ? (
-    <Fade in={true} timeout={300}>
-      <div>{loadingComponent}</div>
-    </Fade>
-  ) : (
-    loadingComponent
+    return (
+      <LoadingMessage wsSize={size}>
+        <Typography
+          variant={
+            size === 'small' ? 'caption' : size === 'large' ? 'h6' : 'body2'
+          }
+          component="div"
+        >
+          {message}
+        </Typography>
+      </LoadingMessage>
+    );
+  };
+
+  // ==============================================
+  // CONDITIONAL RENDERING
+  // ==============================================
+
+  if (!loading) {
+    return null;
+  }
+
+  // ==============================================
+  // ACCESSIBILITY PROPS
+  // ==============================================
+
+  const accessibilityProps = {
+    'aria-label': ariaLabel || (message ? `Loading: ${message}` : 'Loading'),
+    'aria-busy': loading,
+    'aria-live': 'polite' as const,
+    role: 'status',
+    ...(progress !== undefined && {
+      'aria-valuenow': progress,
+      'aria-valuemin': 0,
+      'aria-valuemax': 100,
+    }),
+  };
+
+  // ==============================================
+  // CONTAINER STYLES
+  // ==============================================
+
+  const containerStyles = {
+    ...(width && { width }),
+    ...(height && { height }),
+    ...(sx && typeof sx === 'object' ? sx : {}),
+  };
+
+  // ==============================================
+  // RENDER COMPONENT
+  // ==============================================
+
+  const LoadingComponent = (
+    <LoadingContainer
+      fullScreen={fullScreen}
+      backdrop={backdrop}
+      sx={containerStyles}
+      {...(className && { className })}
+      {...accessibilityProps}
+      {...otherProps}
+    >
+      {renderLoadingIndicator()}
+      {renderMessage()}
+      {children}
+    </LoadingContainer>
   );
-};
 
-export default WSLoading;
+  // Handle full screen loading with portal
+  if (fullScreen) {
+    return <Portal>{LoadingComponent}</Portal>;
+  }
+
+  return LoadingComponent;
+}

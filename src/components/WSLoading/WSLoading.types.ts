@@ -1,36 +1,119 @@
+import { ReactNode } from 'react';
 import { SxProps, Theme } from '@mui/material/styles';
 
+// ==============================================
+// WSLOADING TYPES - SIMPLIFIED
+// ==============================================
+
+export type WSLoadingVariant =
+  | 'spinner'
+  | 'dots'
+  | 'pulse'
+  | 'circular'
+  | 'linear';
+
+export type WSLoadingSize = 'small' | 'medium' | 'large';
+
+export type WSLoadingColor =
+  | 'primary'
+  | 'secondary'
+  | 'success'
+  | 'warning'
+  | 'error'
+  | 'info';
+
+// ==============================================
+// MAIN WSLOADING PROPS INTERFACE
+// ==============================================
+
 export interface WSLoadingProps {
-  /** Loading variant to display */
-  variant?: 'circular' | 'linear' | 'skeleton' | 'page' | 'overlay';
+  // Core styling props
+  variant?: WSLoadingVariant;
+  size?: WSLoadingSize;
+  color?: WSLoadingColor;
 
-  /** Size of the loading indicator */
-  size?: 'small' | 'medium' | 'large';
-
-  /** Loading message to display */
+  // Content and messaging
+  loading?: boolean;
   message?: string;
+  children?: ReactNode;
 
-  /** Progress value (0-100) for determinate variants */
-  progress?: number;
+  // Progress indication (only for linear/circular)
+  progress?: number; // 0-100 for progress indicators
 
-  /** Minimum height of the loading container */
-  minHeight?: string | number;
+  // Sizing
+  width?: string | number;
+  height?: string | number;
 
-  /** Whether to show as full screen overlay */
+  // Visibility and overlay
   fullScreen?: boolean;
+  backdrop?: boolean;
 
-  /** Color of the loading indicator */
-  color?: 'primary' | 'secondary' | 'inherit';
-
-  /** Additional styles */
+  // Custom styling
   sx?: SxProps<Theme>;
+  className?: string;
+
+  // Accessibility
+  ariaLabel?: string;
 }
 
-export type LoadingVariant =
-  | 'circular'
-  | 'linear'
-  | 'skeleton'
-  | 'page'
-  | 'overlay';
-export type LoadingSize = 'small' | 'medium' | 'large';
-export type LoadingColor = 'primary' | 'secondary' | 'inherit';
+// ==============================================
+// CONSTANTS
+// ==============================================
+
+export const WS_LOADING_VARIANTS = [
+  'spinner',
+  'dots',
+  'pulse',
+  'circular',
+  'linear',
+] as const;
+
+export const WS_LOADING_SIZES = ['small', 'medium', 'large'] as const;
+
+export const WS_LOADING_COLORS = [
+  'primary',
+  'secondary',
+  'success',
+  'warning',
+  'error',
+  'info',
+] as const;
+
+// ==============================================
+// DEFAULT VALUES
+// ==============================================
+
+export const WS_LOADING_DEFAULTS = {
+  variant: 'spinner' as WSLoadingVariant,
+  size: 'medium' as WSLoadingSize,
+  color: 'primary' as WSLoadingColor,
+  loading: true,
+  fullScreen: false,
+  backdrop: false,
+} as const;
+
+// ==============================================
+// TYPE GUARDS
+// ==============================================
+
+export const isValidWSLoadingVariant = (
+  variant: unknown
+): variant is WSLoadingVariant => {
+  return WS_LOADING_VARIANTS.includes(variant as WSLoadingVariant);
+};
+
+export const isValidWSLoadingSize = (size: unknown): size is WSLoadingSize => {
+  return WS_LOADING_SIZES.includes(size as WSLoadingSize);
+};
+
+export const isValidWSLoadingColor = (
+  color: unknown
+): color is WSLoadingColor => {
+  return WS_LOADING_COLORS.includes(color as WSLoadingColor);
+};
+
+// ==============================================
+// EXPORT TYPES
+// ==============================================
+
+export type WSLoadingRef = HTMLDivElement;
