@@ -88,6 +88,18 @@ const router = createBrowserRouter([
               </Suspense>
             ),
           },
+          {
+            path: 'ws-card-demo',
+            element: (
+              <Suspense
+                fallback={
+                  <Pages.LoadingPage message="Đang tải trang test..." />
+                }
+              >
+                <Pages.WSCardDemoPage />
+              </Suspense>
+            ),
+          },
         ],
       },
     ],
