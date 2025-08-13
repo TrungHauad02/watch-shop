@@ -1,7 +1,5 @@
-// src/components/WSInput/WSInput.tsx
-import React, { forwardRef, useState, useCallback, useMemo } from 'react';
-import { useMediaQuery, useTheme } from '@mui/material';
-import { WSInputProps, WSInputRef, WS_INPUT_DEFAULTS } from './WSInput.types';
+import { useState, useCallback, useMemo } from 'react';
+import { WSInputProps, WS_INPUT_DEFAULTS } from './WSInput.types';
 import {
   StyledWSInput,
   StyledHelperText,
@@ -10,362 +8,228 @@ import {
 } from './WSInput.styles';
 
 // ==============================================
-// WSInput COMPONENT
+// WSInput COMPONENT - SIMPLIFIED
 // ==============================================
 
-const WSInput = forwardRef<WSInputRef, WSInputProps>(
-  (
-    {
-      // Core props
-      variant = WS_INPUT_DEFAULTS.variant,
-      size = WS_INPUT_DEFAULTS.size,
-      color = WS_INPUT_DEFAULTS.color,
-      type = WS_INPUT_DEFAULTS.type,
+// CUSTOMIZE: Bạn có thể chỉnh sửa variant (outlined, filled),
+// size (small, medium, large), color (primary, secondary, success, warning, error, info) để tùy chỉnh input
+export default function WSInput({
+  // Core props
+  variant = WS_INPUT_DEFAULTS.variant,
+  size = WS_INPUT_DEFAULTS.size,
+  color = WS_INPUT_DEFAULTS.color,
+  type = WS_INPUT_DEFAULTS.type,
 
-      // Content
-      label,
-      placeholder,
-      value,
-      defaultValue,
+  // Content
+  label,
+  placeholder,
+  value,
+  defaultValue,
 
-      // Icons
-      startIcon,
-      endIcon,
-      // iconSize - removed unused prop
-      // iconColor - removed unused prop
+  // Icons
+  startIcon,
+  endIcon,
 
-      // Helper text configuration
-      helperText,
-      showCharacterCount = WS_INPUT_DEFAULTS.showCharacterCount,
-      maxCharacters,
-      persistentHelper = WS_INPUT_DEFAULTS.persistentHelper,
+  // Helper text configuration
+  helperText,
+  showCharacterCount = WS_INPUT_DEFAULTS.showCharacterCount,
+  maxCharacters,
 
-      // Validation
-      error = false,
-      success = false,
-      isValid,
-      isInvalid,
-      // isValidating - removed unused prop
-      validationMessage,
+  // Enhanced features
+  fullWidth = WS_INPUT_DEFAULTS.fullWidth,
+  required = false,
+  disabled = false,
+  readOnly = false,
+  multiline = false,
+  rows,
 
-      // Enhanced features
-      fullWidth = true,
-      required = false,
-      disabled = false,
-      readOnly = false,
-      multiline = false,
-      rows,
-      maxRows,
+  // Validation
+  error = false,
+  success = false,
 
-      // Responsive
-      responsive = WS_INPUT_DEFAULTS.responsive,
-      mobileVariant,
+  // Event handlers
+  onChange,
+  onFocus,
+  onBlur,
 
-      // Input restrictions
-      minLength,
-      maxLength,
-      min,
-      max,
-      step,
-      pattern,
+  // Accessibility
+  ariaLabel,
 
-      // Auto features
-      autoComplete,
-      autoFocus = false,
+  // Form integration
+  name,
+  id,
 
-      // Accessibility
-      ariaLabel,
-      ariaDescribedBy,
+  // Style props
+  sx,
+  className,
 
-      // Form integration
-      name,
-      id,
-      // form - removed unused prop
+  // Forward all other props to MUI TextField
+  ...otherProps
+}: WSInputProps) {
+  // ==============================================
+  // STATE MANAGEMENT
+  // ==============================================
 
-      // Input modes
-      inputMode,
+  const [internalValue, setInternalValue] = useState(
+    value || defaultValue || ''
+  );
 
-      // Event handlers
-      onChange,
-      onFocus,
-      onBlur,
-      onKeyDown,
-      onKeyUp,
+  // ==============================================
+  // COMPUTED VALUES
+  // ==============================================
 
-      // Style props
-      sx,
-      className,
+  // Determine actual values
+  const currentValue = value !== undefined ? value : internalValue;
+  const stringValue = String(currentValue);
+  const characterCount = stringValue.length;
 
-      // Forward all other props to MUI TextField
-      ...otherProps
+  // Determine validation state
+  const hasError = error;
+  const hasSuccess = success && !error;
+
+  // Character count validation
+  const isOverLimit = maxCharacters ? characterCount > maxCharacters : false;
+  const shouldShowCharacterCount: boolean =
+    showCharacterCount && (maxCharacters !== null || characterCount > 0);
+
+  // ==============================================
+  // EVENT HANDLERS
+  // ==============================================
+
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      const newValue = event.target.value;
+
+      // Update internal value if uncontrolled
+      if (value === undefined) {
+        setInternalValue(newValue);
+      }
+
+      // Call external onChange handler
+      onChange?.(event);
     },
-    ref
-  ) => {
-    // ==============================================
-    // HOOKS AND STATE
-    // ==============================================
+    [onChange, value]
+  );
 
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const handleFocus = useCallback(
+    (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      onFocus?.(event);
+    },
+    [onFocus]
+  );
 
-    // const [isFocused, setIsFocused] = useState(false); // Reserved for future use
-    const [internalValue, setInternalValue] = useState(
-      value || defaultValue || ''
-    );
+  const handleBlur = useCallback(
+    (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+      onBlur?.(event);
+    },
+    [onBlur]
+  );
 
-    // ==============================================
-    // COMPUTED VALUES
-    // ==============================================
+  // ==============================================
+  // ADORNMENTS
+  // ==============================================
 
-    // Determine actual values
-    const currentValue = value !== undefined ? value : internalValue;
-    const stringValue = String(currentValue);
-    const characterCount = stringValue.length;
-
-    // Determine validation state
-    const hasError = error || isInvalid || !!validationMessage;
-    const hasSuccess = success || isValid;
-
-    // Determine effective variant based on responsive settings
-    const effectiveVariant =
-      responsive && isMobile && mobileVariant ? mobileVariant : variant;
-
-    // Character count validation
-    const isOverLimit = maxCharacters ? characterCount > maxCharacters : false;
-    const shouldShowCharacterCount =
-      showCharacterCount && (maxCharacters || characterCount > 0);
-
-    // Helper text logic
-    const effectiveHelperText = validationMessage || helperText;
-    const shouldShowHelper =
-      persistentHelper ||
-      effectiveHelperText ||
-      shouldShowCharacterCount ||
-      hasError ||
-      hasSuccess;
-
-    // ==============================================
-    // EVENT HANDLERS
-    // ==============================================
-
-    const handleChange = useCallback(
-      (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const newValue = event.target.value;
-
-        // Update internal value if uncontrolled
-        if (value === undefined) {
-          setInternalValue(newValue);
-        }
-
-        // Call external onChange handler
-        onChange?.(event);
-      },
-      [onChange, value]
-    );
-
-    const handleFocus = useCallback(
-      (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        // setIsFocused(true); // Reserved for future use
-        onFocus?.(event);
-      },
-      [onFocus]
-    );
-
-    const handleBlur = useCallback(
-      (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        // setIsFocused(false); // Reserved for future use
-        onBlur?.(event);
-      },
-      [onBlur]
-    );
-
-    const handleKeyDown = useCallback(
-      (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        onKeyDown?.(event);
-      },
-      [onKeyDown]
-    );
-
-    const handleKeyUp = useCallback(
-      (event: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        onKeyUp?.(event);
-      },
-      [onKeyUp]
-    );
-
-    // ==============================================
-    // ADORNMENTS
-    // ==============================================
-
-    const startAdornment = useMemo(() => {
-      if (!startIcon) return undefined;
-
-      return (
-        <StyledInputAdornment position="start" wsSize={size}>
-          <IconWrapper size={size} position="start">
-            {startIcon}
-          </IconWrapper>
-        </StyledInputAdornment>
-      );
-    }, [startIcon, size]);
-
-    const endAdornment = useMemo(() => {
-      if (!endIcon) return undefined;
-
-      return (
-        <StyledInputAdornment position="end" wsSize={size}>
-          <IconWrapper size={size} position="end">
-            {endIcon}
-          </IconWrapper>
-        </StyledInputAdornment>
-      );
-    }, [endIcon, size]);
-
-    // ==============================================
-    // HELPER TEXT COMPONENT
-    // ==============================================
-
-    const renderHelperText = () => {
-      if (!shouldShowHelper) return undefined;
-
-      return (
-        <StyledHelperText
-          wsSize={size}
-          showCount={!!shouldShowCharacterCount}
-          error={hasError}
-        >
-          {effectiveHelperText && (
-            <span className="helper-text">{effectiveHelperText}</span>
-          )}
-          {shouldShowCharacterCount && (
-            <span
-              className={`character-count ${isOverLimit ? 'over-limit' : ''}`}
-            >
-              {maxCharacters
-                ? `${characterCount}/${maxCharacters}`
-                : characterCount}
-            </span>
-          )}
-        </StyledHelperText>
-      );
-    };
-
-    // ==============================================
-    // INPUT PROPS
-    // ==============================================
-
-    const inputProps = useMemo(
-      () => ({
-        // Input restrictions
-        minLength,
-        maxLength: maxCharacters || maxLength,
-        min,
-        max,
-        step,
-        pattern,
-
-        // Input mode for mobile
-        inputMode,
-
-        // Accessibility
-        'aria-label': ariaLabel,
-        'aria-describedby': ariaDescribedBy,
-
-        // Read only
-        readOnly,
-      }),
-      [
-        minLength,
-        maxCharacters,
-        maxLength,
-        min,
-        max,
-        step,
-        pattern,
-        inputMode,
-        ariaLabel,
-        ariaDescribedBy,
-        readOnly,
-      ]
-    );
-
-    // ==============================================
-    // RENDER COMPONENT
-    // ==============================================
+  const startAdornment = useMemo(() => {
+    if (!startIcon) return undefined;
 
     return (
-      <StyledWSInput
-        ref={ref}
-        // Custom styling props
-        wsVariant={effectiveVariant}
-        wsColor={color}
-        wsSize={size}
-        hasSuccess={(hasSuccess && !hasError) || false}
-        responsive={responsive}
-        {...(mobileVariant && { mobileVariant })}
-        // MUI TextField props
-        variant={effectiveVariant}
-        size={size === 'large' ? 'medium' : size} // MUI doesn't have large size
-        color={hasError ? 'error' : hasSuccess ? 'success' : 'primary'}
-        // Content
-        label={label}
-        {...(placeholder && { placeholder })}
-        value={currentValue}
-        defaultValue={undefined} // Controlled by value prop
-        // Features
-        fullWidth={fullWidth}
-        required={required}
-        disabled={disabled}
-        multiline={multiline}
-        {...(rows !== undefined && { rows })}
-        {...(maxRows !== undefined && { maxRows })}
-        // Validation
-        error={hasError}
-        // Auto features
-        {...(autoComplete && { autoComplete })}
-        autoFocus={autoFocus}
-        // Form integration
-        {...(name && { name })}
-        {...(id && { id })}
-        // form prop removed - not supported by MUI TextField
-        type={type}
-        // Input props
-        inputProps={inputProps}
-        // Adornments - moved to InputProps above
-        // InputProps already set above
-
-        // Helper text
-        helperText={renderHelperText()}
-        // Event handlers - Use InputProps for proper event typing
-        onChange={handleChange}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        // Input-specific event handlers
-        InputProps={{
-          startAdornment,
-          endAdornment,
-          onKeyDown: handleKeyDown,
-          onKeyUp: handleKeyUp,
-          ...otherProps.InputProps,
-        }}
-        // Styling
-        {...(sx && { sx })}
-        {...(className && { className })}
-        // Forward other props
-        {...otherProps}
-      />
+      <StyledInputAdornment position="start" wsSize={size}>
+        <IconWrapper wsSize={size} position="start">
+          {startIcon}
+        </IconWrapper>
+      </StyledInputAdornment>
     );
-  }
-);
+  }, [startIcon, size]);
 
-// ==============================================
-// COMPONENT DISPLAY NAME
-// ==============================================
+  const endAdornment = useMemo(() => {
+    if (!endIcon) return undefined;
 
-WSInput.displayName = 'WSInput';
+    return (
+      <StyledInputAdornment position="end" wsSize={size}>
+        <IconWrapper wsSize={size} position="end">
+          {endIcon}
+        </IconWrapper>
+      </StyledInputAdornment>
+    );
+  }, [endIcon, size]);
 
-// ==============================================
-// EXPORT COMPONENT
-// ==============================================
+  // ==============================================
+  // HELPER TEXT COMPONENT
+  // ==============================================
 
-export default WSInput;
+  const renderHelperText = () => {
+    if (!helperText && !shouldShowCharacterCount) return undefined;
+
+    return (
+      <StyledHelperText showCount={shouldShowCharacterCount} error={hasError}>
+        {helperText && <span className="helper-text">{helperText}</span>}
+        {shouldShowCharacterCount && (
+          <span
+            className={`character-count ${isOverLimit ? 'over-limit' : ''}`}
+          >
+            {maxCharacters
+              ? `${characterCount}/${maxCharacters}`
+              : characterCount}
+          </span>
+        )}
+      </StyledHelperText>
+    );
+  };
+
+  // ==============================================
+  // RENDER COMPONENT
+  // ==============================================
+
+  return (
+    <StyledWSInput
+      // Custom styling props
+      wsVariant={variant}
+      wsColor={color}
+      wsSize={size}
+      hasSuccess={hasSuccess}
+      // MUI TextField props
+      variant={variant}
+      size={size === 'large' ? 'medium' : size} // MUI doesn't have large size
+      color={hasError ? 'error' : hasSuccess ? 'success' : 'primary'}
+      // Content
+      label={label}
+      {...(placeholder && { placeholder })}
+      value={currentValue}
+      // Features
+      fullWidth={fullWidth}
+      required={required}
+      disabled={disabled}
+      multiline={multiline}
+      {...(rows !== undefined && { rows })}
+      // Validation
+      error={hasError}
+      // Form integration
+      {...(name && { name })}
+      {...(id && { id })}
+      type={type}
+      // Input props
+      inputProps={{
+        readOnly,
+        ...(maxCharacters && { maxLength: maxCharacters }),
+        'aria-label': ariaLabel,
+      }}
+      // Adornments
+      InputProps={{
+        startAdornment,
+        endAdornment,
+        ...otherProps.InputProps,
+      }}
+      // Helper text
+      helperText={renderHelperText()}
+      // Event handlers
+      onChange={handleChange}
+      onFocus={handleFocus}
+      onBlur={handleBlur}
+      // Styling
+      {...(sx && { sx })}
+      {...(className && { className })}
+      // Forward other props
+      {...otherProps}
+    />
+  );
+}

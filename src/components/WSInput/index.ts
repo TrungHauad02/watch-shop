@@ -6,18 +6,6 @@ export type {
   WSInputSize,
   WSInputType,
   WSInputColor,
-  WSInputValidation,
-  WSInputIconConfig,
-  WSInputHelperConfig,
-  WSInputStyleConfig,
-  WSInputSizeConfig,
-  WSInputState,
-  WSInputComponent,
-  WSInputEventHandler,
-  WSInputFocusHandler,
-  WSInputKeyboardHandler,
-  WSInputControlled,
-  WSInputUncontrolled,
 } from './WSInput.types';
 
 export {
@@ -31,11 +19,3 @@ export {
   isValidWSInputColor,
   isValidWSInputType,
 } from './WSInput.types';
-
-// Re-export styled components for advanced customization
-export {
-  StyledWSInput,
-  StyledHelperText,
-  StyledInputAdornment,
-  IconWrapper,
-} from './WSInput.styles';
