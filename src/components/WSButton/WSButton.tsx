@@ -1,318 +1,196 @@
-import React, { forwardRef, useState, useCallback } from 'react';
-import {
-  WSButtonProps,
-  WSButtonRef,
-  WS_BUTTON_DEFAULTS,
-} from './WSButton.types';
-import {
-  StyledWSButton,
-  LoadingIndicator,
-  IconWrapper,
-  ButtonContent,
-  LoadingOverlay,
-} from './WSButton.styles';
+import { useState, useCallback } from 'react';
+import { WSButtonProps, WS_BUTTON_DEFAULTS } from './WSButton.types';
+import { StyledWSButton, LoadingSpinner, IconWrapper } from './WSButton.styles';
 
 // ==============================================
-// WSButton COMPONENT
+// WSButton COMPONENT - SIMPLIFIED
 // ==============================================
 
-const WSButton = forwardRef<WSButtonRef, WSButtonProps>(
-  (
-    {
-      // Core props
-      variant = WS_BUTTON_DEFAULTS.variant,
-      color = WS_BUTTON_DEFAULTS.color,
-      size = WS_BUTTON_DEFAULTS.size,
-      shape = WS_BUTTON_DEFAULTS.shape,
+// CUSTOMIZE: Bạn có thể chỉnh sửa variant (contained, outlined, text),
+// size (small, medium, large), color (primary, secondary, success, warning, error, info) để tùy chỉnh button
+export default function WSButton({
+  // Core styling props
+  variant = WS_BUTTON_DEFAULTS.variant,
+  color = WS_BUTTON_DEFAULTS.color,
+  size = WS_BUTTON_DEFAULTS.size,
 
-      // Content
-      children,
+  // Content
+  children,
 
-      // Icons
-      startIcon,
-      endIcon,
-      // iconSize - removed unused prop
+  // Icons
+  startIcon,
+  endIcon,
 
-      // Loading configuration
-      loading = false,
-      loadingText,
-      loadingPosition = WS_BUTTON_DEFAULTS.loadingPosition,
-      preserveWidth = WS_BUTTON_DEFAULTS.preserveWidth,
+  // Loading state
+  loading = WS_BUTTON_DEFAULTS.loading,
+  loadingText,
 
-      // Styling and animation
-      animate = WS_BUTTON_DEFAULTS.animate,
-      hoverEffect = WS_BUTTON_DEFAULTS.hoverEffect,
-      fullWidth = false,
-      disabled = false,
-      disableElevation = false,
-      disableRipple = false,
+  // Enhanced features
+  fullWidth = WS_BUTTON_DEFAULTS.fullWidth,
+  disabled = WS_BUTTON_DEFAULTS.disabled,
 
-      // Accessibility
-      ariaLabel,
-      ariaDescribedBy,
+  // Custom styling
+  sx,
+  className,
 
-      // Event handlers
-      onClick,
-      onFocus,
-      onBlur,
+  // Accessibility
+  ariaLabel,
 
-      // Form props
-      type = 'button',
-      form,
+  // Event handlers
+  onClick,
 
-      // Advanced props
-      component,
-      href,
-      target,
-      rel,
+  // Form integration
+  type = WS_BUTTON_DEFAULTS.type,
 
-      // Style props
-      sx,
-      className,
+  // Advanced props
+  component,
+  href,
+  target,
 
-      // Forward all other props to MUI Button
-      ...otherProps
-    },
-    ref
-  ) => {
-    // ==============================================
-    // STATE MANAGEMENT
-    // ==============================================
+  // Forward all other props
+  ...otherProps
+}: WSButtonProps) {
+  // ==============================================
+  // STATE MANAGEMENT
+  // ==============================================
 
-    const [isInternalLoading, setIsInternalLoading] = useState(false);
-    // const [isPressed, setIsPressed] = useState(false); // TODO: Reserved for future use
+  const [isInternalLoading, setIsInternalLoading] = useState(false);
 
-    // Determine final loading state
-    const isLoading = loading || isInternalLoading;
+  // Determine final loading state
+  const isLoading = loading || isInternalLoading;
 
-    // Determine if button should be disabled
-    const isDisabled = disabled || isLoading;
+  // Determine if button should be disabled
+  const isDisabled = disabled || isLoading;
 
-    // ==============================================
-    // EVENT HANDLERS
-    // ==============================================
+  // ==============================================
+  // EVENT HANDLERS
+  // ==============================================
 
-    const handleClick = useCallback(
-      async (event: React.MouseEvent<HTMLButtonElement>) => {
-        if (isDisabled || isLoading) {
-          event.preventDefault();
-          return;
-        }
+  const handleClick = useCallback(
+    async (event: React.MouseEvent<HTMLButtonElement>) => {
+      if (isDisabled || isLoading) {
+        event.preventDefault();
+        return;
+      }
 
-        // setIsPressed(true); // TODO: Reserved for future use
+      try {
+        if (onClick) {
+          const result = onClick(event);
 
-        try {
-          // If onClick returns a promise, handle loading state
-          if (onClick) {
-            const result = onClick(event);
-
-            // Check if result is a promise
-            if (
-              result !== undefined &&
-              result !== null &&
-              typeof result === 'object' &&
-              'then' in result
-            ) {
-              setIsInternalLoading(true);
-              await (result as Promise<void>);
-            }
+          // Check if result is a promise
+          if (result && typeof result === 'object' && 'then' in result) {
+            setIsInternalLoading(true);
+            await (result as Promise<void>);
           }
-        } catch (error) {
-          console.error('WSButton onClick error:', error);
-        } finally {
-          setIsInternalLoading(false);
-          // setIsPressed(false); // TODO: Reserved for future use
         }
-      },
-      [onClick, isDisabled, isLoading]
-    );
-
-    const handleFocus = useCallback(
-      (event: React.FocusEvent<HTMLButtonElement>) => {
-        onFocus?.(event);
-      },
-      [onFocus]
-    );
-
-    const handleBlur = useCallback(
-      (event: React.FocusEvent<HTMLButtonElement>) => {
-        onBlur?.(event);
-        // setIsPressed(false); // TODO: Reserved for future use
-      },
-      [onBlur]
-    );
-
-    // ==============================================
-    // CONTENT RENDERING
-    // ==============================================
-
-    const renderStartIcon = () => {
-      if (isLoading && loadingPosition === 'start') {
-        return (
-          <LoadingIndicator size={size} position="start">
-            <div className="WSButton-loadingSpinner" />
-          </LoadingIndicator>
-        );
+      } catch (error) {
+        console.error('WSButton onClick error:', error);
+      } finally {
+        setIsInternalLoading(false);
       }
+    },
+    [onClick, isDisabled, isLoading]
+  );
 
-      if (startIcon && !isLoading) {
-        return (
-          <IconWrapper
-            size={size}
-            position="start"
-            className="WSButton-startIcon"
-          >
-            {startIcon}
-          </IconWrapper>
-        );
-      }
+  // ==============================================
+  // CONTENT RENDERING
+  // ==============================================
 
-      return null;
-    };
+  const renderStartIcon = () => {
+    if (isLoading) {
+      return <LoadingSpinner wsSize={size} size="small" />;
+    }
 
-    const renderEndIcon = () => {
-      if (isLoading && loadingPosition === 'end') {
-        return (
-          <LoadingIndicator size={size} position="end">
-            <div className="WSButton-loadingSpinner" />
-          </LoadingIndicator>
-        );
-      }
-
-      if (endIcon && !isLoading) {
-        return (
-          <IconWrapper size={size} position="end" className="WSButton-endIcon">
-            {endIcon}
-          </IconWrapper>
-        );
-      }
-
-      return null;
-    };
-
-    const renderButtonContent = () => {
-      // Display loading text if provided and loading
-      const displayText = isLoading && loadingText ? loadingText : children;
-
-      // For circular buttons, don't show text, only icons
-      if (shape === 'circular') {
-        return null;
-      }
-
+    if (startIcon) {
       return (
-        <ButtonContent
-          loading={isLoading && loadingPosition === 'center'}
-          preserveWidth={preserveWidth}
-        >
-          {renderStartIcon()}
-          {displayText}
-          {renderEndIcon()}
-        </ButtonContent>
+        <IconWrapper position="start" wsSize={size}>
+          {startIcon}
+        </IconWrapper>
       );
-    };
+    }
 
-    const renderCenterLoading = () => {
-      if (isLoading && loadingPosition === 'center') {
-        return (
-          <LoadingOverlay loading={isLoading}>
-            <div className="WSButton-loadingSpinner" />
-          </LoadingOverlay>
-        );
-      }
+    return null;
+  };
 
-      return null;
-    };
+  const renderEndIcon = () => {
+    if (endIcon && !isLoading) {
+      return (
+        <IconWrapper position="end" wsSize={size}>
+          {endIcon}
+        </IconWrapper>
+      );
+    }
 
-    // ==============================================
-    // ACCESSIBILITY PROPS
-    // ==============================================
+    return null;
+  };
 
-    const accessibilityProps = {
-      'aria-label': ariaLabel,
-      'aria-describedby': ariaDescribedBy,
-      'aria-disabled': isDisabled,
-      'aria-busy': isLoading,
-      ...(isLoading && { 'aria-live': 'polite' as const }),
-    };
-
-    // ==============================================
-    // COMPONENT PROPS
-    // ==============================================
-
-    const componentProps = {
-      // Link props
-      ...(href && {
-        href,
-        target,
-        rel: rel || (target === '_blank' ? 'noopener noreferrer' : undefined),
-        component: component || 'a',
-      }),
-
-      // Form props
-      type,
-      form,
-    };
-
-    // ==============================================
-    // RENDER COMPONENT
-    // ==============================================
+  const renderContent = () => {
+    const displayText = isLoading && loadingText ? loadingText : children;
 
     return (
-      <StyledWSButton
-        ref={ref}
-        // Custom styling props
-        wsVariant={variant}
-        wsColor={color}
-        wsSize={size}
-        wsShape={shape}
-        animate={animate}
-        hoverEffect={hoverEffect}
-        loading={isLoading}
-        // MUI Button props
-        fullWidth={fullWidth}
-        disabled={isDisabled}
-        disableElevation={disableElevation}
-        disableRipple={disableRipple}
-        // Event handlers
-        onClick={handleClick}
-        onFocus={handleFocus}
-        onBlur={handleBlur}
-        // Styling
-        {...(sx && { sx })}
-        {...(className && { className })}
-        // Accessibility
-        {...accessibilityProps}
-        // Component and link props
-        {...componentProps}
-        // Forward other props
-        {...otherProps}
-      >
-        {/* Button content with conditional loading */}
-        {renderButtonContent()}
-
-        {/* Center loading overlay */}
-        {renderCenterLoading()}
-
-        {/* Circular button content (icon only) */}
-        {shape === 'circular' && !isLoading && (startIcon || endIcon)}
-
-        {/* Circular button loading */}
-        {shape === 'circular' && isLoading && (
-          <div className="WSButton-loadingSpinner" />
-        )}
-      </StyledWSButton>
+      <>
+        {renderStartIcon()}
+        {displayText}
+        {renderEndIcon()}
+      </>
     );
-  }
-);
+  };
 
-// ==============================================
-// COMPONENT DISPLAY NAME
-// ==============================================
+  // ==============================================
+  // ACCESSIBILITY PROPS
+  // ==============================================
 
-WSButton.displayName = 'WSButton';
+  const accessibilityProps = {
+    'aria-label': ariaLabel,
+    'aria-disabled': isDisabled,
+    'aria-busy': isLoading,
+    ...(isLoading && { 'aria-live': 'polite' as const }),
+  };
 
-// ==============================================
-// EXPORT COMPONENT
-// ==============================================
+  // ==============================================
+  // COMPONENT PROPS
+  // ==============================================
 
-export default WSButton;
+  const componentProps = {
+    // Link props
+    ...(href && {
+      href,
+      target,
+      rel: target === '_blank' ? 'noopener noreferrer' : undefined,
+      component: component || 'a',
+    }),
+
+    // Form props
+    type,
+  };
+
+  // ==============================================
+  // RENDER COMPONENT
+  // ==============================================
+
+  return (
+    <StyledWSButton
+      // Custom styling props
+      wsVariant={variant}
+      wsColor={color}
+      wsSize={size}
+      loading={isLoading}
+      // MUI Button props
+      fullWidth={fullWidth}
+      disabled={isDisabled}
+      // Event handlers
+      onClick={handleClick}
+      // Styling
+      {...(sx && { sx })}
+      {...(className && { className })}
+      // Accessibility
+      {...accessibilityProps}
+      // Component and link props
+      {...componentProps}
+      // Forward other props
+      {...otherProps}
+    >
+      {renderContent()}
+    </StyledWSButton>
+  );
+}
