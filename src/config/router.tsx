@@ -65,6 +65,18 @@ const router = createBrowserRouter([
         element: <WSLayout />,
         children: [
           {
+            index: true,
+            element: (
+              <Suspense
+                fallback={
+                  <Pages.LoadingPage message="Đang tải trang test..." />
+                }
+              >
+                <Pages.WSDemoPage />
+              </Suspense>
+            ),
+          },
+          {
             path: 'ws-button-demo',
             element: (
               <Suspense
@@ -109,6 +121,18 @@ const router = createBrowserRouter([
                 }
               >
                 <Pages.WSLoadingDemoPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'ws-modal-demo',
+            element: (
+              <Suspense
+                fallback={
+                  <Pages.LoadingPage message="Đang tải trang test..." />
+                }
+              >
+                <Pages.WSModalDemoPage />
               </Suspense>
             ),
           },
