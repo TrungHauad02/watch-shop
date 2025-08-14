@@ -1,7 +1,5 @@
-/* eslint-disable @typescript-eslint/no-empty-object-type */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useCallback, useEffect } from 'react';
-import { Typography, CircularProgress } from '@mui/material';
+import { Typography, CircularProgress, useTheme } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
 import WSButton from '@/components/WSButton';
 import {
@@ -17,14 +15,16 @@ import {
   ModalFooter,
   CloseButton,
   LoadingOverlay,
+  ModalActionGroup,
 } from './WSModal.styles';
 
 // ==============================================
-// WSModal COMPONENT - SIMPLIFIED
+// WSModal COMPONENT - THEME INTEGRATED
 // ==============================================
 
 // CUSTOMIZE: Bạn có thể chỉnh sửa size (small, medium, large, fullscreen),
-// variant (default, confirmation, form), và actions để tùy chỉnh modal
+// variant (default, confirmation, form), và actions để tùy chỉnh modal.
+// Modal sẽ tự động thay đổi màu sắc theo theme (dark/light mode).
 export default function WSModal({
   // Core styling props
   size = WS_MODAL_DEFAULTS.size,
@@ -64,6 +64,12 @@ export default function WSModal({
   // Forward all other props
   ...otherProps
 }: WSModalProps) {
+  // ==============================================
+  // THEME INTEGRATION
+  // ==============================================
+
+  const theme = useTheme();
+
   // ==============================================
   // STATE MANAGEMENT
   // ==============================================
@@ -140,8 +146,20 @@ export default function WSModal({
     return undefined;
   }, [open, closable, handleClose]);
 
+  // Focus management
+  useEffect(() => {
+    if (open) {
+      // Prevent body scroll when modal is open
+      document.body.style.overflow = 'hidden';
+
+      return () => {
+        document.body.style.overflow = 'unset';
+      };
+    }
+  }, [open]);
+
   // ==============================================
-  // RENDER HELPERS
+  // RENDER HELPERS - THEME AWARE
   // ==============================================
 
   const renderHeader = () => {
@@ -152,12 +170,28 @@ export default function WSModal({
         {(title || subtitle) && (
           <div>
             {title && (
-              <Typography variant="h5" className="modal-title">
+              <Typography
+                variant={
+                  size === 'small' ? 'h6' : size === 'large' ? 'h4' : 'h5'
+                }
+                className="modal-title"
+                sx={{
+                  color: theme.palette.text.primary,
+                  fontWeight: theme.typography.fontWeightBold || 600,
+                }}
+              >
                 {title}
               </Typography>
             )}
             {subtitle && (
-              <Typography variant="body2" className="modal-subtitle">
+              <Typography
+                variant={size === 'small' ? 'body2' : 'body1'}
+                className="modal-subtitle"
+                sx={{
+                  color: theme.palette.text.secondary,
+                  mt: 0.5,
+                }}
+              >
                 {subtitle}
               </Typography>
             )}
@@ -167,7 +201,7 @@ export default function WSModal({
         {showCloseButton && closable && (
           <CloseButton
             onClick={handleClose}
-            aria-label="Close modal"
+            aria-label="Đóng modal"
             size="small"
           >
             <CloseIcon />
@@ -191,7 +225,19 @@ export default function WSModal({
     if (content) {
       return (
         <ModalContent wsSize={size} {...(contentSx && { sx: contentSx })}>
-          {content}
+          {typeof content === 'string' ? (
+            <Typography
+              variant="body1"
+              sx={{
+                color: theme.palette.text.primary,
+                lineHeight: 1.6,
+              }}
+            >
+              {content}
+            </Typography>
+          ) : (
+            content
+          )}
         </ModalContent>
       );
     }
@@ -204,20 +250,35 @@ export default function WSModal({
 
     return (
       <ModalFooter wsSize={size} {...(footerSx && { sx: footerSx })}>
-        {actions.map((action, index) => (
-          <WSButton
-            key={index}
-            variant={action.variant || 'contained'}
-            color={action.color || 'primary'}
-            size={size === 'small' ? 'small' : 'medium'}
-            onClick={() => handleActionClick(action, index)}
-            disabled={action.disabled || loading}
-            loading={action.loading || actionLoadingStates[index] || false}
-            startIcon={action.startIcon}
-          >
-            {action.label}
-          </WSButton>
-        ))}
+        <ModalActionGroup>
+          {actions.map((action, index) => {
+            // CUSTOMIZE: Bạn có thể chỉnh sửa button styling trong actions tại đây
+            const buttonVariant =
+              action.variant ||
+              (action.color === 'error' ? 'outlined' : 'contained');
+
+            const buttonColor = action.color || 'primary';
+
+            return (
+              <WSButton
+                key={index}
+                variant={buttonVariant}
+                color={buttonColor}
+                size={size === 'small' ? 'small' : 'medium'}
+                onClick={() => handleActionClick(action, index)}
+                disabled={action.disabled || loading}
+                loading={action.loading || actionLoadingStates[index] || false}
+                startIcon={action.startIcon}
+                sx={{
+                  minWidth: size === 'small' ? '80px' : '100px',
+                  ...action.sx,
+                }}
+              >
+                {action.label}
+              </WSButton>
+            );
+          })}
+        </ModalActionGroup>
       </ModalFooter>
     );
   };
@@ -227,7 +288,12 @@ export default function WSModal({
 
     return (
       <LoadingOverlay>
-        <CircularProgress size={40} />
+        <CircularProgress
+          size={40}
+          sx={{
+            color: theme.palette.primary.main,
+          }}
+        />
       </LoadingOverlay>
     );
   };
@@ -264,6 +330,10 @@ export default function WSModal({
         wsVariant={variant}
         {...accessibilityProps}
         tabIndex={-1}
+        sx={{
+          // CUSTOMIZE: Bạn có thể override styles tại đây
+          ...sx,
+        }}
       >
         {/* Header */}
         {renderHeader()}

@@ -11,6 +11,15 @@ const RootLayout = () => (
   </LayoutProvider>
 );
 
+const DefaultLayout = () => (
+  <WSLayout
+    variant="default"
+    scrollRestoration={true}
+    showHeader={true}
+    showFooter={true}
+  />
+);
+
 const AuthLayout = () => (
   <WSLayout variant="auth" backgroundColor={COLOR_PALETTES.richBlack[200]} />
 );
@@ -27,7 +36,7 @@ const router = createBrowserRouter([
       // Public routes with default layout
       {
         path: '',
-        element: <WSLayout />,
+        element: <DefaultLayout />,
         children: [
           {
             index: true,

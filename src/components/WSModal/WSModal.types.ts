@@ -1,9 +1,9 @@
 import { ReactNode } from 'react';
-import { ModalProps as MuiModalProps } from '@mui/material/Modal';
 import { SxProps, Theme } from '@mui/material/styles';
+import { WSButtonVariant, WSButtonColor } from '../WSButton/WSButton.types';
 
 // ==============================================
-// WSMODAL TYPES - SIMPLIFIED
+// WSMODAL TYPES
 // ==============================================
 
 export type WSModalSize = 'small' | 'medium' | 'large' | 'fullscreen';
@@ -11,26 +11,26 @@ export type WSModalSize = 'small' | 'medium' | 'large' | 'fullscreen';
 export type WSModalVariant = 'default' | 'confirmation' | 'form';
 
 // ==============================================
-// ACTION CONFIGURATION
+// MODAL ACTION INTERFACE
 // ==============================================
 
 export interface WSModalAction {
   label: string;
   onClick: () => void | Promise<void>;
-  color?: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info';
-  variant?: 'contained' | 'outlined' | 'text';
-  loading?: boolean;
+  variant?: WSButtonVariant;
+  color?: WSButtonColor;
   disabled?: boolean;
+  loading?: boolean;
+  autoClose?: boolean;
   startIcon?: ReactNode;
-  autoClose?: boolean; // Close modal after action
+  sx?: SxProps<Theme>;
 }
 
 // ==============================================
 // MAIN WSMODAL PROPS INTERFACE
 // ==============================================
 
-export interface WSModalProps
-  extends Omit<MuiModalProps, 'children' | 'content'> {
+export interface WSModalProps {
   // Core styling props
   size?: WSModalSize;
   variant?: WSModalVariant;
@@ -49,6 +49,12 @@ export interface WSModalProps
   loading?: boolean;
   closable?: boolean;
 
+  // Modal state
+  open?: boolean;
+
+  // Event handlers
+  onClose?: () => void;
+
   // Custom styling
   sx?: SxProps<Theme>;
   className?: string;
@@ -56,12 +62,12 @@ export interface WSModalProps
   headerSx?: SxProps<Theme>;
   footerSx?: SxProps<Theme>;
 
-  // Event handlers
-  onClose?: () => void;
-
   // Accessibility
   ariaLabel?: string;
   ariaDescribedBy?: string;
+
+  // Additional props
+  style?: React.CSSProperties;
 }
 
 // ==============================================
@@ -74,6 +80,7 @@ export const WS_MODAL_SIZES = [
   'large',
   'fullscreen',
 ] as const;
+
 export const WS_MODAL_VARIANTS = ['default', 'confirmation', 'form'] as const;
 
 // ==============================================
@@ -87,6 +94,7 @@ export const WS_MODAL_DEFAULTS = {
   loading: false,
   closable: true,
   showCloseButton: true,
+  actions: [] as WSModalAction[],
 } as const;
 
 // ==============================================
@@ -101,6 +109,67 @@ export const isValidWSModalVariant = (
   variant: unknown
 ): variant is WSModalVariant => {
   return WS_MODAL_VARIANTS.includes(variant as WSModalVariant);
+};
+
+// ==============================================
+// MODAL CONFIGURATION TYPES
+// ==============================================
+
+export interface WSModalConfig {
+  size: WSModalSize;
+  variant: WSModalVariant;
+  closable: boolean;
+  showCloseButton: boolean;
+  backdrop: boolean;
+  escapeKeyDown: boolean;
+}
+
+// ==============================================
+// MODAL STATE TYPES
+// ==============================================
+
+export interface WSModalState {
+  isOpen: boolean;
+  isLoading: boolean;
+  actionLoadingStates: Record<number, boolean>;
+}
+
+// ==============================================
+// MODAL THEME TYPES
+// ==============================================
+
+export interface WSModalThemeOverrides {
+  variants?: Array<{
+    props: Partial<WSModalProps>;
+    style: SxProps<Theme>;
+  }>;
+  defaultProps?: Partial<WSModalProps>;
+}
+
+// ==============================================
+// UTILITY TYPES
+// ==============================================
+
+export type WSModalEventHandler = () => void;
+export type WSModalAsyncHandler = () => Promise<void>;
+
+// Modal with confirmation pattern
+export type WSModalConfirmation = WSModalProps & {
+  variant: 'confirmation';
+  onConfirm: WSModalAsyncHandler;
+  onCancel?: WSModalEventHandler;
+  confirmText?: string;
+  cancelText?: string;
+};
+
+// Modal with form pattern
+export type WSModalForm = WSModalProps & {
+  variant: 'form';
+  onSubmit: WSModalAsyncHandler;
+  onCancel?: WSModalEventHandler;
+  submitText?: string;
+  cancelText?: string;
+  isValid?: boolean;
 };
 
 // ==============================================

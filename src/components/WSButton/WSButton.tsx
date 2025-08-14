@@ -3,11 +3,12 @@ import { WSButtonProps, WS_BUTTON_DEFAULTS } from './WSButton.types';
 import { StyledWSButton, LoadingSpinner, IconWrapper } from './WSButton.styles';
 
 // ==============================================
-// WSButton COMPONENT - SIMPLIFIED
+// WSButton COMPONENT - THEME INTEGRATED
 // ==============================================
 
 // CUSTOMIZE: Bạn có thể chỉnh sửa variant (contained, outlined, text),
-// size (small, medium, large), color (primary, secondary, success, warning, error, info) để tùy chỉnh button
+// size (small, medium, large), color (primary, secondary, success, warning, error, info) để tùy chỉnh button.
+// Button sẽ tự động thay đổi màu sắc theo theme (dark/light mode).
 export default function WSButton({
   // Core styling props
   variant = WS_BUTTON_DEFAULTS.variant,
@@ -93,12 +94,18 @@ export default function WSButton({
   );
 
   // ==============================================
-  // CONTENT RENDERING
+  // CONTENT RENDERING - THEME AWARE
   // ==============================================
 
   const renderStartIcon = () => {
     if (isLoading) {
-      return <LoadingSpinner wsSize={size} size="small" />;
+      return (
+        <LoadingSpinner
+          wsSize={size}
+          size={size === 'small' ? 16 : size === 'medium' ? 20 : 24}
+          thickness={4}
+        />
+      );
     }
 
     if (startIcon) {
@@ -125,6 +132,7 @@ export default function WSButton({
   };
 
   const renderContent = () => {
+    // CUSTOMIZE: Bạn có thể chỉnh sửa text hiển thị khi loading tại đây
     const displayText = isLoading && loadingText ? loadingText : children;
 
     return (
