@@ -1,36 +1,54 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { styled } from '@mui/material/styles';
 import { Button, CircularProgress } from '@mui/material';
 import { WSButtonVariant, WSButtonColor, WSButtonSize } from './WSButton.types';
-import { BRAND_COLORS, SEMANTIC_COLORS } from '../../styles/colors';
 
 // ==============================================
-// COLOR CONFIGURATIONS
+// COLOR CONFIGURATIONS - THEME INTEGRATED
 // ==============================================
 
-const getButtonColor = (color: WSButtonColor): string => {
+const getButtonColors = (theme: any, color: WSButtonColor) => {
+  // CUSTOMIZE: Bạn có thể chỉnh sửa màu sắc button tại đây
   const colorMap = {
-    primary: BRAND_COLORS.primary,
-    secondary: BRAND_COLORS.secondary,
-    success: SEMANTIC_COLORS.success,
-    warning: SEMANTIC_COLORS.warning,
-    error: SEMANTIC_COLORS.error,
-    info: SEMANTIC_COLORS.info,
+    primary: {
+      main: theme.palette.primary.main,
+      light: theme.palette.primary.light,
+      dark: theme.palette.primary.dark,
+      contrastText: theme.palette.primary.contrastText,
+    },
+    secondary: {
+      main: theme.palette.secondary.main,
+      light: theme.palette.secondary.light,
+      dark: theme.palette.secondary.dark,
+      contrastText: theme.palette.secondary.contrastText,
+    },
+    success: {
+      main: theme.palette.success.main,
+      light: theme.palette.success.light,
+      dark: theme.palette.success.dark,
+      contrastText: theme.palette.success.contrastText,
+    },
+    warning: {
+      main: theme.palette.warning.main,
+      light: theme.palette.warning.light,
+      dark: theme.palette.warning.dark,
+      contrastText: theme.palette.warning.contrastText,
+    },
+    error: {
+      main: theme.palette.error.main,
+      light: theme.palette.error.light,
+      dark: theme.palette.error.dark,
+      contrastText: theme.palette.error.contrastText,
+    },
+    info: {
+      main: theme.palette.info.main,
+      light: theme.palette.info.light,
+      dark: theme.palette.info.dark,
+      contrastText: theme.palette.info.contrastText,
+    },
   };
 
   return colorMap[color];
-};
-
-const getContrastColor = (color: WSButtonColor): string => {
-  const contrastMap = {
-    primary: BRAND_COLORS.secondary,
-    secondary: BRAND_COLORS.primary,
-    success: '#ffffff',
-    warning: '#ffffff',
-    error: '#ffffff',
-    info: '#ffffff',
-  };
-
-  return contrastMap[color];
 };
 
 // ==============================================
@@ -38,6 +56,7 @@ const getContrastColor = (color: WSButtonColor): string => {
 // ==============================================
 
 const getSizeConfig = (size: WSButtonSize) => {
+  // CUSTOMIZE: Bạn có thể chỉnh sửa kích thước button tại đây
   const sizeMap = {
     small: {
       height: '32px',
@@ -69,7 +88,88 @@ const getSizeConfig = (size: WSButtonSize) => {
 };
 
 // ==============================================
-// STYLED BUTTON COMPONENT
+// VARIANT STYLES - THEME AWARE
+// ==============================================
+
+const getVariantStyles = (
+  theme: any,
+  variant: WSButtonVariant,
+  colors: ReturnType<typeof getButtonColors>
+) => {
+  const variants = {
+    contained: {
+      backgroundColor: colors.main,
+      color: colors.contrastText,
+      border: 'none',
+      boxShadow: theme.shadows[2],
+
+      '&:hover': {
+        backgroundColor: colors.dark,
+        transform: 'translateY(-1px)',
+        boxShadow: theme.shadows[4],
+      },
+
+      '&:active': {
+        backgroundColor: colors.dark,
+        transform: 'translateY(0)',
+        boxShadow: theme.shadows[1],
+      },
+    },
+
+    outlined: {
+      backgroundColor: 'transparent',
+      color: colors.main,
+      border: `2px solid ${colors.main}`,
+      boxShadow: 'none',
+
+      '&:hover': {
+        backgroundColor:
+          theme.palette.mode === 'dark'
+            ? `${colors.main}20`
+            : `${colors.main}15`,
+        borderColor: colors.dark,
+        transform: 'translateY(-1px)',
+        boxShadow: theme.shadows[2],
+      },
+
+      '&:active': {
+        backgroundColor:
+          theme.palette.mode === 'dark'
+            ? `${colors.main}30`
+            : `${colors.main}25`,
+        transform: 'translateY(0)',
+      },
+    },
+
+    text: {
+      backgroundColor: 'transparent',
+      color: colors.main,
+      border: 'none',
+      boxShadow: 'none',
+
+      '&:hover': {
+        backgroundColor:
+          theme.palette.mode === 'dark'
+            ? `${colors.main}15`
+            : `${colors.main}10`,
+        transform: 'translateY(-1px)',
+      },
+
+      '&:active': {
+        backgroundColor:
+          theme.palette.mode === 'dark'
+            ? `${colors.main}25`
+            : `${colors.main}20`,
+        transform: 'translateY(0)',
+      },
+    },
+  };
+
+  return variants[variant];
+};
+
+// ==============================================
+// STYLED BUTTON COMPONENT - THEME INTEGRATED
 // ==============================================
 
 export const StyledWSButton = styled(Button, {
@@ -81,9 +181,9 @@ export const StyledWSButton = styled(Button, {
   wsSize: WSButtonSize;
   loading: boolean;
 }>(({ theme, wsVariant, wsColor, wsSize, loading }) => {
-  const mainColor = getButtonColor(wsColor);
-  const contrastColor = getContrastColor(wsColor);
+  const colors = getButtonColors(theme, wsColor);
   const sizeConfig = getSizeConfig(wsSize);
+  const variantStyles = getVariantStyles(theme, wsVariant, colors);
 
   // Base styles
   const baseStyles = {
@@ -97,66 +197,13 @@ export const StyledWSButton = styled(Button, {
     textTransform: 'none' as const,
     letterSpacing: '0.025em',
     lineHeight: 1.5,
-    transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+    transition: theme.transitions.create(
+      ['background-color', 'border-color', 'color', 'box-shadow', 'transform'],
+      {
+        duration: theme.transitions.duration.short,
+      }
+    ),
     position: 'relative' as const,
-  };
-
-  // Variant-specific styles
-  const variantStyles = {
-    contained: {
-      backgroundColor: mainColor,
-      color: contrastColor,
-      border: 'none',
-      boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-
-      '&:hover': {
-        backgroundColor: `${mainColor}dd`,
-        transform: 'translateY(-1px)',
-        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.15)',
-      },
-
-      '&:active': {
-        backgroundColor: `${mainColor}bb`,
-        transform: 'translateY(0)',
-        boxShadow: '0 2px 4px rgba(0, 0, 0, 0.2)',
-      },
-    },
-
-    outlined: {
-      backgroundColor: 'transparent',
-      color: mainColor,
-      border: `2px solid ${mainColor}`,
-      boxShadow: 'none',
-
-      '&:hover': {
-        backgroundColor: `${mainColor}15`,
-        borderColor: `${mainColor}dd`,
-        transform: 'translateY(-1px)',
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
-      },
-
-      '&:active': {
-        backgroundColor: `${mainColor}25`,
-        transform: 'translateY(0)',
-      },
-    },
-
-    text: {
-      backgroundColor: 'transparent',
-      color: mainColor,
-      border: 'none',
-      boxShadow: 'none',
-
-      '&:hover': {
-        backgroundColor: `${mainColor}10`,
-        transform: 'translateY(-1px)',
-      },
-
-      '&:active': {
-        backgroundColor: `${mainColor}20`,
-        transform: 'translateY(0)',
-      },
-    },
   };
 
   // Loading styles
@@ -169,29 +216,30 @@ export const StyledWSButton = styled(Button, {
       }
     : {};
 
-  // Focus styles
+  // Focus styles - CUSTOMIZE: Bạn có thể chỉnh sửa focus outline tại đây
   const focusStyles = {
     '&:focus-visible': {
-      outline: `2px solid ${BRAND_COLORS.secondary}`,
+      outline: `2px solid ${colors.main}`,
       outlineOffset: '2px',
+      boxShadow: `0 0 0 3px ${colors.main}25`,
     },
   };
 
-  // Disabled styles
+  // Disabled styles - Theme aware
   const disabledStyles = {
     '&:disabled, &.Mui-disabled': {
-      backgroundColor: theme.palette.mode === 'dark' ? '#333' : '#f5f5f5',
-      color: theme.palette.mode === 'dark' ? '#666' : '#999',
+      backgroundColor: theme.palette.action.disabledBackground,
+      color: theme.palette.action.disabled,
       border:
         wsVariant === 'outlined'
-          ? `2px solid ${theme.palette.mode === 'dark' ? '#333' : '#e0e0e0'}`
+          ? `2px solid ${theme.palette.action.disabled}`
           : 'none',
       boxShadow: 'none',
       cursor: 'not-allowed',
       transform: 'none',
 
       '&:hover': {
-        backgroundColor: theme.palette.mode === 'dark' ? '#333' : '#f5f5f5',
+        backgroundColor: theme.palette.action.disabledBackground,
         transform: 'none',
         boxShadow: 'none',
       },
@@ -215,7 +263,7 @@ export const StyledWSButton = styled(Button, {
 
   return {
     ...baseStyles,
-    ...variantStyles[wsVariant],
+    ...variantStyles,
     ...loadingStyles,
     ...focusStyles,
     ...disabledStyles,
@@ -224,25 +272,27 @@ export const StyledWSButton = styled(Button, {
 });
 
 // ==============================================
-// LOADING SPINNER
+// LOADING SPINNER - THEME INTEGRATED
 // ==============================================
 
 export const LoadingSpinner = styled(CircularProgress, {
   shouldForwardProp: (prop) => !['wsSize'].includes(prop as string),
 })<{
   wsSize: WSButtonSize;
-}>(({ wsSize }) => {
+}>(({ theme, wsSize }) => {
   const sizeValue = wsSize === 'small' ? 16 : wsSize === 'medium' ? 20 : 24;
 
   return {
     width: `${sizeValue}px !important`,
     height: `${sizeValue}px !important`,
-    marginRight: '8px',
+    marginRight: theme.spacing(1),
+    // CUSTOMIZE: Bạn có thể chỉnh sửa màu loading spinner tại đây
+    color: 'inherit',
   };
 });
 
 // ==============================================
-// ICON WRAPPER
+// ICON WRAPPER - THEME INTEGRATED
 // ==============================================
 
 export const IconWrapper = styled('span', {
@@ -250,7 +300,7 @@ export const IconWrapper = styled('span', {
 })<{
   position: 'start' | 'end';
   wsSize: WSButtonSize;
-}>(({ position, wsSize }) => {
+}>(({ theme, position, wsSize }) => {
   const iconSize =
     wsSize === 'small' ? '16px' : wsSize === 'medium' ? '18px' : '20px';
 
@@ -261,13 +311,13 @@ export const IconWrapper = styled('span', {
     fontSize: iconSize,
 
     ...(position === 'start' && {
-      marginRight: '8px',
-      marginLeft: '-4px',
+      marginRight: theme.spacing(1),
+      marginLeft: theme.spacing(-0.5),
     }),
 
     ...(position === 'end' && {
-      marginLeft: '8px',
-      marginRight: '-4px',
+      marginLeft: theme.spacing(1),
+      marginRight: theme.spacing(-0.5),
     }),
 
     '& > *': {
@@ -275,3 +325,52 @@ export const IconWrapper = styled('span', {
     },
   };
 });
+
+// ==============================================
+// BUTTON CONTENT WRAPPER - THEME INTEGRATED
+// ==============================================
+
+export const ButtonContent = styled('span')<{
+  loading: boolean;
+  preserveWidth: boolean;
+}>(({ theme, loading, preserveWidth }) => ({
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '100%',
+  transition: theme.transitions.create(['opacity', 'visibility'], {
+    duration: theme.transitions.duration.short,
+  }),
+
+  ...(loading &&
+    preserveWidth && {
+      visibility: 'hidden',
+    }),
+
+  ...(loading &&
+    !preserveWidth && {
+      opacity: 0,
+    }),
+}));
+
+// ==============================================
+// LOADING OVERLAY - THEME INTEGRATED
+// ==============================================
+
+export const LoadingOverlay = styled('div')<{
+  loading: boolean;
+}>(({ theme, loading }) => ({
+  position: 'absolute',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  opacity: loading ? 1 : 0,
+  visibility: loading ? 'visible' : 'hidden',
+  transition: theme.transitions.create(['opacity', 'visibility'], {
+    duration: theme.transitions.duration.short,
+  }),
+}));

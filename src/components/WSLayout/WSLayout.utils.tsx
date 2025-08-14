@@ -8,8 +8,17 @@ import React, {
   Component,
   ReactNode,
   ErrorInfo,
+  useMemo,
+  useCallback,
 } from 'react';
 import { useLocation } from 'react-router-dom';
+import {
+  useIsDarkMode,
+  useLanguage,
+  useStableThemeActions,
+  subscribeToThemeChanges,
+  subscribeToLanguageChanges,
+} from '../../shared/store/themeStore';
 import type WSLayoutProps from './WSLayout.types';
 import type {
   LayoutContextType,
@@ -20,60 +29,80 @@ import type {
 } from './WSLayout.types';
 
 // ==============================================
-// LAYOUT CONTEXT
+// LAYOUT CONTEXT - OPTIMIZED
 // ==============================================
 
 const LayoutContext = createContext<LayoutContextType | null>(null);
 
-export const LayoutProvider: React.FC<{
+export const LayoutProvider = React.memo<{
   children: React.ReactNode;
   initialVariant?: WSLayoutProps['variant'];
-}> = ({ children, initialVariant = 'default' }) => {
+}>(({ children, initialVariant = 'default' }) => {
   const [variant] = useState<WSLayoutProps['variant']>(initialVariant);
   const [isLoading, setIsLoading] = useState(false);
   const [isHeaderVisible] = useState(true);
   const [isFooterVisible] = useState(true);
   const [breadcrumbItems, setBreadcrumbItems] = useState<BreadcrumbItem[]>([]);
-  const [pageMetadata, setPageMetadataState] = useState<PageMetadata>({
+  const [pageMetadata, setPageMetadataState] = useState<PageMetadata>(() => ({
     title: 'WatchStore - Đồng hồ chính hãng',
     description:
       'Chuyên cung cấp đồng hồ chính hãng, cao cấp với chất lượng tuyệt vời',
     keywords: ['đồng hồ', 'watch', 'luxury', 'chính hãng'],
-  });
+  }));
 
-  const setLoading = (loading: boolean): void => {
+  // Memoized callbacks to prevent re-renders
+  const setLoading = useCallback((loading: boolean): void => {
     setIsLoading(loading);
-  };
+  }, []);
 
-  const setPageMetadata = (metadata: Partial<PageMetadata>): void => {
-    setPageMetadataState((prev) => ({ ...prev, ...metadata }));
-  };
+  const setPageMetadata = useCallback(
+    (metadata: Partial<PageMetadata>): void => {
+      setPageMetadataState((prev) => ({ ...prev, ...metadata }));
+    },
+    []
+  );
 
-  const setBreadcrumb = (items: BreadcrumbItem[]): void => {
+  const setBreadcrumb = useCallback((items: BreadcrumbItem[]): void => {
     setBreadcrumbItems(items);
-  };
+  }, []);
 
-  const contextValue: LayoutContextType = {
-    variant,
-    isHeaderVisible,
-    isFooterVisible,
-    isLoading,
-    setLoading,
-    setPageMetadata,
-    setBreadcrumb,
-    breadcrumbItems,
-    pageMetadata,
-  };
+  // Memoized context value
+  const contextValue = useMemo(
+    (): LayoutContextType => ({
+      variant,
+      isHeaderVisible,
+      isFooterVisible,
+      isLoading,
+      setLoading,
+      setPageMetadata,
+      setBreadcrumb,
+      breadcrumbItems,
+      pageMetadata,
+    }),
+    [
+      variant,
+      isHeaderVisible,
+      isFooterVisible,
+      isLoading,
+      setLoading,
+      setPageMetadata,
+      setBreadcrumb,
+      breadcrumbItems,
+      pageMetadata,
+    ]
+  );
 
   return (
     <LayoutContext.Provider value={contextValue}>
       {children}
     </LayoutContext.Provider>
   );
-};
+});
+
+LayoutProvider.displayName = 'LayoutProvider';
 
 // ==============================================
-// LAYOUT HOOK
+// LAYOUT HOOK - OPTIMIZED
 // ==============================================
 
 export const useLayout = () => {
@@ -83,54 +112,73 @@ export const useLayout = () => {
     throw new Error('useLayout must be used within a LayoutProvider');
   }
 
-  const setPageTitle = (title: string): void => {
-    context.setPageMetadata({ title });
-    // Also update document title
-    document.title = title;
-  };
-
-  const addBreadcrumbItem = (item: BreadcrumbItem): void => {
-    context.setBreadcrumb([...context.breadcrumbItems, item]);
-  };
-
-  return {
-    setLoading: context.setLoading,
-    setPageTitle,
-    setPageMetadata: context.setPageMetadata,
-    setBreadcrumb: context.setBreadcrumb,
-    addBreadcrumbItem,
-    layoutState: {
-      isLoading: context.isLoading,
-      pageMetadata: context.pageMetadata,
-      breadcrumbItems: context.breadcrumbItems,
+  const setPageTitle = useCallback(
+    (title: string): void => {
+      context.setPageMetadata({ title });
+      // Also update document title
+      document.title = title;
     },
-  };
+    [context]
+  );
+
+  const addBreadcrumbItem = useCallback(
+    (item: BreadcrumbItem): void => {
+      context.setBreadcrumb([...context.breadcrumbItems, item]);
+    },
+    [context]
+  );
+
+  return useMemo(
+    () => ({
+      setLoading: context.setLoading,
+      setPageTitle,
+      setPageMetadata: context.setPageMetadata,
+      setBreadcrumb: context.setBreadcrumb,
+      addBreadcrumbItem,
+      layoutState: {
+        isLoading: context.isLoading,
+        pageMetadata: context.pageMetadata,
+        breadcrumbItems: context.breadcrumbItems,
+      },
+    }),
+    [
+      context.setLoading,
+      setPageTitle,
+      context.setPageMetadata,
+      context.setBreadcrumb,
+      addBreadcrumbItem,
+      context.isLoading,
+      context.pageMetadata,
+      context.breadcrumbItems,
+    ]
+  );
 };
 
 // ==============================================
-// SCROLL RESTORATION HOOK
+// SCROLL RESTORATION HOOK - OPTIMIZED
 // ==============================================
 
 export const useScrollRestoration = (enabled: boolean = true) => {
   const location = useLocation();
   const [scrollPositions, setScrollPositions] = useState<Map<string, number>>(
-    new Map()
+    () => new Map()
   );
+
+  // Memoized scroll handler
+  const handleScroll = useCallback((): void => {
+    setScrollPositions((prev) => {
+      const newMap = new Map(prev);
+      newMap.set(location.pathname, window.scrollY);
+      return newMap;
+    });
+  }, [location.pathname]);
 
   useEffect(() => {
     if (!enabled) return;
 
-    const handleScroll = (): void => {
-      setScrollPositions((prev) => {
-        const newMap = new Map(prev);
-        newMap.set(location.pathname, window.scrollY);
-        return newMap;
-      });
-    };
-
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, [location.pathname, enabled]);
+  }, [handleScroll, enabled]);
 
   useEffect(() => {
     if (!enabled) return;
@@ -139,140 +187,254 @@ export const useScrollRestoration = (enabled: boolean = true) => {
 
     if (savedPosition !== undefined) {
       // Restore saved position
-      setTimeout(() => {
+      const timeoutId = setTimeout(() => {
         window.scrollTo({ top: savedPosition, behavior: 'smooth' });
       }, 100);
+      return () => clearTimeout(timeoutId);
     } else {
       // Scroll to top for new pages
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   }, [location.pathname, scrollPositions, enabled]);
 
-  const scrollToTop = (): void => {
+  const scrollToTop = useCallback((): void => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
-  };
+  }, []);
 
-  const scrollToElement = (elementId: string): void => {
+  const scrollToElement = useCallback((elementId: string): void => {
     const element = document.getElementById(elementId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth' });
     }
-  };
+  }, []);
 
-  return {
-    scrollToTop,
-    scrollToElement,
-    currentPosition: scrollPositions.get(location.pathname) || 0,
-  };
+  return useMemo(
+    () => ({
+      scrollToTop,
+      scrollToElement,
+      currentPosition: scrollPositions.get(location.pathname) || 0,
+    }),
+    [scrollToTop, scrollToElement, scrollPositions, location.pathname]
+  );
 };
 
 // ==============================================
-// PAGE METADATA HOOK
+// PAGE METADATA HOOK - OPTIMIZED
 // ==============================================
 
 export const usePageMetadata = () => {
   const { setPageMetadata } = useLayout();
 
+  // Memoized meta tags updater
+  const updateMetaTags = useCallback((metadata: PageMetadata): void => {
+    if (metadata.description) {
+      const descTag = document.querySelector(
+        'meta[name="description"]'
+      ) as HTMLMetaElement;
+      if (descTag) {
+        descTag.content = metadata.description;
+      }
+    }
+
+    if (metadata.keywords) {
+      const keywordsTag = document.querySelector(
+        'meta[name="keywords"]'
+      ) as HTMLMetaElement;
+      if (keywordsTag) {
+        keywordsTag.content = metadata.keywords.join(', ');
+      }
+    }
+
+    if (metadata.ogImage) {
+      const ogImageTag = document.querySelector(
+        'meta[property="og:image"]'
+      ) as HTMLMetaElement;
+      if (ogImageTag) {
+        ogImageTag.content = metadata.ogImage;
+      }
+    }
+  }, []);
+
   useEffect(() => {
-    // Update meta tags in document head
-    const updateMetaTags = (metadata: PageMetadata): void => {
-      if (metadata.description) {
-        const descTag = document.querySelector(
-          'meta[name="description"]'
-        ) as HTMLMetaElement;
-        if (descTag) {
-          descTag.content = metadata.description;
-        }
-      }
-
-      if (metadata.keywords) {
-        const keywordsTag = document.querySelector(
-          'meta[name="keywords"]'
-        ) as HTMLMetaElement;
-        if (keywordsTag) {
-          keywordsTag.content = metadata.keywords.join(', ');
-        }
-      }
-
-      if (metadata.ogImage) {
-        const ogImageTag = document.querySelector(
-          'meta[property="og:image"]'
-        ) as HTMLMetaElement;
-        if (ogImageTag) {
-          ogImageTag.content = metadata.ogImage;
-        }
-      }
-    };
-
     // Initialize meta tags update function
     updateMetaTags({
       title: 'WatchStore',
       description: 'Premium watch store',
       keywords: ['watch', 'luxury'],
     });
-  }, [setPageMetadata]);
+  }, [updateMetaTags]);
 
-  return { setPageMetadata };
+  return useMemo(() => ({ setPageMetadata }), [setPageMetadata]);
 };
 
 // ==============================================
-// RESPONSIVE LAYOUT HOOK
+// RESPONSIVE LAYOUT HOOK - OPTIMIZED
 // ==============================================
 
 type Breakpoint = 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 
 export const useResponsiveLayout = () => {
-  const [breakpoint, setBreakpoint] = useState<Breakpoint>('md');
-  const [isMobile, setIsMobile] = useState(false);
-  const [isTablet, setIsTablet] = useState(false);
-  const [isDesktop, setIsDesktop] = useState(true);
+  const [viewport, setViewport] = useState(() => {
+    if (typeof window === 'undefined') {
+      return {
+        breakpoint: 'md' as Breakpoint,
+        isMobile: false,
+        isTablet: false,
+        isDesktop: true,
+        width: 1200,
+        height: 800,
+      };
+    }
 
-  useEffect(() => {
-    const updateBreakpoint = (): void => {
-      const width = window.innerWidth;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
 
-      if (width < 600) {
-        setBreakpoint('xs');
-        setIsMobile(true);
-        setIsTablet(false);
-        setIsDesktop(false);
-      } else if (width < 900) {
-        setBreakpoint('sm');
-        setIsMobile(true);
-        setIsTablet(false);
-        setIsDesktop(false);
-      } else if (width < 1200) {
-        setBreakpoint('md');
-        setIsMobile(false);
-        setIsTablet(true);
-        setIsDesktop(false);
-      } else if (width < 1536) {
-        setBreakpoint('lg');
-        setIsMobile(false);
-        setIsTablet(false);
-        setIsDesktop(true);
-      } else {
-        setBreakpoint('xl');
-        setIsMobile(false);
-        setIsTablet(false);
-        setIsDesktop(true);
-      }
-    };
+    let breakpoint: Breakpoint = 'md';
+    let isMobile = false;
+    let isTablet = false;
+    let isDesktop = true;
 
-    updateBreakpoint();
-    window.addEventListener('resize', updateBreakpoint);
+    if (width < 600) {
+      breakpoint = 'xs';
+      isMobile = true;
+      isTablet = false;
+      isDesktop = false;
+    } else if (width < 900) {
+      breakpoint = 'sm';
+      isMobile = true;
+      isTablet = false;
+      isDesktop = false;
+    } else if (width < 1200) {
+      breakpoint = 'md';
+      isMobile = false;
+      isTablet = true;
+      isDesktop = false;
+    } else if (width < 1536) {
+      breakpoint = 'lg';
+      isMobile = false;
+      isTablet = false;
+      isDesktop = true;
+    } else {
+      breakpoint = 'xl';
+      isMobile = false;
+      isTablet = false;
+      isDesktop = true;
+    }
 
-    return () => window.removeEventListener('resize', updateBreakpoint);
+    return { breakpoint, isMobile, isTablet, isDesktop, width, height };
+  });
+
+  // Throttled resize handler
+  const updateBreakpoint = useCallback((): void => {
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    let breakpoint: Breakpoint = 'md';
+    let isMobile = false;
+    let isTablet = false;
+    let isDesktop = true;
+
+    if (width < 600) {
+      breakpoint = 'xs';
+      isMobile = true;
+      isTablet = false;
+      isDesktop = false;
+    } else if (width < 900) {
+      breakpoint = 'sm';
+      isMobile = true;
+      isTablet = false;
+      isDesktop = false;
+    } else if (width < 1200) {
+      breakpoint = 'md';
+      isMobile = false;
+      isTablet = true;
+      isDesktop = false;
+    } else if (width < 1536) {
+      breakpoint = 'lg';
+      isMobile = false;
+      isTablet = false;
+      isDesktop = true;
+    } else {
+      breakpoint = 'xl';
+      isMobile = false;
+      isTablet = false;
+      isDesktop = true;
+    }
+
+    setViewport({ breakpoint, isMobile, isTablet, isDesktop, width, height });
   }, []);
 
-  return {
-    breakpoint,
-    isMobile,
-    isTablet,
-    isDesktop,
-    width: window.innerWidth,
-    height: window.innerHeight,
-  };
+  useEffect(() => {
+    let timeoutId: NodeJS.Timeout;
+
+    const throttledUpdate = () => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(updateBreakpoint, 100); // Throttle to 100ms
+    };
+
+    window.addEventListener('resize', throttledUpdate);
+    return () => {
+      window.removeEventListener('resize', throttledUpdate);
+      clearTimeout(timeoutId);
+    };
+  }, [updateBreakpoint]);
+
+  return viewport;
+};
+
+// ==============================================
+// THEME INTEGRATION HOOK - OPTIMIZED
+// ==============================================
+
+export const useLayoutTheme = () => {
+  const isDarkMode = useIsDarkMode();
+  const language = useLanguage();
+  const { toggleTheme, setTheme, setLanguage } = useStableThemeActions();
+
+  // Memoized system preference checker
+  const systemPreference = useMemo(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches;
+  }, []);
+
+  // Setup theme change subscription
+  useEffect(() => {
+    const unsubscribeTheme = subscribeToThemeChanges((newIsDarkMode) => {
+      // Apply theme to document root for global styling
+      document.documentElement.setAttribute(
+        'data-theme',
+        newIsDarkMode ? 'dark' : 'light'
+      );
+    });
+
+    const unsubscribeLanguage = subscribeToLanguageChanges((newLanguage) => {
+      document.documentElement.setAttribute('data-language', newLanguage);
+    });
+
+    // Initial setup
+    document.documentElement.setAttribute(
+      'data-theme',
+      isDarkMode ? 'dark' : 'light'
+    );
+    document.documentElement.setAttribute('data-language', language);
+
+    return () => {
+      unsubscribeTheme();
+      unsubscribeLanguage();
+    };
+  }, []); // Empty deps - subscriptions handle changes
+
+  return useMemo(
+    () => ({
+      isDarkMode,
+      language,
+      toggleTheme,
+      setTheme,
+      setLanguage,
+      systemPreference,
+    }),
+    [isDarkMode, language, toggleTheme, setTheme, setLanguage, systemPreference]
+  );
 };
 
 // ==============================================
@@ -351,7 +513,7 @@ export const LAYOUT_VARIANTS: LayoutVariantConfig = {
 };
 
 // ==============================================
-// LAYOUT UTILITIES
+// LAYOUT UTILITIES - MEMOIZED
 // ==============================================
 
 export const getLayoutConfig = (
@@ -375,8 +537,22 @@ export const mergeLayoutConfig = (
 };
 
 // ==============================================
-// BREADCRUMB UTILITIES
+// BREADCRUMB UTILITIES - MEMOIZED
 // ==============================================
+
+const pathLabelsCache: Record<string, string> = {
+  products: 'Sản phẩm',
+  categories: 'Danh mục',
+  brands: 'Thương hiệu',
+  admin: 'Quản trị',
+  profile: 'Hồ sơ',
+  wishlist: 'Yêu thích',
+  search: 'Tìm kiếm',
+  about: 'Giới thiệu',
+  contact: 'Liên hệ',
+  policy: 'Chính sách',
+  help: 'Trợ giúp',
+};
 
 export const generateBreadcrumbFromPath = (
   pathname: string
@@ -392,23 +568,9 @@ export const generateBreadcrumbFromPath = (
     currentPath += `/${segment}`;
     const isLast = index === pathSegments.length - 1;
 
-    // Map common paths to Vietnamese labels
-    const pathLabels: Record<string, string> = {
-      products: 'Sản phẩm',
-      categories: 'Danh mục',
-      brands: 'Thương hiệu',
-      admin: 'Quản trị',
-      profile: 'Hồ sơ',
-      wishlist: 'Yêu thích',
-      search: 'Tìm kiếm',
-      about: 'Giới thiệu',
-      contact: 'Liên hệ',
-      policy: 'Chính sách',
-      help: 'Trợ giúp',
-    };
-
     const label =
-      pathLabels[segment] || segment.charAt(0).toUpperCase() + segment.slice(1);
+      pathLabelsCache[segment] ||
+      segment.charAt(0).toUpperCase() + segment.slice(1);
 
     const breadcrumbItem: BreadcrumbItem = {
       label,
@@ -427,7 +589,7 @@ export const generateBreadcrumbFromPath = (
 };
 
 // ==============================================
-// PERFORMANCE UTILITIES
+// PERFORMANCE UTILITIES - OPTIMIZED
 // ==============================================
 
 interface PerformanceMetrics {
@@ -438,11 +600,11 @@ interface PerformanceMetrics {
 
 export const useLayoutPerformance = (): PerformanceMetrics => {
   const [performanceMetrics, setPerformanceMetrics] =
-    useState<PerformanceMetrics>({
+    useState<PerformanceMetrics>(() => ({
       loadTime: 0,
       renderTime: 0,
       memoryUsage: 0,
-    });
+    }));
 
   useEffect(() => {
     const measurePerformance = (): void => {
@@ -493,7 +655,7 @@ export const useLayoutPerformance = (): PerformanceMetrics => {
 };
 
 // ==============================================
-// ACCESSIBILITY UTILITIES
+// ACCESSIBILITY UTILITIES - OPTIMIZED
 // ==============================================
 
 interface AccessibilityUtils {
@@ -501,6 +663,28 @@ interface AccessibilityUtils {
 }
 
 export const useLayoutAccessibility = (): AccessibilityUtils => {
+  const { toggleTheme } = useStableThemeActions();
+
+  const announceToScreenReader = useCallback((message: string): void => {
+    const announcement = document.createElement('div');
+    announcement.setAttribute('aria-live', 'polite');
+    announcement.setAttribute('aria-atomic', 'true');
+    announcement.style.position = 'absolute';
+    announcement.style.left = '-10000px';
+    announcement.style.width = '1px';
+    announcement.style.height = '1px';
+    announcement.style.overflow = 'hidden';
+    announcement.textContent = message;
+
+    document.body.appendChild(announcement);
+
+    setTimeout(() => {
+      if (document.body.contains(announcement)) {
+        document.body.removeChild(announcement);
+      }
+    }, 1000);
+  }, []);
+
   useEffect(() => {
     // Skip link functionality
     const skipLink = document.querySelector('a[href="#main-content"]');
@@ -547,6 +731,12 @@ export const useLayoutAccessibility = (): AccessibilityUtils => {
           (footer as HTMLElement).focus();
         }
       }
+
+      // Alt + T: Toggle theme
+      if (e.altKey && e.key === 't') {
+        e.preventDefault();
+        toggleTheme();
+      }
     };
 
     document.addEventListener('keydown', handleKeyDown);
@@ -557,85 +747,18 @@ export const useLayoutAccessibility = (): AccessibilityUtils => {
         skipLink.removeEventListener('click', skipLinkHandler);
       }
     };
-  }, []);
+  }, [toggleTheme]);
 
-  const announceToScreenReader = (message: string): void => {
-    const announcement = document.createElement('div');
-    announcement.setAttribute('aria-live', 'polite');
-    announcement.setAttribute('aria-atomic', 'true');
-    announcement.style.position = 'absolute';
-    announcement.style.left = '-10000px';
-    announcement.style.width = '1px';
-    announcement.style.height = '1px';
-    announcement.style.overflow = 'hidden';
-    announcement.textContent = message;
-
-    document.body.appendChild(announcement);
-
-    setTimeout(() => {
-      if (document.body.contains(announcement)) {
-        document.body.removeChild(announcement);
-      }
-    }, 1000);
-  };
-
-  return {
-    announceToScreenReader,
-  };
+  return useMemo(
+    () => ({
+      announceToScreenReader,
+    }),
+    [announceToScreenReader]
+  );
 };
 
 // ==============================================
-// THEME UTILITIES
-// ==============================================
-
-interface ThemeUtils {
-  isDarkMode: boolean;
-  toggleTheme: () => void;
-  setTheme: (mode: 'light' | 'dark') => void;
-  systemPreference: boolean;
-}
-
-export const useLayoutTheme = (): ThemeUtils => {
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
-    const saved = localStorage.getItem('theme-mode');
-    return saved === 'dark';
-  });
-
-  const toggleTheme = (): void => {
-    const newMode = !isDarkMode;
-    setIsDarkMode(newMode);
-    localStorage.setItem('theme-mode', newMode ? 'dark' : 'light');
-  };
-
-  const setTheme = (mode: 'light' | 'dark'): void => {
-    setIsDarkMode(mode === 'dark');
-    localStorage.setItem('theme-mode', mode);
-  };
-
-  // Sync with system preference
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-
-    const handleChange = (e: MediaQueryListEvent): void => {
-      if (!localStorage.getItem('theme-mode')) {
-        setIsDarkMode(e.matches);
-      }
-    };
-
-    mediaQuery.addEventListener('change', handleChange);
-    return () => mediaQuery.removeEventListener('change', handleChange);
-  }, []);
-
-  return {
-    isDarkMode,
-    toggleTheme,
-    setTheme,
-    systemPreference: window.matchMedia('(prefers-color-scheme: dark)').matches,
-  };
-};
-
-// ==============================================
-// ERROR BOUNDARY UTILITIES
+// ERROR BOUNDARY UTILITIES - OPTIMIZED
 // ==============================================
 
 interface ErrorBoundaryState {

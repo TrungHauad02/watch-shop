@@ -1,7 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { styled, keyframes } from '@mui/material/styles';
 import { Modal, Paper, Box, IconButton } from '@mui/material';
 import { WSModalSize, WSModalVariant } from './WSModal.types';
-import { BRAND_COLORS, COLOR_PALETTES } from '../../styles/colors';
 
 // ==============================================
 // ANIMATIONS
@@ -27,11 +27,23 @@ const slideIn = keyframes`
   }
 `;
 
+const slideInMobile = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
 // ==============================================
 // SIZE CONFIGURATIONS
 // ==============================================
 
 const getSizeConfig = (size: WSModalSize) => {
+  // CUSTOMIZE: Bạn có thể chỉnh sửa kích thước modal tại đây
   const sizeMap = {
     small: {
       width: '400px',
@@ -63,7 +75,27 @@ const getSizeConfig = (size: WSModalSize) => {
 };
 
 // ==============================================
-// STYLED MODAL COMPONENT
+// VARIANT STYLES - THEME AWARE
+// ==============================================
+
+const getVariantStyles = (theme: any, variant: WSModalVariant) => {
+  const variants = {
+    default: {
+      borderTop: 'none',
+    },
+    confirmation: {
+      borderTop: `4px solid ${theme.palette.warning.main}`,
+    },
+    form: {
+      borderTop: `4px solid ${theme.palette.primary.main}`,
+    },
+  };
+
+  return variants[variant];
+};
+
+// ==============================================
+// STYLED MODAL COMPONENT - THEME INTEGRATED
 // ==============================================
 
 export const StyledWSModal = styled(Modal)(({ theme }) => ({
@@ -71,12 +103,19 @@ export const StyledWSModal = styled(Modal)(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'center',
   padding: theme.spacing(2),
+  zIndex: theme.zIndex.modal,
 
-  // Backdrop
+  // Backdrop - CUSTOMIZE: Bạn có thể chỉnh sửa backdrop tại đây
   '& .MuiBackdrop-root': {
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor:
+      theme.palette.mode === 'dark'
+        ? 'rgba(0, 0, 0, 0.7)'
+        : 'rgba(0, 0, 0, 0.5)',
     backdropFilter: 'blur(4px)',
     animation: `${fadeIn} 0.3s ease-out`,
+    transition: theme.transitions.create(['background-color'], {
+      duration: theme.transitions.duration.short,
+    }),
   },
 
   // Mobile adjustments
@@ -87,7 +126,7 @@ export const StyledWSModal = styled(Modal)(({ theme }) => ({
 }));
 
 // ==============================================
-// MODAL CONTAINER
+// MODAL CONTAINER - THEME INTEGRATED
 // ==============================================
 
 export const ModalContainer = styled(Paper, {
@@ -98,6 +137,7 @@ export const ModalContainer = styled(Paper, {
   wsVariant: WSModalVariant;
 }>(({ theme, wsSize, wsVariant }) => {
   const sizeConfig = getSizeConfig(wsSize);
+  const variantStyles = getVariantStyles(theme, wsVariant);
 
   return {
     // Base styles
@@ -106,24 +146,22 @@ export const ModalContainer = styled(Paper, {
     maxWidth: sizeConfig.maxWidth,
     maxHeight: sizeConfig.maxHeight,
     backgroundColor: theme.palette.background.paper,
-    borderRadius: wsSize === 'fullscreen' ? 0 : '12px',
-    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.2)',
+    borderRadius:
+      wsSize === 'fullscreen'
+        ? 0
+        : (Number(theme.shape.borderRadius) || 4) * 1.5,
+    boxShadow: theme.shadows[8],
     outline: 'none',
     overflow: 'hidden',
     display: 'flex',
     flexDirection: 'column',
+    border: `1px solid ${theme.palette.divider}`,
 
     // Animation
-    animation: `${wsSize === 'fullscreen' ? fadeIn : slideIn} 0.3s cubic-bezier(0.4, 0, 0.2, 1)`,
+    animation: `${wsSize === 'fullscreen' ? fadeIn : slideIn} 0.3s ${theme.transitions.easing.easeOut}`,
 
     // Variant-specific styles
-    ...(wsVariant === 'confirmation' && {
-      borderTop: `4px solid ${BRAND_COLORS.secondary}`,
-    }),
-
-    ...(wsVariant === 'form' && {
-      borderTop: `4px solid ${BRAND_COLORS.primary}`,
-    }),
+    ...variantStyles,
 
     // Fullscreen styles
     ...(wsSize === 'fullscreen' && {
@@ -134,6 +172,7 @@ export const ModalContainer = styled(Paper, {
       bottom: 0,
       height: '100vh',
       borderRadius: 0,
+      border: 'none',
     }),
 
     // Mobile adjustments
@@ -141,24 +180,35 @@ export const ModalContainer = styled(Paper, {
       width: '100%',
       maxWidth: '100%',
       margin: 0,
-      borderRadius: wsSize === 'fullscreen' ? 0 : '12px 12px 0 0',
+      borderRadius:
+        wsSize === 'fullscreen'
+          ? 0
+          : `${Number(theme.shape.borderRadius) * 1.5}px ${Number(theme.shape.borderRadius) * 1.5}px 0 0`,
+      animation: `${wsSize === 'fullscreen' ? fadeIn : slideInMobile} 0.3s ${theme.transitions.easing.easeOut}`,
 
       ...(wsSize !== 'fullscreen' && {
         maxHeight: '80vh',
-        animation: `${slideIn} 0.3s cubic-bezier(0.4, 0, 0.2, 1)`,
       }),
     },
 
-    // Focus visible
+    // Focus visible - CUSTOMIZE: Bạn có thể chỉnh sửa focus outline tại đây
     '&:focus-visible': {
-      outline: `2px solid ${BRAND_COLORS.secondary}`,
+      outline: `2px solid ${theme.palette.primary.main}`,
       outlineOffset: '2px',
     },
+
+    // Theme transition
+    transition: theme.transitions.create(
+      ['background-color', 'border-color', 'box-shadow'],
+      {
+        duration: theme.transitions.duration.short,
+      }
+    ),
   };
 });
 
 // ==============================================
-// MODAL HEADER
+// MODAL HEADER - THEME INTEGRATED
 // ==============================================
 
 export const ModalHeader = styled(Box, {
@@ -175,15 +225,19 @@ export const ModalHeader = styled(Box, {
     alignItems: 'flex-start',
     justifyContent: 'space-between',
     minHeight: '60px',
+    backgroundColor:
+      theme.palette.mode === 'dark'
+        ? theme.palette.background.paper
+        : theme.palette.grey[50],
 
     '& .modal-title': {
       fontSize:
         wsSize === 'small'
-          ? '1.25rem'
+          ? theme.typography.h6.fontSize
           : wsSize === 'large'
-            ? '1.75rem'
-            : '1.5rem',
-      fontWeight: 600,
+            ? theme.typography.h4.fontSize
+            : theme.typography.h5.fontSize,
+      fontWeight: theme.typography.fontWeightBold || 600,
       color: theme.palette.text.primary,
       margin: 0,
       lineHeight: 1.3,
@@ -192,51 +246,74 @@ export const ModalHeader = styled(Box, {
     },
 
     '& .modal-subtitle': {
-      fontSize: wsSize === 'small' ? '0.875rem' : '1rem',
-      fontWeight: 400,
+      fontSize:
+        wsSize === 'small'
+          ? theme.typography.body2.fontSize
+          : theme.typography.body1.fontSize,
+      fontWeight: theme.typography.fontWeightRegular,
       color: theme.palette.text.secondary,
       margin: `${theme.spacing(0.5)} 0 0 0`,
       lineHeight: 1.4,
     },
+
+    // Theme transition
+    transition: theme.transitions.create(['background-color'], {
+      duration: theme.transitions.duration.short,
+    }),
   };
 });
 
 // ==============================================
-// MODAL CONTENT
+// MODAL CONTENT - THEME INTEGRATED
 // ==============================================
 
 export const ModalContent = styled(Box, {
   shouldForwardProp: (prop) => !['wsSize'].includes(prop as string),
 })<{
   wsSize: WSModalSize;
-}>(({ wsSize }) => {
+}>(({ theme, wsSize }) => {
   const sizeConfig = getSizeConfig(wsSize);
 
   return {
     padding: sizeConfig.padding,
     flex: 1,
     overflow: 'auto',
+    backgroundColor: theme.palette.background.paper,
 
-    // Custom scrollbar
+    // Custom scrollbar - CUSTOMIZE: Bạn có thể chỉnh sửa scrollbar tại đây
     '&::-webkit-scrollbar': {
       width: '6px',
     },
     '&::-webkit-scrollbar-track': {
-      backgroundColor: COLOR_PALETTES.neutral[100],
+      backgroundColor:
+        theme.palette.mode === 'dark'
+          ? theme.palette.grey[800]
+          : theme.palette.grey[100],
     },
     '&::-webkit-scrollbar-thumb': {
-      backgroundColor: COLOR_PALETTES.neutral[300],
+      backgroundColor:
+        theme.palette.mode === 'dark'
+          ? theme.palette.grey[600]
+          : theme.palette.grey[400],
       borderRadius: '3px',
 
       '&:hover': {
-        backgroundColor: COLOR_PALETTES.neutral[400],
+        backgroundColor:
+          theme.palette.mode === 'dark'
+            ? theme.palette.grey[500]
+            : theme.palette.grey[500],
       },
     },
+
+    // Theme transition
+    transition: theme.transitions.create(['background-color'], {
+      duration: theme.transitions.duration.short,
+    }),
   };
 });
 
 // ==============================================
-// MODAL FOOTER
+// MODAL FOOTER - THEME INTEGRATED
 // ==============================================
 
 export const ModalFooter = styled(Box, {
@@ -254,6 +331,10 @@ export const ModalFooter = styled(Box, {
     justifyContent: 'flex-end',
     gap: theme.spacing(1),
     minHeight: '60px',
+    backgroundColor:
+      theme.palette.mode === 'dark'
+        ? theme.palette.background.paper
+        : theme.palette.grey[50],
 
     // Mobile adjustments
     [theme.breakpoints.down('sm')]: {
@@ -264,33 +345,44 @@ export const ModalFooter = styled(Box, {
         width: '100%',
       },
     },
+
+    // Theme transition
+    transition: theme.transitions.create(['background-color', 'border-color'], {
+      duration: theme.transitions.duration.short,
+    }),
   };
 });
 
 // ==============================================
-// CLOSE BUTTON
+// CLOSE BUTTON - THEME INTEGRATED
 // ==============================================
 
 export const CloseButton = styled(IconButton)(({ theme }) => ({
   position: 'absolute',
-  top: '8px',
-  right: '8px',
+  top: theme.spacing(1),
+  right: theme.spacing(1),
   color: theme.palette.text.secondary,
   zIndex: 1,
+  backgroundColor: 'transparent',
 
   '&:hover': {
-    backgroundColor: COLOR_PALETTES.neutral[100],
+    backgroundColor: theme.palette.action.hover,
     color: theme.palette.text.primary,
   },
 
   '&:focus-visible': {
-    outline: `2px solid ${BRAND_COLORS.secondary}`,
+    outline: `2px solid ${theme.palette.primary.main}`,
     outlineOffset: '2px',
   },
+
+  // Theme transition
+  transition: theme.transitions.create(['background-color', 'color'], {
+    duration: theme.transitions.duration.shorter,
+  }),
 }));
 
 // ==============================================
-// LOADING OVERLAY
+// LOADING OVERLAY - THEME INTEGRATED
 // ==============================================
 
 export const LoadingOverlay = styled(Box)(({ theme }) => ({
@@ -299,15 +391,54 @@ export const LoadingOverlay = styled(Box)(({ theme }) => ({
   left: 0,
   right: 0,
   bottom: 0,
-  backgroundColor: 'rgba(255, 255, 255, 0.8)',
+  backgroundColor:
+    theme.palette.mode === 'dark'
+      ? 'rgba(0, 0, 0, 0.8)'
+      : 'rgba(255, 255, 255, 0.8)',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   zIndex: 10,
   backdropFilter: 'blur(2px)',
 
-  // Dark mode
-  ...(theme.palette.mode === 'dark' && {
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+  // Theme transition
+  transition: theme.transitions.create(['background-color'], {
+    duration: theme.transitions.duration.short,
   }),
+}));
+
+// ==============================================
+// MODAL SECTION DIVIDER - THEME INTEGRATED
+// ==============================================
+
+export const ModalDivider = styled(Box)(({ theme }) => ({
+  width: '100%',
+  height: '1px',
+  backgroundColor: theme.palette.divider,
+  margin: `${theme.spacing(2)} 0`,
+
+  // Theme transition
+  transition: theme.transitions.create(['background-color'], {
+    duration: theme.transitions.duration.short,
+  }),
+}));
+
+// ==============================================
+// MODAL ACTION GROUP - THEME INTEGRATED
+// ==============================================
+
+export const ModalActionGroup = styled(Box)(({ theme }) => ({
+  display: 'flex',
+  gap: theme.spacing(1),
+  alignItems: 'center',
+  justifyContent: 'flex-end',
+
+  [theme.breakpoints.down('sm')]: {
+    flexDirection: 'column-reverse',
+    width: '100%',
+
+    '& > *': {
+      width: '100%',
+    },
+  },
 }));
