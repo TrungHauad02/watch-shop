@@ -6,49 +6,72 @@ import { StyledWSButton, LoadingSpinner, IconWrapper } from './WSButton.styles';
 // WSButton COMPONENT - THEME INTEGRATED
 // ==============================================
 
-// CUSTOMIZE: Bạn có thể chỉnh sửa variant (contained, outlined, text),
-// size (small, medium, large), color (primary, secondary, success, warning, error, info) để tùy chỉnh button.
-// Button sẽ tự động thay đổi màu sắc theo theme (dark/light mode).
+/**
+ * WSButton - Custom Button Component
+ *
+ * CUSTOMIZE: Bạn có thể chỉnh sửa:
+ * - variant: 'contained' | 'outlined' | 'text'
+ * - size: 'small' | 'medium' | 'large'
+ * - color: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info'
+ *
+ * Button sẽ tự động thay đổi màu sắc theo theme (dark/light mode).
+ *
+ * @example
+ * // Basic usage
+ * <WSButton>Click me</WSButton>
+ *
+ * // With loading
+ * <WSButton loading>Saving...</WSButton>
+ *
+ * // With icons
+ * <WSButton startIcon={<SaveIcon />} color="success">Save</WSButton>
+ *
+ * // Async handler (auto loading)
+ * <WSButton onClick={async () => await saveData()}>Save</WSButton>
+ *
+ * // As link
+ * <WSButton href="/products" target="_blank">View Products</WSButton>
+ */
 export default function WSButton({
-  // Core styling props
-  variant = WS_BUTTON_DEFAULTS.variant,
-  color = WS_BUTTON_DEFAULTS.color,
-  size = WS_BUTTON_DEFAULTS.size,
+  // === CORE STYLING PROPS ===
+  variant = WS_BUTTON_DEFAULTS.variant, // 🎨 contained | outlined | text
+  color = WS_BUTTON_DEFAULTS.color, // 🎨 primary | secondary | success | warning | error | info
+  size = WS_BUTTON_DEFAULTS.size, // 📏 small | medium | large
 
-  // Content
-  children,
+  // === CONTENT ===
+  children, // 📝 Button text/content
 
-  // Icons
-  startIcon,
-  endIcon,
+  // === ICONS ===
+  startIcon, // 🎯 Icon bên trái
+  endIcon, // 🎯 Icon bên phải
 
-  // Loading state
-  loading = WS_BUTTON_DEFAULTS.loading,
-  loadingText,
+  // === LOADING STATE ===
+  loading = WS_BUTTON_DEFAULTS.loading, // 🔄 Loading state
+  loadingText, // 📝 Text hiển thị khi loading
 
-  // Enhanced features
-  fullWidth = WS_BUTTON_DEFAULTS.fullWidth,
-  disabled = WS_BUTTON_DEFAULTS.disabled,
+  // === ENHANCED FEATURES ===
+  fullWidth = WS_BUTTON_DEFAULTS.fullWidth, // 📐 Full width button
+  disabled = WS_BUTTON_DEFAULTS.disabled, // 🚫 Disabled state
 
-  // Custom styling
-  sx,
-  className,
+  // === CUSTOM STYLING ===
+  sx, // 🎨 MUI sx prop
+  className, // 🎨 CSS class
 
-  // Accessibility
-  ariaLabel,
+  // === ACCESSIBILITY ===
+  ariaLabel, // ♿ Accessibility label
 
-  // Event handlers
-  onClick,
+  // === EVENT HANDLERS ===
+  onClick, // 🖱️ Click handler (có thể async)
 
-  // Form integration
-  type = WS_BUTTON_DEFAULTS.type,
+  // === FORM INTEGRATION ===
+  type = WS_BUTTON_DEFAULTS.type, // 📋 button | submit | reset
 
-  // Advanced props
-  component,
-  href,
-  target,
+  // === ADVANCED PROPS ===
+  component, // 🔗 Custom component (for links)
+  href, // 🔗 URL for link buttons
+  target, // 🔗 Link target
 
-  // Forward all other props
+  // === FORWARD ALL OTHER PROPS ===
   ...otherProps
 }: WSButtonProps) {
   // ==============================================
@@ -57,18 +80,23 @@ export default function WSButton({
 
   const [isInternalLoading, setIsInternalLoading] = useState(false);
 
-  // Determine final loading state
+  // 🔄 Determine final loading state
   const isLoading = loading || isInternalLoading;
 
-  // Determine if button should be disabled
+  // 🚫 Determine if button should be disabled
   const isDisabled = disabled || isLoading;
 
   // ==============================================
   // EVENT HANDLERS
   // ==============================================
 
+  /**
+   * Handle button click with async support
+   * Automatically manages loading state for async operations
+   */
   const handleClick = useCallback(
     async (event: React.MouseEvent<HTMLButtonElement>) => {
+      // 🛑 Prevent action if disabled or loading
       if (isDisabled || isLoading) {
         event.preventDefault();
         return;
@@ -78,15 +106,17 @@ export default function WSButton({
         if (onClick) {
           const result = onClick(event);
 
-          // Check if result is a promise
+          // 🔄 Check if result is a promise (async operation)
           if (result && typeof result === 'object' && 'then' in result) {
             setIsInternalLoading(true);
             await (result as Promise<void>);
           }
         }
       } catch (error) {
+        // 🚨 Log errors but don't throw to prevent app crashes
         console.error('WSButton onClick error:', error);
       } finally {
+        // 🧹 Always clean up loading state
         setIsInternalLoading(false);
       }
     },
@@ -97,7 +127,11 @@ export default function WSButton({
   // CONTENT RENDERING - THEME AWARE
   // ==============================================
 
+  /**
+   * Render start icon or loading spinner
+   */
   const renderStartIcon = () => {
+    // 🔄 Show loading spinner instead of icon when loading
     if (isLoading) {
       return (
         <LoadingSpinner
@@ -108,6 +142,7 @@ export default function WSButton({
       );
     }
 
+    // 🎯 Show start icon if provided and not loading
     if (startIcon) {
       return (
         <IconWrapper position="start" wsSize={size}>
@@ -119,7 +154,11 @@ export default function WSButton({
     return null;
   };
 
+  /**
+   * Render end icon (only when not loading)
+   */
   const renderEndIcon = () => {
+    // 🎯 Only show end icon if provided and not loading
     if (endIcon && !isLoading) {
       return (
         <IconWrapper position="end" wsSize={size}>
@@ -131,8 +170,12 @@ export default function WSButton({
     return null;
   };
 
+  /**
+   * Render button content with conditional loading text
+   */
   const renderContent = () => {
     // CUSTOMIZE: Bạn có thể chỉnh sửa text hiển thị khi loading tại đây
+    // 📝 Show loading text if provided and loading, otherwise show children
     const displayText = isLoading && loadingText ? loadingText : children;
 
     return (
@@ -149,10 +192,10 @@ export default function WSButton({
   // ==============================================
 
   const accessibilityProps = {
-    'aria-label': ariaLabel,
-    'aria-disabled': isDisabled,
-    'aria-busy': isLoading,
-    ...(isLoading && { 'aria-live': 'polite' as const }),
+    'aria-label': ariaLabel, // ♿ Custom aria label
+    'aria-disabled': isDisabled, // ♿ Disabled state
+    'aria-busy': isLoading, // ♿ Loading state
+    ...(isLoading && { 'aria-live': 'polite' as const }), // ♿ Loading announcements
   };
 
   // ==============================================
@@ -160,7 +203,7 @@ export default function WSButton({
   // ==============================================
 
   const componentProps = {
-    // Link props
+    // 🔗 Link props - for button as link
     ...(href && {
       href,
       target,
@@ -168,7 +211,7 @@ export default function WSButton({
       component: component || 'a',
     }),
 
-    // Form props
+    // 📋 Form props
     type,
   };
 
@@ -178,24 +221,24 @@ export default function WSButton({
 
   return (
     <StyledWSButton
-      // Custom styling props
+      // === CUSTOM STYLING PROPS ===
       wsVariant={variant}
       wsColor={color}
       wsSize={size}
       loading={isLoading}
-      // MUI Button props
+      // === MUI BUTTON PROPS ===
       fullWidth={fullWidth}
       disabled={isDisabled}
-      // Event handlers
+      // === EVENT HANDLERS ===
       onClick={handleClick}
-      // Styling
+      // === STYLING ===
       {...(sx && { sx })}
       {...(className && { className })}
-      // Accessibility
+      // === ACCESSIBILITY ===
       {...accessibilityProps}
-      // Component and link props
+      // === COMPONENT AND LINK PROPS ===
       {...componentProps}
-      // Forward other props
+      // === FORWARD OTHER PROPS ===
       {...otherProps}
     >
       {renderContent()}

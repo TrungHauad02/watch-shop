@@ -145,6 +145,18 @@ const router = createBrowserRouter([
               </Suspense>
             ),
           },
+          {
+            path: 'ws-form-field-demo',
+            element: (
+              <Suspense
+                fallback={
+                  <Pages.LoadingPage message="Đang tải trang test..." />
+                }
+              >
+                <Pages.WSFormFieldDemoPage />
+              </Suspense>
+            ),
+          },
         ],
       },
     ],
