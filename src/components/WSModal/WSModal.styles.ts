@@ -4,30 +4,45 @@ import { Modal, Paper, Box, IconButton } from '@mui/material';
 import { WSModalSize, WSModalVariant } from './WSModal.types';
 
 // ==============================================
-// ANIMATIONS
+// ANIMATIONS - SMOOTH & MODERN
 // ==============================================
 
-const fadeIn = keyframes`
+/**
+ * WSModal Animation Guide
+ * ======================
+ *
+ * CUSTOMIZE:
+ *
+ * Animation types:
+ * - backdropFadeIn:
+ * - modalZoomIn:
+ * - modalMobileSlide:
+ * - modalFullscreenFade:
+ */
+
+const backdropFadeIn = keyframes`
   from {
     opacity: 0;
+    backdrop-filter: blur(0px);
   }
   to {
     opacity: 1;
+    backdrop-filter: blur(4px);
   }
 `;
 
-const slideIn = keyframes`
+const modalZoomIn = keyframes`
   from {
     opacity: 0;
-    transform: translate(-50%, -60%);
+    transform: scale(0.1);
   }
   to {
     opacity: 1;
-    transform: translate(-50%, -50%);
+    transform: scale(1);
   }
 `;
 
-const slideInMobile = keyframes`
+const modalMobileSlide = keyframes`
   from {
     opacity: 0;
     transform: translateY(100%);
@@ -38,36 +53,49 @@ const slideInMobile = keyframes`
   }
 `;
 
+const modalFullscreenFade = keyframes`
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+`;
+
 // ==============================================
 // SIZE CONFIGURATIONS
 // ==============================================
 
 const getSizeConfig = (size: WSModalSize) => {
-  // CUSTOMIZE: Bạn có thể chỉnh sửa kích thước modal tại đây
+  // CUSTOMIZE: KÃ­ch thÆ°á»›c modal cho tá»«ng size
   const sizeMap = {
     small: {
-      width: '400px',
-      maxWidth: '90vw',
-      maxHeight: '80vh',
-      padding: '16px',
+      width: '400px', // ðŸ" Compact cho confirmations
+      maxWidth: '90vw', // ðŸ"± Mobile responsive
+      maxHeight: '80vh', // ðŸ" Prevent overflow
+      padding: '16px', // ðŸ" Tight padding
+      borderRadius: '12px', // ðŸ"„ Rounded corners
     },
     medium: {
-      width: '600px',
-      maxWidth: '90vw',
-      maxHeight: '85vh',
-      padding: '24px',
+      width: '600px', // ðŸ" Standard cho forms
+      maxWidth: '90vw', // ðŸ"± Mobile responsive
+      maxHeight: '85vh', // ðŸ" More content space
+      padding: '24px', // ðŸ" Comfortable padding
+      borderRadius: '16px', // ðŸ"„ More rounded
     },
     large: {
-      width: '800px',
-      maxWidth: '95vw',
-      maxHeight: '90vh',
-      padding: '32px',
+      width: '800px', // ðŸ" Wide cho complex content
+      maxWidth: '95vw', // ðŸ"± Wider on desktop
+      maxHeight: '90vh', // ðŸ" Almost full height
+      padding: '32px', // ðŸ" Spacious padding
+      borderRadius: '20px', // ðŸ"„ Very rounded
     },
     fullscreen: {
-      width: '100vw',
-      maxWidth: '100vw',
-      maxHeight: '100vh',
-      padding: '24px',
+      width: '100vw', // ðŸ" Full viewport
+      maxWidth: '100vw', // ðŸ" No limit
+      maxHeight: '100vh', // ðŸ" Full height
+      padding: '24px', // ðŸ" Standard padding
+      borderRadius: '0px', // ðŸ"„ No radius for fullscreen
     },
   };
 
@@ -79,15 +107,25 @@ const getSizeConfig = (size: WSModalSize) => {
 // ==============================================
 
 const getVariantStyles = (theme: any, variant: WSModalVariant) => {
+  // CUSTOMIZE: Visual indicators cho tá»«ng variant
   const variants = {
     default: {
       borderTop: 'none',
+      // ðŸŽ¨ Default: Clean, no special styling
     },
     confirmation: {
+      // âš ï¸ CONFIRMATION: Warning accent
       borderTop: `4px solid ${theme.palette.warning.main}`,
+      '& .modal-icon': {
+        color: theme.palette.warning.main,
+      },
     },
     form: {
+      // ðŸ" FORM: Primary accent
       borderTop: `4px solid ${theme.palette.primary.main}`,
+      '& .modal-icon': {
+        color: theme.palette.primary.main,
+      },
     },
   };
 
@@ -99,34 +137,60 @@ const getVariantStyles = (theme: any, variant: WSModalVariant) => {
 // ==============================================
 
 export const StyledWSModal = styled(Modal)(({ theme }) => ({
+  // === BASE MODAL CONTAINER ===
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
   padding: theme.spacing(2),
   zIndex: theme.zIndex.modal,
+  // FIX: Remove position/transform issues that cause jumping
+  position: 'fixed',
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
 
-  // Backdrop - CUSTOMIZE: Bạn có thể chỉnh sửa backdrop tại đây
+  // === BACKDROP STYLING ===
+  // CUSTOMIZE: Backdrop appearance vÃ  blur effect
   '& .MuiBackdrop-root': {
+    // ðŸŒ«ï¸ BACKDROP: Dark overlay vá»›i blur
     backgroundColor:
       theme.palette.mode === 'dark'
-        ? 'rgba(0, 0, 0, 0.7)'
-        : 'rgba(0, 0, 0, 0.5)',
-    backdropFilter: 'blur(4px)',
-    animation: `${fadeIn} 0.3s ease-out`,
-    transition: theme.transitions.create(['background-color'], {
-      duration: theme.transitions.duration.short,
-    }),
+        ? 'rgba(0, 0, 0, 0.75)' // Darker cho dark mode
+        : 'rgba(0, 0, 0, 0.6)', // Medium darkness cho light mode
+
+    // âœ¨ BLUR EFFECT: Modern glassmorphism
+    backdropFilter: 'blur(8px)',
+    WebkitBackdropFilter: 'blur(8px)', // Safari support
+
+    // ðŸŽ¬ SMOOTH ANIMATION: Fade in vá»›i blur
+    animation: `${backdropFadeIn} 0.3s cubic-bezier(0.4, 0, 0.2, 1)`,
+
+    // âš¡ TRANSITIONS: Theme-aware transitions
+    transition: theme.transitions.create(
+      ['background-color', 'backdrop-filter'],
+      {
+        duration: theme.transitions.duration.standard,
+        easing: theme.transitions.easing.easeOut,
+      }
+    ),
   },
 
-  // Mobile adjustments
+  // === MOBILE RESPONSIVE ===
+  // ðŸ"± Mobile: Bottom sheet layout
   [theme.breakpoints.down('sm')]: {
     padding: theme.spacing(1),
-    alignItems: 'flex-end', // Bottom-sheet style on mobile
+    alignItems: 'flex-end', // Bottom-aligned cho mobile
+  },
+
+  // === FOCUS MANAGEMENT ===
+  '&.Mui-focused': {
+    outline: 'none',
   },
 }));
 
 // ==============================================
-// MODAL CONTAINER - THEME INTEGRATED
+// MODAL CONTAINER - ENHANCED ANIMATIONS
 // ==============================================
 
 export const ModalContainer = styled(Paper, {
@@ -140,30 +204,44 @@ export const ModalContainer = styled(Paper, {
   const variantStyles = getVariantStyles(theme, wsVariant);
 
   return {
-    // Base styles
+    // === BASE CONTAINER STYLES ===
     position: 'relative',
     width: sizeConfig.width,
     maxWidth: sizeConfig.maxWidth,
     maxHeight: sizeConfig.maxHeight,
+
+    // ðŸŽ¨ BACKGROUND: Theme-aware background
     backgroundColor: theme.palette.background.paper,
-    borderRadius:
-      wsSize === 'fullscreen'
-        ? 0
-        : (Number(theme.shape.borderRadius) || 4) * 1.5,
-    boxShadow: theme.shadows[8],
+
+    // ðŸ"„ BORDER RADIUS: Size-dependent rounding
+    borderRadius: wsSize === 'fullscreen' ? 0 : sizeConfig.borderRadius,
+
+    // âœ¨ SHADOW: Elevated appearance
+    boxShadow: wsSize === 'fullscreen' ? 'none' : theme.shadows[12], // Deep shadow cho depth
+
+    // ðŸŽ¯ FOCUS: Remove default outline
     outline: 'none',
     overflow: 'hidden',
+
+    // ðŸ" LAYOUT: Flex column for header/content/footer
     display: 'flex',
     flexDirection: 'column',
-    border: `1px solid ${theme.palette.divider}`,
 
-    // Animation
-    animation: `${wsSize === 'fullscreen' ? fadeIn : slideIn} 0.3s ${theme.transitions.easing.easeOut}`,
+    // ðŸ"² BORDER: Subtle border cho definition
+    border:
+      wsSize === 'fullscreen' ? 'none' : `1px solid ${theme.palette.divider}`,
 
-    // Variant-specific styles
+    // === ANIMATIONS ===
+    // ðŸŽ¬ ENTRANCE ANIMATION: Smooth zoom-in animation
+    animation:
+      wsSize === 'fullscreen'
+        ? `${modalFullscreenFade} 0.5s cubic-bezier(0.4, 0, 0.2, 1)`
+        : `${modalZoomIn} 0.5s ease-out`, // Smooth zoom animation
+
+    // === VARIANT STYLING ===
     ...variantStyles,
 
-    // Fullscreen styles
+    // === FULLSCREEN SPECIFIC ===
     ...(wsSize === 'fullscreen' && {
       position: 'fixed',
       top: 0,
@@ -171,44 +249,64 @@ export const ModalContainer = styled(Paper, {
       right: 0,
       bottom: 0,
       height: '100vh',
+      width: '100vw',
       borderRadius: 0,
-      border: 'none',
+      margin: 0,
     }),
 
-    // Mobile adjustments
+    // === MOBILE RESPONSIVE ===
     [theme.breakpoints.down('sm')]: {
       width: '100%',
       maxWidth: '100%',
       margin: 0,
+
+      // ðŸ"„ MOBILE RADIUS: Rounded top corners only
       borderRadius:
         wsSize === 'fullscreen'
           ? 0
-          : `${Number(theme.shape.borderRadius) * 1.5}px ${Number(theme.shape.borderRadius) * 1.5}px 0 0`,
-      animation: `${wsSize === 'fullscreen' ? fadeIn : slideInMobile} 0.3s ${theme.transitions.easing.easeOut}`,
+          : `${sizeConfig.borderRadius} ${sizeConfig.borderRadius} 0 0`,
 
+      // ðŸŽ¬ MOBILE ANIMATION: Bottom slide for mobile
+      animation:
+        wsSize === 'fullscreen'
+          ? `${modalFullscreenFade} 0.5s cubic-bezier(0.4, 0, 0.2, 1)`
+          : `${modalMobileSlide} 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)`,
+
+      // ðŸ" HEIGHT LIMIT: Prevent overflow on mobile
       ...(wsSize !== 'fullscreen' && {
-        maxHeight: '80vh',
+        maxHeight: '85vh',
       }),
     },
 
-    // Focus visible - CUSTOMIZE: Bạn có thể chỉnh sửa focus outline tại đây
+    // === ACCESSIBILITY ===
+    // â™¿ FOCUS VISIBLE: Keyboard navigation support
     '&:focus-visible': {
-      outline: `2px solid ${theme.palette.primary.main}`,
+      outline: `3px solid ${theme.palette.primary.main}`,
       outlineOffset: '2px',
     },
 
-    // Theme transition
+    // === THEME TRANSITIONS ===
+    // âš¡ SMOOTH TRANSITIONS: For theme switching
     transition: theme.transitions.create(
       ['background-color', 'border-color', 'box-shadow'],
       {
         duration: theme.transitions.duration.short,
+        easing: theme.transitions.easing.easeOut,
       }
     ),
+
+    // === INTERACTION STATES ===
+    // ðŸ–±ï¸ HOVER: Subtle enhancement (desktop only)
+    [theme.breakpoints.up('md')]: {
+      '&:hover': {
+        boxShadow: wsSize === 'fullscreen' ? 'none' : theme.shadows[16], // Enhanced shadow on hover
+      },
+    },
   };
 });
 
 // ==============================================
-// MODAL HEADER - THEME INTEGRATED
+// MODAL HEADER - ENHANCED STYLING
 // ==============================================
 
 export const ModalHeader = styled(Box, {
@@ -219,25 +317,33 @@ export const ModalHeader = styled(Box, {
   const sizeConfig = getSizeConfig(wsSize);
 
   return {
+    // === LAYOUT & SPACING ===
     padding: `${sizeConfig.padding} ${sizeConfig.padding} 0 ${sizeConfig.padding}`,
-    borderBottom: `1px solid ${theme.palette.divider}`,
     display: 'flex',
     alignItems: 'flex-start',
     justifyContent: 'space-between',
-    minHeight: '60px',
+    minHeight: wsSize === 'small' ? '50px' : '60px',
+
+    // ðŸ"² SEPARATOR: Subtle bottom border
+    borderBottom: `1px solid ${theme.palette.divider}`,
+
+    // ðŸŽ¨ BACKGROUND: Subtle background difference
     backgroundColor:
       theme.palette.mode === 'dark'
-        ? theme.palette.background.paper
-        : theme.palette.grey[50],
+        ? `${theme.palette.background.paper}`
+        : `${theme.palette.grey[50]}`,
 
+    // === TYPOGRAPHY STYLES ===
     '& .modal-title': {
+      // ðŸ" TITLE: Size-responsive typography
       fontSize:
         wsSize === 'small'
           ? theme.typography.h6.fontSize
           : wsSize === 'large'
             ? theme.typography.h4.fontSize
             : theme.typography.h5.fontSize,
-      fontWeight: theme.typography.fontWeightBold || 600,
+
+      fontWeight: theme.typography.fontWeightBold || 700,
       color: theme.palette.text.primary,
       margin: 0,
       lineHeight: 1.3,
@@ -246,17 +352,19 @@ export const ModalHeader = styled(Box, {
     },
 
     '& .modal-subtitle': {
+      // ðŸ" SUBTITLE: Secondary information
       fontSize:
         wsSize === 'small'
           ? theme.typography.body2.fontSize
           : theme.typography.body1.fontSize,
+
       fontWeight: theme.typography.fontWeightRegular,
       color: theme.palette.text.secondary,
       margin: `${theme.spacing(0.5)} 0 0 0`,
       lineHeight: 1.4,
     },
 
-    // Theme transition
+    // === THEME TRANSITIONS ===
     transition: theme.transitions.create(['background-color'], {
       duration: theme.transitions.duration.short,
     }),
@@ -264,7 +372,7 @@ export const ModalHeader = styled(Box, {
 });
 
 // ==============================================
-// MODAL CONTENT - THEME INTEGRATED
+// MODAL CONTENT - ENHANCED SCROLLING
 // ==============================================
 
 export const ModalContent = styled(Box, {
@@ -275,27 +383,33 @@ export const ModalContent = styled(Box, {
   const sizeConfig = getSizeConfig(wsSize);
 
   return {
+    // === LAYOUT ===
     padding: sizeConfig.padding,
     flex: 1,
     overflow: 'auto',
     backgroundColor: theme.palette.background.paper,
 
-    // Custom scrollbar - CUSTOMIZE: Bạn có thể chỉnh sửa scrollbar tại đây
+    // === CUSTOM SCROLLBAR ===
+    // CUSTOMIZE: Scrollbar styling cho better UX
     '&::-webkit-scrollbar': {
-      width: '6px',
+      width: '8px',
+      height: '8px',
     },
+
     '&::-webkit-scrollbar-track': {
       backgroundColor:
         theme.palette.mode === 'dark'
           ? theme.palette.grey[800]
           : theme.palette.grey[100],
+      borderRadius: '4px',
     },
+
     '&::-webkit-scrollbar-thumb': {
       backgroundColor:
         theme.palette.mode === 'dark'
           ? theme.palette.grey[600]
           : theme.palette.grey[400],
-      borderRadius: '3px',
+      borderRadius: '4px',
 
       '&:hover': {
         backgroundColor:
@@ -305,7 +419,14 @@ export const ModalContent = styled(Box, {
       },
     },
 
-    // Theme transition
+    // === FIREFOX SCROLLBAR ===
+    scrollbarWidth: 'thin',
+    scrollbarColor:
+      theme.palette.mode === 'dark'
+        ? `${theme.palette.grey[600]} ${theme.palette.grey[800]}`
+        : `${theme.palette.grey[400]} ${theme.palette.grey[100]}`,
+
+    // === THEME TRANSITIONS ===
     transition: theme.transitions.create(['background-color'], {
       duration: theme.transitions.duration.short,
     }),
@@ -313,7 +434,7 @@ export const ModalContent = styled(Box, {
 });
 
 // ==============================================
-// MODAL FOOTER - THEME INTEGRATED
+// MODAL FOOTER - ENHANCED ACTIONS
 // ==============================================
 
 export const ModalFooter = styled(Box, {
@@ -324,29 +445,36 @@ export const ModalFooter = styled(Box, {
   const sizeConfig = getSizeConfig(wsSize);
 
   return {
-    padding: `0 ${sizeConfig.padding} ${sizeConfig.padding} ${sizeConfig.padding}`,
-    borderTop: `1px solid ${theme.palette.divider}`,
+    // === LAYOUT & SPACING ===
+    padding: `${theme.spacing(2)} ${sizeConfig.padding} ${sizeConfig.padding} ${sizeConfig.padding}`, // FIX: Better top padding
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    gap: theme.spacing(1),
-    minHeight: '60px',
+    gap: theme.spacing(2), // FIX: Increased gap between buttons
+    minHeight: wsSize === 'small' ? '60px' : '70px', // FIX: More height for breathing room
+
+    // ðŸ"² SEPARATOR: Top border
+    borderTop: `1px solid ${theme.palette.divider}`,
+
+    // ðŸŽ¨ BACKGROUND: Consistent vá»›i header
     backgroundColor:
       theme.palette.mode === 'dark'
         ? theme.palette.background.paper
         : theme.palette.grey[50],
 
-    // Mobile adjustments
+    // === MOBILE RESPONSIVE ===
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column-reverse',
-      gap: theme.spacing(1),
+      gap: theme.spacing(1.5), // FIX: Better mobile spacing
+      padding: `${theme.spacing(2)} ${theme.spacing(3)} ${theme.spacing(3)}`, // FIX: Better mobile padding
 
+      // ðŸ" FULL WIDTH: Mobile buttons take full width
       '& > *': {
         width: '100%',
       },
     },
 
-    // Theme transition
+    // === THEME TRANSITIONS ===
     transition: theme.transitions.create(['background-color', 'border-color'], {
       duration: theme.transitions.duration.short,
     }),
@@ -354,89 +482,120 @@ export const ModalFooter = styled(Box, {
 });
 
 // ==============================================
-// CLOSE BUTTON - THEME INTEGRATED
+// CLOSE BUTTON - ENHANCED STYLING
 // ==============================================
 
 export const CloseButton = styled(IconButton)(({ theme }) => ({
+  // === POSITIONING ===
   position: 'absolute',
-  top: theme.spacing(1),
-  right: theme.spacing(1),
-  color: theme.palette.text.secondary,
+  top: theme.spacing(1.5),
+  right: theme.spacing(1.5),
   zIndex: 1,
+
+  // ðŸŽ¨ COLORS: Subtle but accessible
+  color: theme.palette.text.secondary,
   backgroundColor: 'transparent',
 
+  // ðŸ" SIZE: Compact but touchable
+  width: '32px',
+  height: '32px',
+
+  // === INTERACTION STATES ===
   '&:hover': {
     backgroundColor: theme.palette.action.hover,
     color: theme.palette.text.primary,
+    // âœ¨ SCALE: Subtle grow effect
+    transform: 'scale(1.1)',
   },
 
+  '&:active': {
+    transform: 'scale(0.95)',
+  },
+
+  // === ACCESSIBILITY ===
   '&:focus-visible': {
     outline: `2px solid ${theme.palette.primary.main}`,
     outlineOffset: '2px',
+    backgroundColor: theme.palette.action.focus,
   },
 
-  // Theme transition
-  transition: theme.transitions.create(['background-color', 'color'], {
-    duration: theme.transitions.duration.shorter,
-  }),
+  // === TRANSITIONS ===
+  transition: theme.transitions.create(
+    ['background-color', 'color', 'transform'],
+    {
+      duration: theme.transitions.duration.shorter,
+      easing: theme.transitions.easing.easeOut,
+    }
+  ),
 }));
 
 // ==============================================
-// LOADING OVERLAY - THEME INTEGRATED
+// LOADING OVERLAY - ENHANCED BLUR
 // ==============================================
 
 export const LoadingOverlay = styled(Box)(({ theme }) => ({
+  // === POSITIONING ===
   position: 'absolute',
   top: 0,
   left: 0,
   right: 0,
   bottom: 0,
-  backgroundColor:
-    theme.palette.mode === 'dark'
-      ? 'rgba(0, 0, 0, 0.8)'
-      : 'rgba(255, 255, 255, 0.8)',
+  zIndex: 10,
+
+  // === LAYOUT ===
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  zIndex: 10,
-  backdropFilter: 'blur(2px)',
 
-  // Theme transition
+  // ðŸŒ«ï¸ BACKDROP: Blur effect
+  backgroundColor:
+    theme.palette.mode === 'dark'
+      ? 'rgba(0, 0, 0, 0.8)'
+      : 'rgba(255, 255, 255, 0.9)',
+
+  backdropFilter: 'blur(4px)',
+  WebkitBackdropFilter: 'blur(4px)',
+
+  // === TRANSITIONS ===
   transition: theme.transitions.create(['background-color'], {
     duration: theme.transitions.duration.short,
   }),
 }));
 
 // ==============================================
-// MODAL SECTION DIVIDER - THEME INTEGRATED
+// MODAL DIVIDER - ENHANCED SEPARATOR
 // ==============================================
 
 export const ModalDivider = styled(Box)(({ theme }) => ({
   width: '100%',
   height: '1px',
   backgroundColor: theme.palette.divider,
-  margin: `${theme.spacing(2)} 0`,
+  margin: `${theme.spacing(3)} 0`, // Increased margin for better spacing
 
-  // Theme transition
+  // === TRANSITIONS ===
   transition: theme.transitions.create(['background-color'], {
     duration: theme.transitions.duration.short,
   }),
 }));
 
 // ==============================================
-// MODAL ACTION GROUP - THEME INTEGRATED
+// MODAL ACTION GROUP - ENHANCED LAYOUT
 // ==============================================
 
 export const ModalActionGroup = styled(Box)(({ theme }) => ({
+  // === LAYOUT ===
   display: 'flex',
-  gap: theme.spacing(1),
+  gap: theme.spacing(2), // FIX: Better spacing between buttons
   alignItems: 'center',
   justifyContent: 'flex-end',
 
+  // === MOBILE RESPONSIVE ===
   [theme.breakpoints.down('sm')]: {
     flexDirection: 'column-reverse',
     width: '100%',
+    gap: theme.spacing(1.5), // FIX: Better mobile spacing
 
+    // ðŸ" FULL WIDTH: All buttons take full width on mobile
     '& > *': {
       width: '100%',
     },
