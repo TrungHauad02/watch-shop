@@ -1,7 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Typography, CircularProgress, useTheme } from '@mui/material';
 import { Close as CloseIcon } from '@mui/icons-material';
-import WSButton from '@/components/WSButton';
+import { WSButton } from '@/components';
 import {
   WSModalProps,
   WSModalAction,
@@ -19,49 +19,100 @@ import {
 } from './WSModal.styles';
 
 // ==============================================
-// WSModal COMPONENT - THEME INTEGRATED
+// WSModal COMPONENT - ENHANCED & THEME INTEGRATED
 // ==============================================
 
-// CUSTOMIZE: Bạn có thể chỉnh sửa size (small, medium, large, fullscreen),
-// variant (default, confirmation, form), và actions để tùy chỉnh modal.
-// Modal sẽ tự động thay đổi màu sắc theo theme (dark/light mode).
+/**
+ * WSModal - Flexible Modal Dialog Component
+ *
+ * CUSTOMIZE: Bạn có thể chỉnh sửa:
+ * - size: 'small' | 'medium' | 'large' | 'fullscreen'
+ * - variant: 'default' | 'confirmation' | 'form'
+ * - animations: Smooth slide-in with blur backdrop
+ * - actions: Button array với async support
+ *
+ * Modal tự động responsive và thay đổi theo theme (dark/light mode).
+ *
+ * @example
+ * // Basic modal
+ * <WSModal
+ *   open={isOpen}
+ *   onClose={() => setIsOpen(false)}
+ *   title="Xác nhận"
+ *   content="Bạn có chắc chắn muốn thực hiện hành động này?"
+ * />
+ *
+ * // Confirmation modal với actions
+ * <WSModal
+ *   open={showConfirm}
+ *   onClose={() => setShowConfirm(false)}
+ *   variant="confirmation"
+ *   title="Xóa sản phẩm"
+ *   subtitle="Hành động này không thể hoàn tác"
+ *   content="Sản phẩm sẽ bị xóa vĩnh viễn khỏi hệ thống."
+ *   actions={[
+ *     {
+ *       label: "Hủy",
+ *       onClick: () => setShowConfirm(false),
+ *       variant: "outlined"
+ *     },
+ *     {
+ *       label: "Xóa",
+ *       onClick: async () => await deleteProduct(),
+ *       color: "error",
+ *       autoClose: true
+ *     }
+ *   ]}
+ * />
+ *
+ * // Form modal với custom content
+ * <WSModal
+ *   open={showForm}
+ *   onClose={() => setShowForm(false)}
+ *   variant="form"
+ *   size="large"
+ *   title="Thêm sản phẩm mới"
+ * >
+ *   <ProductForm onSubmit={handleSubmit} />
+ * </WSModal>
+ */
 export default function WSModal({
-  // Core styling props
-  size = WS_MODAL_DEFAULTS.size,
-  variant = WS_MODAL_DEFAULTS.variant,
+  // === CORE STYLING PROPS ===
+  size = WS_MODAL_DEFAULTS.size, // 📏 small | medium | large | fullscreen
+  variant = WS_MODAL_DEFAULTS.variant, // 🎨 default | confirmation | form
 
-  // Content
-  children,
-  title,
-  subtitle,
-  content,
+  // === CONTENT ===
+  children, // 🔧 Custom content component
+  title, // 📝 Modal title
+  subtitle, // 📝 Modal subtitle
+  content, // 📝 Content text hoặc ReactNode
 
-  // Actions
-  actions = [],
-  showCloseButton = WS_MODAL_DEFAULTS.showCloseButton,
+  // === ACTIONS ===
+  actions = WS_MODAL_DEFAULTS.actions, // 🎬 Array of action buttons
+  showCloseButton = WS_MODAL_DEFAULTS.showCloseButton, // ❌ Show X button
 
-  // Enhanced features
-  loading = WS_MODAL_DEFAULTS.loading,
-  closable = WS_MODAL_DEFAULTS.closable,
+  // === ENHANCED FEATURES ===
+  loading = WS_MODAL_DEFAULTS.loading, // 🔄 Loading overlay
+  closable = WS_MODAL_DEFAULTS.closable, // 🚪 Can be closed
 
-  // Modal state
-  open = WS_MODAL_DEFAULTS.open,
+  // === MODAL STATE ===
+  open = WS_MODAL_DEFAULTS.open, // 👁️ Modal visibility
 
-  // Event handlers
-  onClose,
+  // === EVENT HANDLERS ===
+  onClose, // 🚪 Close handler
 
-  // Custom styling
-  sx,
-  className,
-  contentSx,
-  headerSx,
-  footerSx,
+  // === CUSTOM STYLING ===
+  sx, // 🎨 Container styles
+  className, // 🎨 CSS class
+  contentSx, // 🎨 Content area styles
+  headerSx, // 🎨 Header area styles
+  footerSx, // 🎨 Footer area styles
 
-  // Accessibility
-  ariaLabel,
-  ariaDescribedBy,
+  // === ACCESSIBILITY ===
+  ariaLabel, // ♿ Accessibility label
+  ariaDescribedBy, // ♿ Accessibility description
 
-  // Forward all other props
+  // === FORWARD OTHER PROPS ===
   ...otherProps
 }: WSModalProps) {
   // ==============================================
@@ -82,46 +133,62 @@ export default function WSModal({
   // EVENT HANDLERS
   // ==============================================
 
-  // Handle modal close (for backdrop/escape)
-  const handleModalClose = useCallback(() => {
+  /**
+   * Handle modal close from backdrop or escape key
+   */
+  const handleModalClose = useCallback(
+    (_event: unknown, reason: 'backdropClick' | 'escapeKeyDown') => {
+      // 🚪 Only close if modal is closable
+      if (closable && onClose) {
+        // 📝 Optional: Different behavior based on close reason
+        if (reason === 'backdropClick' || reason === 'escapeKeyDown') {
+          onClose();
+        }
+      }
+    },
+    [closable, onClose]
+  );
+
+  /**
+   * Handle close button click
+   */
+  const handleCloseButtonClick = useCallback(() => {
     if (closable && onClose) {
       onClose();
     }
   }, [closable, onClose]);
 
-  // Handle close button click
-  const handleClose = useCallback(() => {
-    if (closable && onClose) {
-      onClose();
-    }
-  }, [closable, onClose]);
-
+  /**
+   * Handle action button click with loading state management
+   */
   const handleActionClick = useCallback(
     async (action: WSModalAction, index: number) => {
-      if (!action) return;
+      if (!action || action.disabled) return;
 
       try {
-        // Set loading state for this specific action
+        // 🔄 Set loading state for this specific action
         if (!action.loading) {
           setActionLoadingStates((prev) => ({ ...prev, [index]: true }));
         }
 
-        // Execute action
+        // 🚀 Execute action
         const result = action.onClick();
 
-        // Handle async actions
+        // 🔄 Handle async actions
         if (result && typeof result === 'object' && 'then' in result) {
           await (result as Promise<void>);
         }
 
-        // Auto close if specified
+        // 🚪 Auto close if specified (default: true)
         if (action.autoClose !== false && onClose) {
           onClose();
         }
       } catch (error) {
+        // 🚨 Log errors but don't crash the modal
         console.error('WSModal action error:', error);
+        // TODO: Có thể show error toast ở đây
       } finally {
-        // Clear loading state
+        // 🧹 Clear loading state
         if (!action.loading) {
           setActionLoadingStates((prev) => ({ ...prev, [index]: false }));
         }
@@ -130,11 +197,17 @@ export default function WSModal({
     [onClose]
   );
 
-  // Handle escape key
+  // ==============================================
+  // LIFECYCLE EFFECTS
+  // ==============================================
+
+  /**
+   * Handle escape key press
+   */
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
-      if (event.key === 'Escape' && closable && open) {
-        handleClose();
+      if (event.key === 'Escape' && closable && open && onClose) {
+        onClose();
       }
     };
 
@@ -144,16 +217,20 @@ export default function WSModal({
     }
 
     return undefined;
-  }, [open, closable, handleClose]);
+  }, [open, closable, onClose]);
 
-  // Focus management
+  /**
+   * Prevent body scroll when modal is open
+   */
   useEffect(() => {
     if (open) {
-      // Prevent body scroll when modal is open
+      // 🔒 Lock body scroll
+      const originalOverflow = document.body.style.overflow;
       document.body.style.overflow = 'hidden';
 
       return () => {
-        document.body.style.overflow = 'unset';
+        // 🔓 Restore original overflow
+        document.body.style.overflow = originalOverflow;
       };
     }
   }, [open]);
@@ -162,34 +239,51 @@ export default function WSModal({
   // RENDER HELPERS - THEME AWARE
   // ==============================================
 
+  /**
+   * Render modal header with title, subtitle, and close button
+   */
   const renderHeader = () => {
     if (!title && !subtitle && !showCloseButton) return null;
 
+    // Build header props safely
+    const headerProps = {
+      wsSize: size,
+      ...(headerSx && { sx: headerSx }),
+    };
+
     return (
-      <ModalHeader wsSize={size} {...(headerSx && { sx: headerSx })}>
+      <ModalHeader {...headerProps}>
+        {/* 📝 TITLE & SUBTITLE SECTION */}
         {(title || subtitle) && (
-          <div>
+          <div style={{ flex: 1 }}>
             {title && (
               <Typography
+                component="h2"
                 variant={
                   size === 'small' ? 'h6' : size === 'large' ? 'h4' : 'h5'
                 }
                 className="modal-title"
                 sx={{
+                  // CUSTOMIZE: Title styling
                   color: theme.palette.text.primary,
-                  fontWeight: theme.typography.fontWeightBold || 600,
+                  fontWeight: theme.typography.fontWeightBold || 700,
+                  margin: 0,
+                  lineHeight: 1.3,
                 }}
               >
                 {title}
               </Typography>
             )}
+
             {subtitle && (
               <Typography
                 variant={size === 'small' ? 'body2' : 'body1'}
                 className="modal-subtitle"
                 sx={{
+                  // CUSTOMIZE: Subtitle styling
                   color: theme.palette.text.secondary,
-                  mt: 0.5,
+                  marginTop: theme.spacing(0.5),
+                  lineHeight: 1.4,
                 }}
               >
                 {subtitle}
@@ -198,39 +292,54 @@ export default function WSModal({
           </div>
         )}
 
+        {/* ❌ CLOSE BUTTON */}
         {showCloseButton && closable && (
           <CloseButton
-            onClick={handleClose}
+            onClick={handleCloseButtonClick}
             aria-label="Đóng modal"
             size="small"
+            disabled={loading}
           >
-            <CloseIcon />
+            <CloseIcon fontSize="small" />
           </CloseButton>
         )}
       </ModalHeader>
     );
   };
 
+  /**
+   * Render modal content area
+   */
   const renderContent = () => {
-    // If children provided, render them directly
+    // 🔧 CUSTOM CHILDREN: Render custom component if provided
     if (children) {
-      return (
-        <ModalContent wsSize={size} {...(contentSx && { sx: contentSx })}>
-          {children}
-        </ModalContent>
-      );
+      // Build content props safely
+      const contentProps = {
+        wsSize: size,
+        ...(contentSx && { sx: contentSx }),
+      };
+
+      return <ModalContent {...contentProps}>{children}</ModalContent>;
     }
 
-    // Render content prop
+    // 📝 CONTENT PROP: Render string or ReactNode content
     if (content) {
+      // Build content props safely
+      const contentProps = {
+        wsSize: size,
+        ...(contentSx && { sx: contentSx }),
+      };
+
       return (
-        <ModalContent wsSize={size} {...(contentSx && { sx: contentSx })}>
+        <ModalContent {...contentProps}>
           {typeof content === 'string' ? (
             <Typography
               variant="body1"
               sx={{
+                // CUSTOMIZE: Content text styling
                 color: theme.palette.text.primary,
                 lineHeight: 1.6,
+                margin: 0,
               }}
             >
               {content}
@@ -245,32 +354,47 @@ export default function WSModal({
     return null;
   };
 
+  /**
+   * Render modal footer with action buttons
+   */
   const renderFooter = () => {
-    if (actions.length === 0) return null;
+    if (!actions || actions.length === 0) return null;
 
     return (
       <ModalFooter wsSize={size} {...(footerSx && { sx: footerSx })}>
         <ModalActionGroup>
           {actions.map((action, index) => {
-            // CUSTOMIZE: Bạn có thể chỉnh sửa button styling trong actions tại đây
+            // 🎨 BUTTON VARIANT: Smart defaults based on action
             const buttonVariant =
               action.variant ||
               (action.color === 'error' ? 'outlined' : 'contained');
 
+            // 🎨 BUTTON COLOR: Default to primary
             const buttonColor = action.color || 'primary';
+
+            // 🔄 LOADING STATE: Individual or global loading
+            const isActionLoading =
+              action.loading || actionLoadingStates[index] || loading;
 
             return (
               <WSButton
-                key={index}
+                key={`modal-action-${index}`}
                 variant={buttonVariant}
                 color={buttonColor}
                 size={size === 'small' ? 'small' : 'medium'}
                 onClick={() => handleActionClick(action, index)}
                 disabled={action.disabled || loading}
-                loading={action.loading || actionLoadingStates[index] || false}
+                loading={isActionLoading}
                 startIcon={action.startIcon}
                 sx={{
-                  minWidth: size === 'small' ? '80px' : '100px',
+                  // CUSTOMIZE: Action button styling
+                  minWidth: size === 'small' ? '80px' : '120px',
+
+                  // 📱 Mobile: Full width buttons
+                  [theme.breakpoints.down('sm')]: {
+                    width: '100%',
+                  },
+
                   ...action.sx,
                 }}
               >
@@ -283,14 +407,19 @@ export default function WSModal({
     );
   };
 
+  /**
+   * Render loading overlay when modal is in loading state
+   */
   const renderLoadingOverlay = () => {
     if (!loading) return null;
 
     return (
       <LoadingOverlay>
         <CircularProgress
-          size={40}
+          size={size === 'small' ? 32 : 48}
+          thickness={4}
           sx={{
+            // CUSTOMIZE: Loading spinner styling
             color: theme.palette.primary.main,
           }}
         />
@@ -299,7 +428,7 @@ export default function WSModal({
   };
 
   // ==============================================
-  // ACCESSIBILITY PROPS
+  // ACCESSIBILITY CONFIGURATION
   // ==============================================
 
   const accessibilityProps = {
@@ -307,6 +436,8 @@ export default function WSModal({
     'aria-describedby': ariaDescribedBy,
     'aria-modal': true,
     role: 'dialog',
+    // 🎯 Focus management
+    tabIndex: -1,
   };
 
   // ==============================================
@@ -316,35 +447,49 @@ export default function WSModal({
   return (
     <StyledWSModal
       open={open}
-      {...(closable && onClose && { onClose: handleModalClose })}
+      {...(closable && { onClose: handleModalClose })}
       closeAfterTransition
+      disableEscapeKeyDown={!closable}
       {...(sx && { sx })}
       {...(className && { className })}
-      {...(otherProps.style !== undefined && { style: otherProps.style })}
-      {...Object.fromEntries(
-        Object.entries(otherProps).filter(([key]) => key !== 'style')
-      )}
+      {...otherProps}
     >
       <ModalContainer
         wsSize={size}
         wsVariant={variant}
         {...accessibilityProps}
-        tabIndex={-1}
         sx={{
-          // CUSTOMIZE: Bạn có thể override styles tại đây
-          ...sx,
+          // === CUSTOM STYLING OVERRIDES ===
+          // CUSTOMIZE: Bạn có thể override container styles tại đây
+
+          // 🎨 Theme integration
+          backgroundColor: theme.palette.background.paper,
+
+          // 🌙 Dark mode enhancements
+          ...(theme.palette.mode === 'dark' && {
+            boxShadow: theme.shadows[24], // Deeper shadow in dark mode
+          }),
+
+          // 📱 Mobile responsive
+          [theme.breakpoints.down('sm')]: {
+            margin: 0,
+            width: '100%',
+            maxWidth: '100%',
+          },
         }}
       >
-        {/* Header */}
+        {/* === MODAL SECTIONS === */}
+
+        {/* 📄 HEADER: Title, subtitle, close button */}
         {renderHeader()}
 
-        {/* Content */}
+        {/* 📝 CONTENT: Main modal content */}
         {renderContent()}
 
-        {/* Footer */}
+        {/* 🎬 FOOTER: Action buttons */}
         {renderFooter()}
 
-        {/* Loading overlay */}
+        {/* 🔄 LOADING: Overlay when processing */}
         {renderLoadingOverlay()}
       </ModalContainer>
     </StyledWSModal>

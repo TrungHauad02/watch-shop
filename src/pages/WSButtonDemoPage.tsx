@@ -1,592 +1,408 @@
 import { useState } from 'react';
 import {
-  Box,
   Container,
   Typography,
-  Paper,
   Grid,
+  Paper,
+  Box,
   Divider,
   Stack,
-  Alert,
 } from '@mui/material';
 import {
-  ShoppingCart,
-  Favorite,
-  Add,
-  Delete,
-  Edit,
-  Save,
-  Download,
-  Share,
-  ArrowForward,
-  Search,
-  Login,
-  AccountCircle,
-  Refresh,
+  Save as SaveIcon,
+  Delete as DeleteIcon,
+  Add as AddIcon,
+  Download as DownloadIcon,
+  Send as SendIcon,
+  Favorite as FavoriteIcon,
 } from '@mui/icons-material';
-import WSButton from '@/components/WSButton';
-import { BRAND_COLORS } from '@/styles/colors';
+import { WSButton } from '@/components';
 
 export default function WSButtonDemoPage() {
-  // ==============================================
-  // STATE MANAGEMENT
-  // ==============================================
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [loadingStates, setLoadingStates] = useState({
-    addToCart: false,
-    download: false,
-    save: false,
-    login: false,
-  });
-
-  // ==============================================
-  // EVENT HANDLERS
-  // ==============================================
-
-  // Simulate async operations
-  const handleAsyncAction = async (action: keyof typeof loadingStates) => {
-    setLoadingStates((prev) => ({ ...prev, [action]: true }));
+  // Simulate async operation
+  const handleAsyncAction = async () => {
+    setIsLoading(true);
     await new Promise((resolve) => setTimeout(resolve, 2000));
-    setLoadingStates((prev) => ({ ...prev, [action]: false }));
+    setIsLoading(false);
   };
 
-  const handleSyncAction = (actionName: string) => {
-    console.log(`${actionName} clicked!`);
-    alert(`${actionName} action executed!`);
+  const handleAsyncClick = async () => {
+    // This will automatically show loading state
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+    alert('Async operation completed!');
   };
 
-  // ==============================================
-  // RENDER SECTIONS
-  // ==============================================
-
-  const renderBasicVariants = () => (
-    <Paper sx={{ p: 3, height: '100%' }}>
-      <Typography
-        variant="h5"
-        gutterBottom
-        sx={{ color: BRAND_COLORS.primary }}
-      >
-        🎨 Variants
+  return (
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Typography variant="h3" component="h1" gutterBottom>
+        WSButton Component Demo
       </Typography>
-      <Divider sx={{ mb: 3 }} />
-
-      <Stack spacing={3}>
-        <Box>
-          <Typography variant="subtitle2" gutterBottom color="text.secondary">
-            Các variant chính
-          </Typography>
-          <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap>
-            <WSButton variant="contained">Contained</WSButton>
-            <WSButton variant="outlined">Outlined</WSButton>
-            <WSButton variant="text">Text</WSButton>
-          </Stack>
-        </Box>
-
-        <Box>
-          <Typography variant="subtitle2" gutterBottom color="text.secondary">
-            Màu sắc
-          </Typography>
-          <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-            <WSButton color="primary" size="small">
-              Primary
-            </WSButton>
-            <WSButton color="secondary" size="small">
-              Secondary
-            </WSButton>
-            <WSButton color="success" size="small">
-              Success
-            </WSButton>
-            <WSButton color="warning" size="small">
-              Warning
-            </WSButton>
-            <WSButton color="error" size="small">
-              Error
-            </WSButton>
-            <WSButton color="info" size="small">
-              Info
-            </WSButton>
-          </Stack>
-        </Box>
-
-        <Box>
-          <Typography variant="subtitle2" gutterBottom color="text.secondary">
-            Kích thước
-          </Typography>
-          <Stack direction="row" spacing={2} alignItems="center">
-            <WSButton size="small">Small</WSButton>
-            <WSButton size="medium">Medium</WSButton>
-            <WSButton size="large">Large</WSButton>
-          </Stack>
-        </Box>
-      </Stack>
-    </Paper>
-  );
-
-  const renderIconsAndInteractions = () => (
-    <Paper sx={{ p: 3, height: '100%' }}>
-      <Typography
-        variant="h5"
-        gutterBottom
-        sx={{ color: BRAND_COLORS.primary }}
-      >
-        🔧 Icons & Interactions
+      <Typography variant="subtitle1" color="text.secondary" gutterBottom>
+        Comprehensive demo of WSButton variants, sizes, colors and features
       </Typography>
-      <Divider sx={{ mb: 3 }} />
 
-      <Stack spacing={3}>
-        <Box>
-          <Typography variant="subtitle2" gutterBottom color="text.secondary">
-            Buttons với icons
-          </Typography>
-          <Stack spacing={1}>
-            <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap>
+      <Grid container spacing={4}>
+        {/* === VARIANTS DEMO === */}
+        <Grid size={{ xs: 12 }}>
+          <Paper sx={{ p: 3 }}>
+            <Typography variant="h5" gutterBottom>
+              🎨 Button Variants
+            </Typography>
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              Contained, Outlined, and Text variants with primary color
+            </Typography>
+
+            <Stack direction="row" spacing={2} sx={{ mt: 2 }}>
+              <WSButton variant="contained" color="primary">
+                Contained
+              </WSButton>
+              <WSButton variant="outlined" color="primary">
+                Outlined
+              </WSButton>
+              <WSButton variant="text" color="primary">
+                Text
+              </WSButton>
+            </Stack>
+          </Paper>
+        </Grid>
+
+        {/* === SIZES DEMO === */}
+        <Grid size={{ xs: 12 }}>
+          <Paper sx={{ p: 3 }}>
+            <Typography variant="h5" gutterBottom>
+              📏 Button Sizes
+            </Typography>
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              Small, Medium, and Large sizes
+            </Typography>
+
+            <Stack
+              direction="row"
+              spacing={2}
+              alignItems="center"
+              sx={{ mt: 2 }}
+            >
+              <WSButton size="small" variant="contained">
+                Small
+              </WSButton>
+              <WSButton size="medium" variant="contained">
+                Medium
+              </WSButton>
+              <WSButton size="large" variant="contained">
+                Large
+              </WSButton>
+            </Stack>
+          </Paper>
+        </Grid>
+
+        {/* === COLORS DEMO === */}
+        <Grid size={{ xs: 12 }}>
+          <Paper sx={{ p: 3 }}>
+            <Typography variant="h5" gutterBottom>
+              🌈 Color Variants
+            </Typography>
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              All available color options for contained buttons
+            </Typography>
+
+            <Grid container spacing={2} sx={{ mt: 1 }}>
+              <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+                <WSButton fullWidth color="primary">
+                  Primary
+                </WSButton>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+                <WSButton fullWidth color="secondary">
+                  Secondary
+                </WSButton>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+                <WSButton fullWidth color="success">
+                  Success
+                </WSButton>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+                <WSButton fullWidth color="warning">
+                  Warning
+                </WSButton>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+                <WSButton fullWidth color="error">
+                  Error
+                </WSButton>
+              </Grid>
+              <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+                <WSButton fullWidth color="info">
+                  Info
+                </WSButton>
+              </Grid>
+            </Grid>
+          </Paper>
+        </Grid>
+
+        {/* === ICONS DEMO === */}
+        <Grid size={{ xs: 12 }}>
+          <Paper sx={{ p: 3 }}>
+            <Typography variant="h5" gutterBottom>
+              🎯 Buttons with Icons
+            </Typography>
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              Start icons, end icons, and different combinations
+            </Typography>
+
+            <Stack direction="row" spacing={2} flexWrap="wrap" sx={{ mt: 2 }}>
+              <WSButton startIcon={<SaveIcon />} color="success">
+                Save
+              </WSButton>
+              <WSButton startIcon={<DeleteIcon />} color="error">
+                Delete
+              </WSButton>
+              <WSButton endIcon={<SendIcon />} color="primary">
+                Send
+              </WSButton>
+              <WSButton startIcon={<AddIcon />} variant="outlined">
+                Add New
+              </WSButton>
               <WSButton
-                startIcon={<ShoppingCart />}
-                onClick={() => handleSyncAction('Add to Cart')}
+                startIcon={<DownloadIcon />}
+                endIcon={<FavoriteIcon />}
+                variant="text"
+                color="secondary"
+              >
+                Download & Like
+              </WSButton>
+            </Stack>
+          </Paper>
+        </Grid>
+
+        {/* === LOADING STATES DEMO === */}
+        <Grid size={{ xs: 12 }}>
+          <Paper sx={{ p: 3 }}>
+            <Typography variant="h5" gutterBottom>
+              🔄 Loading States
+            </Typography>
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              Manual loading control and automatic async loading
+            </Typography>
+
+            <Stack direction="row" spacing={2} flexWrap="wrap" sx={{ mt: 2 }}>
+              <WSButton
+                loading={isLoading}
+                onClick={handleAsyncAction}
+                color="primary"
+              >
+                Manual Loading
+              </WSButton>
+
+              <WSButton
+                loading={isLoading}
+                loadingText="Saving..."
+                startIcon={<SaveIcon />}
+                color="success"
+              >
+                Save with Custom Text
+              </WSButton>
+
+              <WSButton
+                onClick={handleAsyncClick}
+                startIcon={<SendIcon />}
+                color="secondary"
+              >
+                Auto Loading (Async)
+              </WSButton>
+
+              <WSButton loading variant="outlined" color="info">
+                Always Loading
+              </WSButton>
+            </Stack>
+          </Paper>
+        </Grid>
+
+        {/* === STATES DEMO === */}
+        <Grid size={{ xs: 12 }}>
+          <Paper sx={{ p: 3 }}>
+            <Typography variant="h5" gutterBottom>
+              🚫 Button States
+            </Typography>
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              Disabled and various interactive states
+            </Typography>
+
+            <Stack direction="row" spacing={2} flexWrap="wrap" sx={{ mt: 2 }}>
+              <WSButton disabled>Disabled</WSButton>
+              <WSButton disabled variant="outlined">
+                Disabled Outlined
+              </WSButton>
+              <WSButton disabled variant="text">
+                Disabled Text
+              </WSButton>
+              <WSButton disabled startIcon={<SaveIcon />}>
+                Disabled with Icon
+              </WSButton>
+            </Stack>
+          </Paper>
+        </Grid>
+
+        {/* === LINK BUTTONS DEMO === */}
+        <Grid size={{ xs: 12 }}>
+          <Paper sx={{ p: 3 }}>
+            <Typography variant="h5" gutterBottom>
+              🔗 Link Buttons
+            </Typography>
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              Buttons that act as links
+            </Typography>
+
+            <Stack direction="row" spacing={2} flexWrap="wrap" sx={{ mt: 2 }}>
+              <WSButton href="/products" variant="contained" color="primary">
+                View Products
+              </WSButton>
+
+              <WSButton
+                href="https://example.com"
+                target="_blank"
+                variant="outlined"
+                endIcon={<SendIcon />}
+              >
+                External Link
+              </WSButton>
+
+              <WSButton href="#demo" variant="text" color="secondary">
+                Anchor Link
+              </WSButton>
+            </Stack>
+          </Paper>
+        </Grid>
+
+        {/* === FULL WIDTH DEMO === */}
+        <Grid size={{ xs: 12 }}>
+          <Paper sx={{ p: 3 }}>
+            <Typography variant="h5" gutterBottom>
+              📐 Full Width Buttons
+            </Typography>
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              Buttons that span the full width of their container
+            </Typography>
+
+            <Stack spacing={2} sx={{ mt: 2 }}>
+              <WSButton
+                fullWidth
+                size="large"
+                startIcon={<AddIcon />}
+                color="primary"
               >
                 Add to Cart
               </WSButton>
-              <WSButton
-                startIcon={<Favorite />}
-                color="error"
-                variant="outlined"
-                onClick={() => handleSyncAction('Add to Wishlist')}
-              >
-                Wishlist
-              </WSButton>
-            </Stack>
-            <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap>
-              <WSButton
-                endIcon={<ArrowForward />}
-                variant="text"
-                onClick={() => handleSyncAction('Continue')}
-              >
-                Continue
-              </WSButton>
-              <WSButton
-                startIcon={<Search />}
-                endIcon={<ArrowForward />}
-                color="info"
-                onClick={() => handleSyncAction('Search and Go')}
-              >
-                Search & Go
-              </WSButton>
-            </Stack>
-          </Stack>
-        </Box>
 
-        <Box>
-          <Typography variant="subtitle2" gutterBottom color="text.secondary">
-            Disabled states
-          </Typography>
-          <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap>
-            <WSButton disabled>Disabled</WSButton>
-            <WSButton disabled variant="outlined">
-              Disabled Outlined
-            </WSButton>
-            <WSButton disabled variant="text">
-              Disabled Text
-            </WSButton>
-          </Stack>
-        </Box>
-
-        <Box>
-          <Typography variant="subtitle2" gutterBottom color="text.secondary">
-            Full width buttons
-          </Typography>
-          <Stack spacing={1}>
-            <WSButton fullWidth startIcon={<Save />} color="success">
-              Save Changes (Full Width)
-            </WSButton>
-            <WSButton
-              fullWidth
-              variant="outlined"
-              startIcon={<Refresh />}
-              onClick={() => handleSyncAction('Reset')}
-            >
-              Reset Form
-            </WSButton>
-          </Stack>
-        </Box>
-      </Stack>
-    </Paper>
-  );
-
-  const renderLoadingStates = () => (
-    <Paper sx={{ p: 3, height: '100%' }}>
-      <Typography
-        variant="h5"
-        gutterBottom
-        sx={{ color: BRAND_COLORS.primary }}
-      >
-        ⏳ Loading States
-      </Typography>
-      <Divider sx={{ mb: 3 }} />
-
-      <Stack spacing={3}>
-        <Box>
-          <Typography variant="subtitle2" gutterBottom color="text.secondary">
-            Async actions với loading
-          </Typography>
-          <Stack spacing={2}>
-            <WSButton
-              loading={loadingStates.addToCart}
-              loadingText="Đang thêm vào giỏ..."
-              startIcon={<ShoppingCart />}
-              onClick={() => handleAsyncAction('addToCart')}
-              fullWidth
-              size="large"
-            >
-              Add to Cart - $299
-            </WSButton>
-
-            <Stack direction="row" spacing={2}>
-              <WSButton
-                loading={loadingStates.download}
-                startIcon={<Download />}
-                onClick={() => handleAsyncAction('download')}
-                variant="outlined"
-                color="info"
-              >
-                Download
-              </WSButton>
-
-              <WSButton
-                loading={loadingStates.save}
-                loadingText="Saving..."
-                startIcon={<Save />}
-                onClick={() => handleAsyncAction('save')}
-                color="success"
-              >
-                Save File
-              </WSButton>
-            </Stack>
-          </Stack>
-        </Box>
-
-        <Box>
-          <Typography variant="subtitle2" gutterBottom color="text.secondary">
-            Loading với custom text
-          </Typography>
-          <WSButton
-            loading={loadingStates.login}
-            loadingText="Đang đăng nhập..."
-            startIcon={<Login />}
-            onClick={() => handleAsyncAction('login')}
-            color="primary"
-            fullWidth
-          >
-            Sign In
-          </WSButton>
-        </Box>
-      </Stack>
-    </Paper>
-  );
-
-  const renderLinksAndForms = () => (
-    <Paper sx={{ p: 3, height: '100%' }}>
-      <Typography
-        variant="h5"
-        gutterBottom
-        sx={{ color: BRAND_COLORS.primary }}
-      >
-        🔗 Links & Forms
-      </Typography>
-      <Divider sx={{ mb: 3 }} />
-
-      <Stack spacing={3}>
-        <Box>
-          <Typography variant="subtitle2" gutterBottom color="text.secondary">
-            Button as links
-          </Typography>
-          <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap>
-            <WSButton
-              href="https://mui.com"
-              target="_blank"
-              endIcon={<ArrowForward />}
-              variant="outlined"
-              color="info"
-            >
-              External Link
-            </WSButton>
-            <WSButton href="/products" startIcon={<Search />} variant="text">
-              View Products
-            </WSButton>
-          </Stack>
-        </Box>
-
-        <Box>
-          <Typography variant="subtitle2" gutterBottom color="text.secondary">
-            Form buttons
-          </Typography>
-          <Stack direction="row" spacing={2} flexWrap="wrap" useFlexGap>
-            <WSButton type="submit" color="primary">
-              Submit Form
-            </WSButton>
-            <WSButton type="reset" variant="outlined" color="warning">
-              Reset Form
-            </WSButton>
-            <WSButton type="button" variant="text">
-              Cancel
-            </WSButton>
-          </Stack>
-        </Box>
-      </Stack>
-    </Paper>
-  );
-
-  const renderEcommerceExamples = () => (
-    <Paper sx={{ p: 3 }}>
-      <Typography
-        variant="h5"
-        gutterBottom
-        sx={{ color: BRAND_COLORS.primary }}
-      >
-        🛒 E-commerce Use Cases
-      </Typography>
-      <Divider sx={{ mb: 3 }} />
-
-      <Grid container spacing={3}>
-        {/* Product Actions */}
-        <Grid size={{ xs: 12, md: 4 }}>
-          <Typography variant="h6" gutterBottom>
-            Product Actions
-          </Typography>
-          <Stack spacing={2}>
-            <WSButton
-              fullWidth
-              size="large"
-              startIcon={<ShoppingCart />}
-              color="primary"
-              onClick={() => handleSyncAction('Add to Cart $299')}
-            >
-              Add to Cart - $299
-            </WSButton>
-
-            <Stack direction="row" spacing={1}>
               <WSButton
                 fullWidth
-                startIcon={<Favorite />}
-                color="error"
                 variant="outlined"
-                onClick={() => handleSyncAction('Add to Wishlist')}
+                startIcon={<FavoriteIcon />}
+                color="secondary"
               >
-                Wishlist
-              </WSButton>
-
-              <WSButton
-                startIcon={<Share />}
-                variant="text"
-                color="info"
-                onClick={() => handleSyncAction('Share Product')}
-              >
-                Share
+                Add to Wishlist
               </WSButton>
             </Stack>
-          </Stack>
+          </Paper>
         </Grid>
 
-        {/* Auth Actions */}
-        <Grid size={{ xs: 12, md: 4 }}>
-          <Typography variant="h6" gutterBottom>
-            Auth Actions
-          </Typography>
-          <Stack spacing={2}>
-            <WSButton
-              fullWidth
-              startIcon={<Login />}
-              color="primary"
-              onClick={() => handleSyncAction('Sign In')}
+        {/* === FORM DEMO === */}
+        <Grid size={{ xs: 12 }}>
+          <Paper sx={{ p: 3 }}>
+            <Typography variant="h5" gutterBottom>
+              📋 Form Integration
+            </Typography>
+            <Typography variant="body2" color="text.secondary" gutterBottom>
+              Buttons in form context with different types
+            </Typography>
+
+            <Box
+              component="form"
+              onSubmit={(e) => {
+                e.preventDefault();
+                alert('Form submitted!');
+              }}
+              sx={{ mt: 2 }}
             >
-              Sign In
-            </WSButton>
+              <Stack direction="row" spacing={2}>
+                <WSButton
+                  type="submit"
+                  startIcon={<SaveIcon />}
+                  color="success"
+                >
+                  Submit Form
+                </WSButton>
 
-            <WSButton
-              fullWidth
-              startIcon={<AccountCircle />}
-              variant="outlined"
-              color="secondary"
-              onClick={() => handleSyncAction('Create Account')}
-            >
-              Create Account
-            </WSButton>
+                <WSButton type="reset" variant="outlined" color="warning">
+                  Reset
+                </WSButton>
 
-            <WSButton
-              fullWidth
-              variant="text"
-              onClick={() => handleSyncAction('Forgot Password')}
-            >
-              Forgot Password?
-            </WSButton>
-          </Stack>
-        </Grid>
-
-        {/* Admin Actions */}
-        <Grid size={{ xs: 12, md: 4 }}>
-          <Typography variant="h6" gutterBottom>
-            Admin Actions
-          </Typography>
-          <Stack spacing={2}>
-            <Stack direction="row" spacing={1}>
-              <WSButton
-                size="small"
-                startIcon={<Edit />}
-                color="warning"
-                onClick={() => handleSyncAction('Edit')}
-              >
-                Edit
-              </WSButton>
-
-              <WSButton
-                size="small"
-                startIcon={<Delete />}
-                color="error"
-                variant="outlined"
-                onClick={() => handleSyncAction('Delete')}
-              >
-                Delete
-              </WSButton>
-
-              <WSButton
-                size="small"
-                startIcon={<Add />}
-                color="success"
-                onClick={() => handleSyncAction('Add New')}
-              >
-                Add
-              </WSButton>
-            </Stack>
-
-            <WSButton
-              fullWidth
-              startIcon={<Save />}
-              color="success"
-              variant="contained"
-              onClick={() => handleSyncAction('Save All Changes')}
-            >
-              Save Changes
-            </WSButton>
-          </Stack>
+                <WSButton
+                  type="button"
+                  variant="text"
+                  color="error"
+                  onClick={() => alert('Cancel clicked')}
+                >
+                  Cancel
+                </WSButton>
+              </Stack>
+            </Box>
+          </Paper>
         </Grid>
       </Grid>
-    </Paper>
-  );
 
-  // ==============================================
-  // RENDER COMPONENT
-  // ==============================================
+      <Divider sx={{ my: 4 }} />
 
-  return (
-    <Container maxWidth="xl" sx={{ py: 4 }}>
-      {/* Header */}
-      <Box sx={{ mb: 4, textAlign: 'center' }}>
-        <Typography
-          variant="h3"
-          gutterBottom
-          sx={{
-            fontWeight: 700,
-            color: BRAND_COLORS.primary,
-            mb: 2,
-          }}
-        >
-          WSButton Component Demo
+      {/* === USAGE EXAMPLES === */}
+      <Paper sx={{ p: 3 }}>
+        <Typography variant="h5" gutterBottom>
+          💡 Usage Examples
         </Typography>
-        <Typography
-          variant="h6"
-          color="text.secondary"
-          sx={{ maxWidth: 600, mx: 'auto', mb: 2 }}
-        >
-          WatchStore button component đơn giản với 3 variant chính
-        </Typography>
-        <Divider
-          sx={{
-            width: '100px',
-            mx: 'auto',
-            bgcolor: BRAND_COLORS.secondary,
-            height: 3,
-          }}
-        />
-      </Box>
 
-      {/* Simplified Notice */}
-      <Alert severity="info" sx={{ mb: 4 }}>
-        <Typography variant="body2">
-          <strong>Phiên bản đơn giản:</strong> WSButton đã được tối ưu với 3
-          variant (contained, outlined, text), 3 size (small, medium, large) và
-          6 màu chính. Tập trung vào tính năng thiết yếu cho e-commerce.
-        </Typography>
-      </Alert>
+        <Box sx={{ mt: 2 }}>
+          <Typography variant="h6" gutterBottom>
+            Basic Usage:
+          </Typography>
+          <Box
+            component="pre"
+            sx={{
+              backgroundColor: 'grey.100',
+              p: 2,
+              borderRadius: 1,
+              overflow: 'auto',
+              fontSize: '0.875rem',
+            }}
+          >
+            {`import { WSButton } from '@/components';
 
-      <Grid container spacing={4}>
-        {/* Basic Variants */}
-        <Grid size={{ xs: 12, md: 6 }}>{renderBasicVariants()}</Grid>
-
-        {/* Icons & Interactions */}
-        <Grid size={{ xs: 12, md: 6 }}>{renderIconsAndInteractions()}</Grid>
-
-        {/* Loading States */}
-        <Grid size={{ xs: 12, md: 6 }}>{renderLoadingStates()}</Grid>
-
-        {/* Links & Forms */}
-        <Grid size={{ xs: 12, md: 6 }}>{renderLinksAndForms()}</Grid>
-
-        {/* E-commerce Examples */}
-        <Grid size={{ xs: 12 }}>{renderEcommerceExamples()}</Grid>
-      </Grid>
-
-      {/* Usage Example */}
-      <Paper sx={{ p: 3, mt: 4, bgcolor: 'grey.50' }}>
-        <Typography variant="h6" gutterBottom>
-          Cách sử dụng WSButton
-        </Typography>
-        <Box
-          sx={{
-            p: 2,
-            bgcolor: 'grey.100',
-            borderRadius: 1,
-            fontFamily: 'monospace',
-            fontSize: '0.875rem',
-          }}
-        >
-          <pre>{`// Basic usage
+// Basic button
 <WSButton>Click me</WSButton>
 
-// With variant and color
-<WSButton variant="outlined" color="secondary">
-  Secondary Button
+// With loading
+<WSButton loading loadingText="Saving...">
+  Save
 </WSButton>
 
-// With loading state
-<WSButton 
-  loading={isLoading} 
-  loadingText="Processing..."
-  onClick={handleAsyncAction}
->
-  Submit
+// With async handler (auto loading)
+<WSButton onClick={async () => {
+  await saveData();
+}}>
+  Save Data
 </WSButton>
 
 // With icons
 <WSButton 
   startIcon={<SaveIcon />} 
   color="success"
-  onClick={handleSave}
+  variant="contained"
 >
   Save
-</WSButton>
-
-// As link
-<WSButton href="/products" variant="text">
-  View Products
-</WSButton>`}</pre>
+</WSButton>`}
+          </Box>
         </Box>
       </Paper>
-
-      {/* Footer */}
-      <Box sx={{ mt: 6, textAlign: 'center' }}>
-        <Typography variant="body2" color="text.secondary">
-          WSButton - WatchStore Design System Component (Simplified Version)
-        </Typography>
-      </Box>
     </Container>
   );
 }

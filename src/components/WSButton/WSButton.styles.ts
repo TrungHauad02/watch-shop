@@ -7,44 +7,59 @@ import { WSButtonVariant, WSButtonColor, WSButtonSize } from './WSButton.types';
 // COLOR CONFIGURATIONS - THEME INTEGRATED
 // ==============================================
 
+/**
+ * WSButton Color Mapping Guide
+ * ===========================
+ *
+ * CUSTOMIZE: Bạn có thể chỉnh sửa màu sắc button tại đây
+ *
+ * Cấu trúc màu cho mỗi variant:
+ * - backgroundColor: 🎨 Màu nền button
+ * - color: 📝 Màu chữ/icon
+ * - border: 🔲 Màu viền (chỉ cho outlined)
+ * - hoverBackgroundColor: 🎨 Màu nền khi hover
+ * - hoverColor: 📝 Màu chữ khi hover
+ * - activeBackgroundColor: 🎨 Màu nền khi click
+ */
+
 const getButtonColors = (theme: any, color: WSButtonColor) => {
-  // CUSTOMIZE: Bạn có thể chỉnh sửa màu sắc button tại đây
+  // CUSTOMIZE: Mapping màu theme sang button elements
   const colorMap = {
     primary: {
-      main: theme.palette.primary.main,
-      light: theme.palette.primary.light,
-      dark: theme.palette.primary.dark,
-      contrastText: theme.palette.primary.contrastText,
+      main: theme.palette.primary.main, // 🎨 #101820 (Rich Black)
+      light: theme.palette.primary.light, // 🎨 #212529 (Lighter Black)
+      dark: theme.palette.primary.dark, // 🎨 #050a0f (Darker Black)
+      contrastText: theme.palette.primary.contrastText, // 📝 #FEE715 (Vivid Yellow)
     },
     secondary: {
-      main: theme.palette.secondary.main,
-      light: theme.palette.secondary.light,
-      dark: theme.palette.secondary.dark,
-      contrastText: theme.palette.secondary.contrastText,
+      main: theme.palette.secondary.main, // 🎨 #FEE715 (Vivid Yellow)
+      light: theme.palette.secondary.light, // 🎨 #fff4c4 (Light Yellow)
+      dark: theme.palette.secondary.dark, // 🎨 #f59e0b (Gold)
+      contrastText: theme.palette.secondary.contrastText, // 📝 #101820 (Rich Black)
     },
     success: {
-      main: theme.palette.success.main,
-      light: theme.palette.success.light,
-      dark: theme.palette.success.dark,
-      contrastText: theme.palette.success.contrastText,
+      main: theme.palette.success.main, // 🎨 Green for positive actions
+      light: theme.palette.success.light, // 🎨 Light Green
+      dark: theme.palette.success.dark, // 🎨 Dark Green
+      contrastText: theme.palette.success.contrastText || '#ffffff', // 📝 White
     },
     warning: {
-      main: theme.palette.warning.main,
-      light: theme.palette.warning.light,
-      dark: theme.palette.warning.dark,
-      contrastText: theme.palette.warning.contrastText,
+      main: theme.palette.warning.main, // 🎨 Orange for warnings
+      light: theme.palette.warning.light, // 🎨 Light Orange
+      dark: theme.palette.warning.dark, // 🎨 Dark Orange
+      contrastText: theme.palette.warning.contrastText || '#ffffff', // 📝 White
     },
     error: {
-      main: theme.palette.error.main,
-      light: theme.palette.error.light,
-      dark: theme.palette.error.dark,
-      contrastText: theme.palette.error.contrastText,
+      main: theme.palette.error.main, // 🎨 Red for destructive actions
+      light: theme.palette.error.light, // 🎨 Light Red
+      dark: theme.palette.error.dark, // 🎨 Dark Red
+      contrastText: theme.palette.error.contrastText || '#ffffff', // 📝 White
     },
     info: {
-      main: theme.palette.info.main,
-      light: theme.palette.info.light,
-      dark: theme.palette.info.dark,
-      contrastText: theme.palette.info.contrastText,
+      main: theme.palette.info.main, // 🎨 Blue for informational
+      light: theme.palette.info.light, // 🎨 Light Blue
+      dark: theme.palette.info.dark, // 🎨 Dark Blue
+      contrastText: theme.palette.info.contrastText || '#ffffff', // 📝 White
     },
   };
 
@@ -59,28 +74,31 @@ const getSizeConfig = (size: WSButtonSize) => {
   // CUSTOMIZE: Bạn có thể chỉnh sửa kích thước button tại đây
   const sizeMap = {
     small: {
-      height: '32px',
-      padding: '6px 16px',
-      fontSize: '0.875rem',
-      fontWeight: 500,
-      borderRadius: '6px',
-      minWidth: '64px',
+      height: '32px', // 📏 Chiều cao nhỏ
+      padding: '6px 16px', // 📐 Padding compact
+      fontSize: '0.875rem', // 📝 Font size nhỏ (14px)
+      fontWeight: 500, // 📝 Font weight medium
+      borderRadius: '6px', // 🔄 Bo góc nhỏ
+      minWidth: '64px', // 📏 Độ rộng tối thiểu
+      iconSize: '16px', // 🎯 Kích thước icon
     },
     medium: {
-      height: '40px',
-      padding: '8px 24px',
-      fontSize: '0.875rem',
-      fontWeight: 600,
-      borderRadius: '8px',
-      minWidth: '80px',
+      height: '40px', // 📏 Chiều cao vừa
+      padding: '8px 24px', // 📐 Padding chuẩn
+      fontSize: '0.875rem', // 📝 Font size vừa (14px)
+      fontWeight: 600, // 📝 Font weight semi-bold
+      borderRadius: '8px', // 🔄 Bo góc vừa
+      minWidth: '80px', // 📏 Độ rộng tối thiểu
+      iconSize: '18px', // 🎯 Kích thước icon
     },
     large: {
-      height: '48px',
-      padding: '12px 32px',
-      fontSize: '1rem',
-      fontWeight: 600,
-      borderRadius: '10px',
-      minWidth: '120px',
+      height: '48px', // 📏 Chiều cao lớn
+      padding: '12px 32px', // 📐 Padding rộng rãi
+      fontSize: '1rem', // 📝 Font size lớn (16px)
+      fontWeight: 600, // 📝 Font weight semi-bold
+      borderRadius: '10px', // 🔄 Bo góc lớn
+      minWidth: '120px', // 📏 Độ rộng tối thiểu
+      iconSize: '20px', // 🎯 Kích thước icon
     },
   };
 
@@ -88,7 +106,7 @@ const getSizeConfig = (size: WSButtonSize) => {
 };
 
 // ==============================================
-// VARIANT STYLES - THEME AWARE
+// VARIANT STYLES - THEME AWARE WITH VISUAL COMMENTS
 // ==============================================
 
 const getVariantStyles = (
@@ -97,69 +115,100 @@ const getVariantStyles = (
   colors: ReturnType<typeof getButtonColors>
 ) => {
   const variants = {
+    // === CONTAINED VARIANT ===
     contained: {
+      // 🎨 NỀN: Màu chính của theme (Rich Black cho primary)
       backgroundColor: colors.main,
+      // 📝 CHỮ: Màu tương phản (Vivid Yellow cho primary)
       color: colors.contrastText,
+      // 🔲 VIỀN: Không có viền cho contained
       border: 'none',
+      // ✨ SHADOW: Độ bóng nhẹ để tạo depth
       boxShadow: theme.shadows[2],
 
       '&:hover': {
+        // 🎨 NỀN HOVER: Màu đậm hơn khi hover
         backgroundColor: colors.dark,
+        // ✨ HIỆU ỨNG: Nâng lên nhẹ
         transform: 'translateY(-1px)',
+        // ✨ SHADOW HOVER: Bóng đậm hơn khi hover
         boxShadow: theme.shadows[4],
       },
 
       '&:active': {
+        // 🎨 NỀN ACTIVE: Giữ màu đậm khi nhấn
         backgroundColor: colors.dark,
+        // ✨ HIỆU ỨNG: Nhấn xuống
         transform: 'translateY(0)',
+        // ✨ SHADOW ACTIVE: Bóng nhẹ khi nhấn
         boxShadow: theme.shadows[1],
       },
     },
 
+    // === OUTLINED VARIANT ===
     outlined: {
+      // 🎨 NỀN: Trong suốt ban đầu
       backgroundColor: 'transparent',
+      // 📝 CHỮ: Màu chính để tương phản với nền
       color: colors.main,
+      // 🔲 VIỀN: Màu chính để định nghĩa button boundary
       border: `2px solid ${colors.main}`,
+      // ✨ SHADOW: Không có bóng cho outlined
       boxShadow: 'none',
 
       '&:hover': {
+        // 🎨 NỀN HOVER: Fill màu nhạt (theme-aware opacity)
         backgroundColor:
           theme.palette.mode === 'dark'
-            ? `${colors.main}20`
-            : `${colors.main}15`,
+            ? `${colors.main}20` // 20% opacity cho dark mode
+            : `${colors.main}15`, // 15% opacity cho light mode
+        // 🔲 VIỀN HOVER: Đậm hơn khi hover
         borderColor: colors.dark,
+        // ✨ HIỆU ỨNG: Nâng lên nhẹ
         transform: 'translateY(-1px)',
+        // ✨ SHADOW HOVER: Thêm bóng nhẹ
         boxShadow: theme.shadows[2],
       },
 
       '&:active': {
+        // 🎨 NỀN ACTIVE: Fill đậm hơn khi nhấn
         backgroundColor:
           theme.palette.mode === 'dark'
-            ? `${colors.main}30`
-            : `${colors.main}25`,
+            ? `${colors.main}30` // 30% opacity cho dark mode
+            : `${colors.main}25`, // 25% opacity cho light mode
+        // ✨ HIỆU ỨNG: Nhấn xuống
         transform: 'translateY(0)',
       },
     },
 
+    // === TEXT VARIANT ===
     text: {
+      // 🎨 NỀN: Hoàn toàn trong suốt
       backgroundColor: 'transparent',
+      // 📝 CHỮ: Màu chính để dễ đọc
       color: colors.main,
+      // 🔲 VIỀN: Không có viền
       border: 'none',
+      // ✨ SHADOW: Không có bóng
       boxShadow: 'none',
 
       '&:hover': {
+        // 🎨 NỀN HOVER: Fill rất nhạt để có feedback visual
         backgroundColor:
           theme.palette.mode === 'dark'
-            ? `${colors.main}15`
-            : `${colors.main}10`,
+            ? `${colors.main}15` // 15% opacity cho dark mode
+            : `${colors.main}10`, // 10% opacity cho light mode
+        // ✨ HIỆU ỨNG: Nâng lên nhẹ
         transform: 'translateY(-1px)',
       },
 
       '&:active': {
+        // 🎨 NỀN ACTIVE: Fill đậm hơn một chút khi nhấn
         backgroundColor:
           theme.palette.mode === 'dark'
-            ? `${colors.main}25`
-            : `${colors.main}20`,
+            ? `${colors.main}25` // 25% opacity cho dark mode
+            : `${colors.main}20`, // 20% opacity cho light mode
+        // ✨ HIỆU ỨNG: Nhấn xuống
         transform: 'translateY(0)',
       },
     },
@@ -185,60 +234,77 @@ export const StyledWSButton = styled(Button, {
   const sizeConfig = getSizeConfig(wsSize);
   const variantStyles = getVariantStyles(theme, wsVariant, colors);
 
-  // Base styles
+  // === BASE STYLES ===
   const baseStyles = {
+    // 📏 Kích thước cơ bản
     height: sizeConfig.height,
     padding: sizeConfig.padding,
     fontSize: sizeConfig.fontSize,
     fontWeight: sizeConfig.fontWeight,
     minWidth: sizeConfig.minWidth,
     borderRadius: sizeConfig.borderRadius,
+
+    // 📝 Typography
     fontFamily: theme.typography.fontFamily,
     textTransform: 'none' as const,
     letterSpacing: '0.025em',
     lineHeight: 1.5,
+
+    // ✨ Transitions cho smooth animations
     transition: theme.transitions.create(
       ['background-color', 'border-color', 'color', 'box-shadow', 'transform'],
       {
         duration: theme.transitions.duration.short,
       }
     ),
+
+    // 📐 Positioning cho loading overlay
     position: 'relative' as const,
   };
 
-  // Loading styles
+  // === LOADING STYLES ===
   const loadingStyles = loading
     ? {
+        // 🔄 Cursor chờ khi loading
         cursor: 'wait',
         '&:hover': {
+          // ✨ Tắt hover effect khi loading
           transform: 'none',
         },
       }
     : {};
 
-  // Focus styles - CUSTOMIZE: Bạn có thể chỉnh sửa focus outline tại đây
+  // === FOCUS STYLES ===
+  // CUSTOMIZE: Bạn có thể chỉnh sửa focus outline tại đây
   const focusStyles = {
     '&:focus-visible': {
+      // 🎯 Outline cho accessibility
       outline: `2px solid ${colors.main}`,
       outlineOffset: '2px',
+      // ✨ Glow effect khi focus
       boxShadow: `0 0 0 3px ${colors.main}25`,
     },
   };
 
-  // Disabled styles - Theme aware
+  // === DISABLED STYLES - THEME AWARE ===
   const disabledStyles = {
     '&:disabled, &.Mui-disabled': {
+      // 🎨 NỀN DISABLED: Xám nhạt từ theme
       backgroundColor: theme.palette.action.disabledBackground,
+      // 📝 CHỮ DISABLED: Xám đậm từ theme
       color: theme.palette.action.disabled,
+      // 🔲 VIỀN DISABLED: Chỉ cho outlined variant
       border:
         wsVariant === 'outlined'
           ? `2px solid ${theme.palette.action.disabled}`
           : 'none',
+      // ✨ Tắt tất cả effects
       boxShadow: 'none',
       cursor: 'not-allowed',
       transform: 'none',
 
       '&:hover': {
+        // 🚫 Không có hover effect khi disabled
         backgroundColor: theme.palette.action.disabledBackground,
         transform: 'none',
         boxShadow: 'none',
@@ -246,14 +312,17 @@ export const StyledWSButton = styled(Button, {
     },
   };
 
-  // Responsive styles
+  // === RESPONSIVE STYLES ===
   const responsiveStyles = {
+    // 📱 Mobile optimizations
     [theme.breakpoints.down('sm')]: {
+      // Large buttons trở thành medium trên mobile
       ...(wsSize === 'large' && {
         height: '44px',
         padding: '10px 24px',
         fontSize: '0.875rem',
       }),
+      // Medium buttons trở thành small trên mobile
       ...(wsSize === 'medium' && {
         height: '36px',
         padding: '6px 16px',
@@ -280,6 +349,7 @@ export const LoadingSpinner = styled(CircularProgress, {
 })<{
   wsSize: WSButtonSize;
 }>(({ theme, wsSize }) => {
+  // 🎯 Size mapping cho loading spinner
   const sizeValue = wsSize === 'small' ? 16 : wsSize === 'medium' ? 20 : 24;
 
   return {
@@ -287,6 +357,7 @@ export const LoadingSpinner = styled(CircularProgress, {
     height: `${sizeValue}px !important`,
     marginRight: theme.spacing(1),
     // CUSTOMIZE: Bạn có thể chỉnh sửa màu loading spinner tại đây
+    // 🎨 Inherit màu từ button text
     color: 'inherit',
   };
 });
@@ -301,6 +372,7 @@ export const IconWrapper = styled('span', {
   position: 'start' | 'end';
   wsSize: WSButtonSize;
 }>(({ theme, position, wsSize }) => {
+  // 🎯 Icon size mapping
   const iconSize =
     wsSize === 'small' ? '16px' : wsSize === 'medium' ? '18px' : '20px';
 
@@ -310,16 +382,19 @@ export const IconWrapper = styled('span', {
     justifyContent: 'center',
     fontSize: iconSize,
 
+    // 📐 Spacing cho start icon
     ...(position === 'start' && {
-      marginRight: theme.spacing(1),
-      marginLeft: theme.spacing(-0.5),
+      marginRight: theme.spacing(1), // 8px khoảng cách với text
+      marginLeft: theme.spacing(-0.5), // -4px để căn chỉnh với padding
     }),
 
+    // 📐 Spacing cho end icon
     ...(position === 'end' && {
-      marginLeft: theme.spacing(1),
-      marginRight: theme.spacing(-0.5),
+      marginLeft: theme.spacing(1), // 8px khoảng cách với text
+      marginRight: theme.spacing(-0.5), // -4px để căn chỉnh với padding
     }),
 
+    // 🎯 Icon inheritance
     '& > *': {
       fontSize: 'inherit',
     },
@@ -338,15 +413,18 @@ export const ButtonContent = styled('span')<{
   alignItems: 'center',
   justifyContent: 'center',
   width: '100%',
+  // ✨ Smooth transition cho loading states
   transition: theme.transitions.create(['opacity', 'visibility'], {
     duration: theme.transitions.duration.short,
   }),
 
+  // 🔄 Preserve width loading: ẩn content nhưng giữ kích thước
   ...(loading &&
     preserveWidth && {
       visibility: 'hidden',
     }),
 
+  // 🔄 Dynamic width loading: fade out content
   ...(loading &&
     !preserveWidth && {
       opacity: 0,
@@ -360,6 +438,7 @@ export const ButtonContent = styled('span')<{
 export const LoadingOverlay = styled('div')<{
   loading: boolean;
 }>(({ theme, loading }) => ({
+  // 📐 Absolute positioning để overlay lên content
   position: 'absolute',
   top: 0,
   left: 0,
@@ -368,8 +447,12 @@ export const LoadingOverlay = styled('div')<{
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+
+  // 🔄 Show/hide loading overlay
   opacity: loading ? 1 : 0,
   visibility: loading ? 'visible' : 'hidden',
+
+  // ✨ Smooth transition
   transition: theme.transitions.create(['opacity', 'visibility'], {
     duration: theme.transitions.duration.short,
   }),

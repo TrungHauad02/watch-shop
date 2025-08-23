@@ -13,60 +13,90 @@ import {
 // WSInput COMPONENT - THEME INTEGRATED
 // ==============================================
 
-// CUSTOMIZE: Bạn có thể chỉnh sửa variant (outlined, filled),
-// size (small, medium, large), color (primary, secondary, success, warning, error, info) để tùy chỉnh input.
-// Input sẽ tự động thay đổi màu sắc theo theme (dark/light mode).
+/**
+ * WSInput - Custom Input Component
+ *
+ * CUSTOMIZE: Bạn có thể chỉnh sửa:
+ * - variant: 'outlined' | 'filled'
+ * - size: 'small' | 'medium' | 'large'
+ * - color: 'primary' | 'secondary' | 'success' | 'warning' | 'error' | 'info'
+ * - type: 'text' | 'password' | 'email' | 'number' | 'tel' | 'search'
+ *
+ * Input sẽ tự động thay đổi màu sắc theo theme (dark/light mode).
+ *
+ * @example
+ * // Basic usage
+ * <WSInput label="Tên sản phẩm" />
+ *
+ * // With validation
+ * <WSInput
+ *   label="Email"
+ *   type="email"
+ *   error={hasError}
+ *   helperText="Email không hợp lệ"
+ * />
+ *
+ * // With icons and character count
+ * <WSInput
+ *   label="Mô tả"
+ *   multiline
+ *   rows={3}
+ *   maxCharacters={500}
+ *   showCharacterCount
+ *   startIcon={<DescriptionIcon />}
+ * />
+ */
 export default function WSInput({
-  // Core props
-  variant = WS_INPUT_DEFAULTS.variant,
-  size = WS_INPUT_DEFAULTS.size,
-  color = WS_INPUT_DEFAULTS.color,
-  type = WS_INPUT_DEFAULTS.type,
+  // === CORE STYLING PROPS ===
+  variant = WS_INPUT_DEFAULTS.variant, // 🎨 outlined | filled
+  size = WS_INPUT_DEFAULTS.size, // 📏 small | medium | large
+  color = WS_INPUT_DEFAULTS.color, // 🎨 primary | secondary | success | warning | error | info
+  type = WS_INPUT_DEFAULTS.type, // ⌨️ text | password | email | number | tel | search
 
-  // Content
-  label,
-  placeholder,
-  value,
-  defaultValue,
+  // === CONTENT ===
+  label, // 📝 Input label
+  placeholder, // 💭 Placeholder text
+  value, // 🔄 Controlled value
+  defaultValue, // 🔄 Uncontrolled default value
 
-  // Icons
-  startIcon,
-  endIcon,
+  // === ICONS ===
+  startIcon, // 🎯 Icon bên trái
+  endIcon, // 🎯 Icon bên phải
 
-  // Helper text configuration
-  helperText,
-  showCharacterCount = WS_INPUT_DEFAULTS.showCharacterCount,
-  maxCharacters,
+  // === HELPER TEXT CONFIGURATION ===
+  helperText, // 💬 Helper/error message
+  showCharacterCount = WS_INPUT_DEFAULTS.showCharacterCount, // 🔢 Show character counter
+  maxCharacters, // 📏 Maximum character limit
 
-  // Enhanced features
-  fullWidth = WS_INPUT_DEFAULTS.fullWidth,
-  required = false,
-  disabled = false,
-  readOnly = false,
-  multiline = false,
-  rows,
+  // === ENHANCED FEATURES ===
+  fullWidth = WS_INPUT_DEFAULTS.fullWidth, // 📐 Full width input
+  required = false, // ⚠️ Required field
+  disabled = false, // 🚫 Disabled state
+  readOnly = false, // 👁️ Read-only state
+  multiline = false, // 📄 Textarea mode
+  rows, // 📄 Textarea rows
 
-  // Validation
-  error = false,
-  success = false,
+  // === VALIDATION ===
+  error = false, // 🚨 Error state
+  success = false, // ✅ Success state
 
-  // Event handlers
-  onChange,
-  onFocus,
-  onBlur,
+  // === EVENT HANDLERS ===
+  onChange, // 🔄 Change handler
+  onFocus, // 🎯 Focus handler
+  onBlur, // 👋 Blur handler
 
-  // Accessibility
-  ariaLabel,
+  // === ACCESSIBILITY ===
+  ariaLabel, // ♿ Accessibility label
 
-  // Form integration
-  name,
-  id,
+  // === FORM INTEGRATION ===
+  name, // 📋 Form field name
+  id, // 🔑 Element ID
 
-  // Style props
-  sx,
-  className,
+  // === CUSTOM STYLING ===
+  sx, // 🎨 MUI sx prop
+  className, // 🎨 CSS class
 
-  // Forward all other props to MUI TextField
+  // === FORWARD ALL OTHER PROPS ===
   ...otherProps
 }: WSInputProps) {
   // ==============================================
@@ -88,16 +118,16 @@ export default function WSInput({
   // COMPUTED VALUES
   // ==============================================
 
-  // Determine actual values
+  // 🔄 Determine actual value (controlled vs uncontrolled)
   const currentValue = value !== undefined ? value : internalValue;
   const stringValue = String(currentValue);
   const characterCount = stringValue.length;
 
-  // Determine validation state
+  // 🚨 Validation states
   const hasError = error;
   const hasSuccess = success && !error;
 
-  // Character count validation
+  // 🔢 Character count validation
   const isOverLimit = maxCharacters ? characterCount > maxCharacters : false;
   const isNearLimit = maxCharacters
     ? characterCount >= maxCharacters * 0.8
@@ -105,7 +135,7 @@ export default function WSInput({
   const shouldShowCharacterCount: boolean =
     showCharacterCount && (maxCharacters !== null || characterCount > 0);
 
-  // Container classes
+  // 📦 Container CSS classes
   const containerClasses = useMemo(() => {
     const classes = [];
     if (hasError) classes.push('error');
@@ -118,21 +148,28 @@ export default function WSInput({
   // EVENT HANDLERS
   // ==============================================
 
+  /**
+   * Handle input value changes
+   * Manages both controlled and uncontrolled components
+   */
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       const newValue = event.target.value;
 
-      // Update internal value if uncontrolled
+      // 🔄 Update internal value for uncontrolled component
       if (value === undefined) {
         setInternalValue(newValue);
       }
 
-      // Call external onChange handler
+      // 📤 Call external onChange handler
       onChange?.(event);
     },
     [onChange, value]
   );
 
+  /**
+   * Handle input focus
+   */
   const handleFocus = useCallback(
     (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setIsFocused(true);
@@ -141,6 +178,9 @@ export default function WSInput({
     [onFocus]
   );
 
+  /**
+   * Handle input blur
+   */
   const handleBlur = useCallback(
     (event: React.FocusEvent<HTMLInputElement | HTMLTextAreaElement>) => {
       setIsFocused(false);
@@ -153,6 +193,9 @@ export default function WSInput({
   // ADORNMENTS - THEME AWARE
   // ==============================================
 
+  /**
+   * Render start icon adornment
+   */
   const startAdornment = useMemo(() => {
     if (!startIcon) return undefined;
 
@@ -165,6 +208,9 @@ export default function WSInput({
     );
   }, [startIcon, size]);
 
+  /**
+   * Render end icon adornment
+   */
   const endAdornment = useMemo(() => {
     if (!endIcon) return undefined;
 
@@ -181,6 +227,9 @@ export default function WSInput({
   // HELPER TEXT COMPONENT - THEME AWARE
   // ==============================================
 
+  /**
+   * Render helper text with optional character count
+   */
   const renderHelperText = () => {
     if (!helperText && !shouldShowCharacterCount) return undefined;
 
@@ -189,12 +238,12 @@ export default function WSInput({
         showCount={shouldShowCharacterCount}
         error={hasError}
         sx={{
-          // CUSTOMIZE: Bạn có thể chỉnh sửa helper text styling tại đây
+          // CUSTOMIZE: Màu helper text theo validation state
           color: hasError
-            ? theme.palette.error.main
+            ? theme.palette.error.main // 🚨 Đỏ cho error
             : hasSuccess
-              ? theme.palette.success.main
-              : theme.palette.text.secondary,
+              ? theme.palette.success.main // ✅ Xanh cho success
+              : theme.palette.text.secondary, // 📝 Xám cho bình thường
         }}
       >
         {helperText && <span className="helper-text">{helperText}</span>}
@@ -244,66 +293,64 @@ export default function WSInput({
   return (
     <InputContainer className={containerClasses}>
       <StyledWSInput
-        // Custom styling props
+        // === CUSTOM STYLING PROPS ===
         wsVariant={variant}
         wsColor={color}
         wsSize={size}
         hasSuccess={hasSuccess}
-        // MUI TextField props
+        // === MUI TEXTFIELD PROPS ===
         variant={variant}
-        size={size === 'large' ? 'medium' : size} // MUI doesn't have large size
+        size={size === 'large' ? 'medium' : size}
         color={hasError ? 'error' : hasSuccess ? 'success' : 'primary'}
-        // Content
+        // === CONTENT ===
         label={label}
         {...(placeholder && { placeholder })}
         value={currentValue}
-        // Features
+        // === FEATURES ===
         fullWidth={fullWidth}
         required={required}
         disabled={disabled}
         multiline={multiline}
         {...(rows !== undefined && { rows })}
-        // Validation
+        // === VALIDATION ===
         error={hasError}
-        // Form integration
+        // === FORM INTEGRATION ===
         {...(name && { name })}
         {...(id && { id })}
         type={type}
-        // Input props
+        // === INPUT PROPS ===
         inputProps={inputProps}
-        // Adornments
         InputProps={InputPropsConfig}
-        // Helper text
+        // === HELPER TEXT ===
         helperText={renderHelperText()}
-        // Event handlers
+        // === EVENT HANDLERS ===
         onChange={handleChange}
         onFocus={handleFocus}
         onBlur={handleBlur}
-        // Styling - CUSTOMIZE: Bạn có thể override styles tại đây
+        // === STYLING ===
+        // CUSTOMIZE: Bạn có thể override styles tại đây
         sx={{
-          // Ensure proper theme integration
+          // 🎨 Theme integration cho background
           '& .MuiInputBase-root': {
             backgroundColor: theme.palette.background.paper,
             transition: theme.transitions.create(
               ['background-color', 'border-color', 'box-shadow'],
-              {
-                duration: theme.transitions.duration.short,
-              }
+              { duration: theme.transitions.duration.short }
             ),
           },
 
-          // Focus state enhancements
+          // ✨ Focus state enhancements
           '& .MuiInputBase-root.Mui-focused': {
             boxShadow: `0 0 0 2px ${
               hasError
-                ? theme.palette.error.main + '25'
+                ? theme.palette.error.main + '25' // 🚨 Đỏ cho error
                 : hasSuccess
-                  ? theme.palette.success.main + '25'
-                  : theme.palette.primary.main + '25'
+                  ? theme.palette.success.main + '25' // ✅ Xanh cho success
+                  : theme.palette.primary.main + '25' // 🎯 Theme color cho bình thường
             }`,
           },
 
-          // Dark mode specific adjustments
+          // 🌙 Dark mode adjustments
           ...(theme.palette.mode === 'dark' && {
             '& .MuiOutlinedInput-notchedOutline': {
               borderColor: theme.palette.grey[700],
@@ -316,7 +363,7 @@ export default function WSInput({
           ...sx,
         }}
         {...(className && { className })}
-        // Forward other props
+        // === FORWARD OTHER PROPS ===
         {...Object.fromEntries(
           Object.entries(otherProps).filter(
             ([key]) => !['InputProps', 'inputProps'].includes(key)

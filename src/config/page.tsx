@@ -12,3 +12,4 @@ export { default as WSInputDemoPage } from '@/pages/WSInputDemoPage';
 export { default as WSCardDemoPage } from '@/pages/WSCardDemoPage';
 export { default as WSLoadingDemoPage } from '@/pages/WSLoadingDemoPage';
 export { default as WSModalDemoPage } from '@/pages/WSModalDemoPage';
+export { default as WSFormFieldDemoPage } from '@/pages/WSFormFieldDemoPage';

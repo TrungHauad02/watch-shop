@@ -34,6 +34,10 @@ export default function WSDemoPage() {
       title: 'Modal Demo',
       path: 'ws-modal-demo',
     },
+    {
+      title: 'Form Field Demo',
+      path: 'ws-form-field-demo',
+    },
   ];
 
   return (
