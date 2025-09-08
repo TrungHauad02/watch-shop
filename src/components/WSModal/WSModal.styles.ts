@@ -14,10 +14,10 @@ import { WSModalSize, WSModalVariant } from './WSModal.types';
  * CUSTOMIZE:
  *
  * Animation types:
- * - backdropFadeIn:
- * - modalZoomIn:
- * - modalMobileSlide:
- * - modalFullscreenFade:
+ * - backdropFadeIn: Fade in với blur effect
+ * - modalZoomIn: Zoom in animation cho desktop
+ * - modalMobileSlide: Slide up animation cho mobile
+ * - modalFullscreenFade: Fade animation cho fullscreen
  */
 
 const backdropFadeIn = keyframes`
@@ -67,35 +67,35 @@ const modalFullscreenFade = keyframes`
 // ==============================================
 
 const getSizeConfig = (size: WSModalSize) => {
-  // CUSTOMIZE: KÃ­ch thÆ°á»›c modal cho tá»«ng size
+  // CUSTOMIZE: Kích thước modal cho từng size
   const sizeMap = {
     small: {
-      width: '400px', // ðŸ" Compact cho confirmations
-      maxWidth: '90vw', // ðŸ"± Mobile responsive
-      maxHeight: '80vh', // ðŸ" Prevent overflow
-      padding: '16px', // ðŸ" Tight padding
-      borderRadius: '12px', // ðŸ"„ Rounded corners
+      width: '400px', // 📏 Compact cho confirmations
+      maxWidth: '90vw', // 📱 Mobile responsive
+      maxHeight: '80vh', // 📏 Prevent overflow
+      padding: '16px', // 📏 Tight padding
+      borderRadius: '12px', // 🎗️ Rounded corners
     },
     medium: {
-      width: '600px', // ðŸ" Standard cho forms
-      maxWidth: '90vw', // ðŸ"± Mobile responsive
-      maxHeight: '85vh', // ðŸ" More content space
-      padding: '24px', // ðŸ" Comfortable padding
-      borderRadius: '16px', // ðŸ"„ More rounded
+      width: '600px', // 📏 Standard cho forms
+      maxWidth: '90vw', // 📱 Mobile responsive
+      maxHeight: '85vh', // 📏 More content space
+      padding: '24px', // 📏 Comfortable padding
+      borderRadius: '16px', // 🎗️ More rounded
     },
     large: {
-      width: '800px', // ðŸ" Wide cho complex content
-      maxWidth: '95vw', // ðŸ"± Wider on desktop
-      maxHeight: '90vh', // ðŸ" Almost full height
-      padding: '32px', // ðŸ" Spacious padding
-      borderRadius: '20px', // ðŸ"„ Very rounded
+      width: '800px', // 📏 Wide cho complex content
+      maxWidth: '95vw', // 📱 Wider on desktop
+      maxHeight: '90vh', // 📏 Almost full height
+      padding: '32px', // 📏 Spacious padding
+      borderRadius: '20px', // 🎗️ Very rounded
     },
     fullscreen: {
-      width: '100vw', // ðŸ" Full viewport
-      maxWidth: '100vw', // ðŸ" No limit
-      maxHeight: '100vh', // ðŸ" Full height
-      padding: '24px', // ðŸ" Standard padding
-      borderRadius: '0px', // ðŸ"„ No radius for fullscreen
+      width: '100vw', // 📏 Full viewport
+      maxWidth: '100vw', // 📏 No limit
+      maxHeight: '100vh', // 📏 Full height
+      padding: '24px', // 📏 Standard padding
+      borderRadius: '0px', // 🎗️ No radius for fullscreen
     },
   };
 
@@ -107,21 +107,21 @@ const getSizeConfig = (size: WSModalSize) => {
 // ==============================================
 
 const getVariantStyles = (theme: any, variant: WSModalVariant) => {
-  // CUSTOMIZE: Visual indicators cho tá»«ng variant
+  // CUSTOMIZE: Visual indicators cho từng variant
   const variants = {
     default: {
       borderTop: 'none',
-      // ðŸŽ¨ Default: Clean, no special styling
+      // 🎨 Default: Clean, no special styling
     },
     confirmation: {
-      // âš ï¸ CONFIRMATION: Warning accent
+      // ⚠️ CONFIRMATION: Warning accent
       borderTop: `4px solid ${theme.palette.warning.main}`,
       '& .modal-icon': {
         color: theme.palette.warning.main,
       },
     },
     form: {
-      // ðŸ" FORM: Primary accent
+      // 📝 FORM: Primary accent
       borderTop: `4px solid ${theme.palette.primary.main}`,
       '& .modal-icon': {
         color: theme.palette.primary.main,
@@ -133,61 +133,110 @@ const getVariantStyles = (theme: any, variant: WSModalVariant) => {
 };
 
 // ==============================================
+// DARK MODE COLOR HELPERS
+// ==============================================
+
+const getDarkModeColors = (theme: any) => {
+  return {
+    // 🌙 BACKGROUNDS: Softer dark backgrounds
+    backdrop: 'rgba(0, 0, 0, 0.65)', // Giảm từ 0.75 xuống 0.65
+    paper: theme.palette.grey[850] || '#303030', // Lighter than default paper
+    headerFooter: theme.palette.grey[800] || '#424242', // Softer header/footer
+
+    // 📝 TEXT: Reduced contrast
+    primaryText: theme.palette.grey[100] || '#f5f5f5', // Softer white
+    secondaryText: theme.palette.grey[400] || '#bdbdbd', // Less harsh gray
+
+    // 🎨 BORDERS: Subtle separation
+    border: theme.palette.grey[700] || '#616161', // Softer border
+    divider: theme.palette.grey[600] || '#757575', // Gentle divider
+
+    // 🔘 BUTTON STATES
+    hoverBackground: theme.palette.grey[700] || '#616161',
+    focusBackground: theme.palette.grey[600] || '#757575',
+  };
+};
+
+const getLightModeColors = (theme: any) => {
+  return {
+    // ☀️ BACKGROUNDS: Clean light backgrounds
+    backdrop: 'rgba(0, 0, 0, 0.6)',
+    paper: theme.palette.background.paper,
+    headerFooter: theme.palette.grey[50] || '#fafafa',
+
+    // 📝 TEXT: Standard contrast
+    primaryText: theme.palette.text.primary,
+    secondaryText: theme.palette.text.secondary,
+
+    // 🎨 BORDERS: Clear separation
+    border: theme.palette.divider,
+    divider: theme.palette.divider,
+
+    // 🔘 BUTTON STATES
+    hoverBackground: theme.palette.action.hover,
+    focusBackground: theme.palette.action.focus,
+  };
+};
+
+// ==============================================
 // STYLED MODAL COMPONENT - THEME INTEGRATED
 // ==============================================
 
-export const StyledWSModal = styled(Modal)(({ theme }) => ({
-  // === BASE MODAL CONTAINER ===
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  padding: theme.spacing(2),
-  zIndex: theme.zIndex.modal,
-  // FIX: Remove position/transform issues that cause jumping
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
+export const StyledWSModal = styled(Modal)(({ theme }) => {
+  const colors =
+    theme.palette.mode === 'dark'
+      ? getDarkModeColors(theme)
+      : getLightModeColors(theme);
 
-  // === BACKDROP STYLING ===
-  // CUSTOMIZE: Backdrop appearance vÃ  blur effect
-  '& .MuiBackdrop-root': {
-    // ðŸŒ«ï¸ BACKDROP: Dark overlay vá»›i blur
-    backgroundColor:
-      theme.palette.mode === 'dark'
-        ? 'rgba(0, 0, 0, 0.75)' // Darker cho dark mode
-        : 'rgba(0, 0, 0, 0.6)', // Medium darkness cho light mode
+  return {
+    // === BASE MODAL CONTAINER ===
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: theme.spacing(2),
+    zIndex: theme.zIndex.modal,
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
 
-    // âœ¨ BLUR EFFECT: Modern glassmorphism
-    backdropFilter: 'blur(8px)',
-    WebkitBackdropFilter: 'blur(8px)', // Safari support
+    // === BACKDROP STYLING ===
+    // CUSTOMIZE: Backdrop appearance với blur effect
+    '& .MuiBackdrop-root': {
+      // 🌙 BACKDROP: Softer overlay với subtle blur
+      backgroundColor: colors.backdrop,
 
-    // ðŸŽ¬ SMOOTH ANIMATION: Fade in vá»›i blur
-    animation: `${backdropFadeIn} 0.3s cubic-bezier(0.4, 0, 0.2, 1)`,
+      // ✨ BLUR EFFECT: Modern glassmorphism
+      backdropFilter: 'blur(6px)', // Tăng blur để tạo depth
+      WebkitBackdropFilter: 'blur(6px)', // Safari support
 
-    // âš¡ TRANSITIONS: Theme-aware transitions
-    transition: theme.transitions.create(
-      ['background-color', 'backdrop-filter'],
-      {
-        duration: theme.transitions.duration.standard,
-        easing: theme.transitions.easing.easeOut,
-      }
-    ),
-  },
+      // 🎬 SMOOTH ANIMATION: Fade in với blur
+      animation: `${backdropFadeIn} 0.3s cubic-bezier(0.4, 0, 0.2, 1)`,
 
-  // === MOBILE RESPONSIVE ===
-  // ðŸ"± Mobile: Bottom sheet layout
-  [theme.breakpoints.down('sm')]: {
-    padding: theme.spacing(1),
-    alignItems: 'flex-end', // Bottom-aligned cho mobile
-  },
+      // 🎯 TRANSITIONS: Theme-aware transitions
+      transition: theme.transitions.create(
+        ['background-color', 'backdrop-filter'],
+        {
+          duration: theme.transitions.duration.standard,
+          easing: theme.transitions.easing.easeOut,
+        }
+      ),
+    },
 
-  // === FOCUS MANAGEMENT ===
-  '&.Mui-focused': {
-    outline: 'none',
-  },
-}));
+    // === MOBILE RESPONSIVE ===
+    // 📱 Mobile: Bottom sheet layout
+    [theme.breakpoints.down('sm')]: {
+      padding: theme.spacing(1),
+      alignItems: 'flex-end', // Bottom-aligned cho mobile
+    },
+
+    // === FOCUS MANAGEMENT ===
+    '&.Mui-focused': {
+      outline: 'none',
+    },
+  };
+});
 
 // ==============================================
 // MODAL CONTAINER - ENHANCED ANIMATIONS
@@ -202,6 +251,10 @@ export const ModalContainer = styled(Paper, {
 }>(({ theme, wsSize, wsVariant }) => {
   const sizeConfig = getSizeConfig(wsSize);
   const variantStyles = getVariantStyles(theme, wsVariant);
+  const colors =
+    theme.palette.mode === 'dark'
+      ? getDarkModeColors(theme)
+      : getLightModeColors(theme);
 
   return {
     // === BASE CONTAINER STYLES ===
@@ -210,33 +263,37 @@ export const ModalContainer = styled(Paper, {
     maxWidth: sizeConfig.maxWidth,
     maxHeight: sizeConfig.maxHeight,
 
-    // ðŸŽ¨ BACKGROUND: Theme-aware background
-    backgroundColor: theme.palette.background.paper,
+    // 🎨 BACKGROUND: Softer dark mode background
+    backgroundColor: colors.paper,
 
-    // ðŸ"„ BORDER RADIUS: Size-dependent rounding
+    // 🎗️ BORDER RADIUS: Size-dependent rounding
     borderRadius: wsSize === 'fullscreen' ? 0 : sizeConfig.borderRadius,
 
-    // âœ¨ SHADOW: Elevated appearance
-    boxShadow: wsSize === 'fullscreen' ? 'none' : theme.shadows[12], // Deep shadow cho depth
+    // ✨ SHADOW: Softer shadow cho dark mode
+    boxShadow:
+      wsSize === 'fullscreen'
+        ? 'none'
+        : theme.palette.mode === 'dark'
+          ? '0 8px 32px rgba(0, 0, 0, 0.4)' // Softer shadow
+          : theme.shadows[12], // Standard shadow cho light mode
 
-    // ðŸŽ¯ FOCUS: Remove default outline
+    // 🎯 FOCUS: Remove default outline
     outline: 'none',
     overflow: 'hidden',
 
-    // ðŸ" LAYOUT: Flex column for header/content/footer
+    // 📐 LAYOUT: Flex column for header/content/footer
     display: 'flex',
     flexDirection: 'column',
 
-    // ðŸ"² BORDER: Subtle border cho definition
-    border:
-      wsSize === 'fullscreen' ? 'none' : `1px solid ${theme.palette.divider}`,
+    // 🎨 BORDER: Subtle border cho definition
+    border: wsSize === 'fullscreen' ? 'none' : `1px solid ${colors.border}`,
 
     // === ANIMATIONS ===
-    // ðŸŽ¬ ENTRANCE ANIMATION: Smooth zoom-in animation
+    // 🎬 ENTRANCE ANIMATION: Smooth zoom-in animation
     animation:
       wsSize === 'fullscreen'
         ? `${modalFullscreenFade} 0.5s cubic-bezier(0.4, 0, 0.2, 1)`
-        : `${modalZoomIn} 0.5s ease-out`, // Smooth zoom animation
+        : `${modalZoomIn} 0.5s ease-out`,
 
     // === VARIANT STYLING ===
     ...variantStyles,
@@ -260,33 +317,33 @@ export const ModalContainer = styled(Paper, {
       maxWidth: '100%',
       margin: 0,
 
-      // ðŸ"„ MOBILE RADIUS: Rounded top corners only
+      // 🎗️ MOBILE RADIUS: Rounded top corners only
       borderRadius:
         wsSize === 'fullscreen'
           ? 0
           : `${sizeConfig.borderRadius} ${sizeConfig.borderRadius} 0 0`,
 
-      // ðŸŽ¬ MOBILE ANIMATION: Bottom slide for mobile
+      // 🎬 MOBILE ANIMATION: Bottom slide for mobile
       animation:
         wsSize === 'fullscreen'
           ? `${modalFullscreenFade} 0.5s cubic-bezier(0.4, 0, 0.2, 1)`
           : `${modalMobileSlide} 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)`,
 
-      // ðŸ" HEIGHT LIMIT: Prevent overflow on mobile
+      // 📐 HEIGHT LIMIT: Prevent overflow on mobile
       ...(wsSize !== 'fullscreen' && {
         maxHeight: '85vh',
       }),
     },
 
     // === ACCESSIBILITY ===
-    // â™¿ FOCUS VISIBLE: Keyboard navigation support
+    // ♿ FOCUS VISIBLE: Keyboard navigation support
     '&:focus-visible': {
       outline: `3px solid ${theme.palette.primary.main}`,
       outlineOffset: '2px',
     },
 
     // === THEME TRANSITIONS ===
-    // âš¡ SMOOTH TRANSITIONS: For theme switching
+    // 🎯 SMOOTH TRANSITIONS: For theme switching
     transition: theme.transitions.create(
       ['background-color', 'border-color', 'box-shadow'],
       {
@@ -296,10 +353,15 @@ export const ModalContainer = styled(Paper, {
     ),
 
     // === INTERACTION STATES ===
-    // ðŸ–±ï¸ HOVER: Subtle enhancement (desktop only)
+    // 🖱️ HOVER: Subtle enhancement (desktop only)
     [theme.breakpoints.up('md')]: {
       '&:hover': {
-        boxShadow: wsSize === 'fullscreen' ? 'none' : theme.shadows[16], // Enhanced shadow on hover
+        boxShadow:
+          wsSize === 'fullscreen'
+            ? 'none'
+            : theme.palette.mode === 'dark'
+              ? '0 12px 40px rgba(0, 0, 0, 0.5)' // Enhanced but softer
+              : theme.shadows[16],
       },
     },
   };
@@ -315,6 +377,10 @@ export const ModalHeader = styled(Box, {
   wsSize: WSModalSize;
 }>(({ theme, wsSize }) => {
   const sizeConfig = getSizeConfig(wsSize);
+  const colors =
+    theme.palette.mode === 'dark'
+      ? getDarkModeColors(theme)
+      : getLightModeColors(theme);
 
   return {
     // === LAYOUT & SPACING ===
@@ -324,18 +390,15 @@ export const ModalHeader = styled(Box, {
     justifyContent: 'space-between',
     minHeight: wsSize === 'small' ? '50px' : '60px',
 
-    // ðŸ"² SEPARATOR: Subtle bottom border
-    borderBottom: `1px solid ${theme.palette.divider}`,
+    // 🎨 SEPARATOR: Subtle bottom border
+    borderBottom: `1px solid ${colors.divider}`,
 
-    // ðŸŽ¨ BACKGROUND: Subtle background difference
-    backgroundColor:
-      theme.palette.mode === 'dark'
-        ? `${theme.palette.background.paper}`
-        : `${theme.palette.grey[50]}`,
+    // 🎨 BACKGROUND: Softer background difference
+    backgroundColor: colors.headerFooter,
 
     // === TYPOGRAPHY STYLES ===
     '& .modal-title': {
-      // ðŸ" TITLE: Size-responsive typography
+      // 📝 TITLE: Size-responsive typography
       fontSize:
         wsSize === 'small'
           ? theme.typography.h6.fontSize
@@ -344,7 +407,7 @@ export const ModalHeader = styled(Box, {
             : theme.typography.h5.fontSize,
 
       fontWeight: theme.typography.fontWeightBold || 700,
-      color: theme.palette.text.primary,
+      color: colors.primaryText, // Softer text color
       margin: 0,
       lineHeight: 1.3,
       flex: 1,
@@ -352,14 +415,14 @@ export const ModalHeader = styled(Box, {
     },
 
     '& .modal-subtitle': {
-      // ðŸ" SUBTITLE: Secondary information
+      // 📝 SUBTITLE: Secondary information
       fontSize:
         wsSize === 'small'
           ? theme.typography.body2.fontSize
           : theme.typography.body1.fontSize,
 
       fontWeight: theme.typography.fontWeightRegular,
-      color: theme.palette.text.secondary,
+      color: colors.secondaryText, // Softer secondary text
       margin: `${theme.spacing(0.5)} 0 0 0`,
       lineHeight: 1.4,
     },
@@ -381,13 +444,17 @@ export const ModalContent = styled(Box, {
   wsSize: WSModalSize;
 }>(({ theme, wsSize }) => {
   const sizeConfig = getSizeConfig(wsSize);
+  const colors =
+    theme.palette.mode === 'dark'
+      ? getDarkModeColors(theme)
+      : getLightModeColors(theme);
 
   return {
     // === LAYOUT ===
     padding: sizeConfig.padding,
     flex: 1,
     overflow: 'auto',
-    backgroundColor: theme.palette.background.paper,
+    backgroundColor: colors.paper,
 
     // === CUSTOM SCROLLBAR ===
     // CUSTOMIZE: Scrollbar styling cho better UX
@@ -399,7 +466,7 @@ export const ModalContent = styled(Box, {
     '&::-webkit-scrollbar-track': {
       backgroundColor:
         theme.palette.mode === 'dark'
-          ? theme.palette.grey[800]
+          ? theme.palette.grey[800] || '#424242' // Softer track
           : theme.palette.grey[100],
       borderRadius: '4px',
     },
@@ -407,14 +474,14 @@ export const ModalContent = styled(Box, {
     '&::-webkit-scrollbar-thumb': {
       backgroundColor:
         theme.palette.mode === 'dark'
-          ? theme.palette.grey[600]
+          ? theme.palette.grey[600] || '#757575' // Softer thumb
           : theme.palette.grey[400],
       borderRadius: '4px',
 
       '&:hover': {
         backgroundColor:
           theme.palette.mode === 'dark'
-            ? theme.palette.grey[500]
+            ? theme.palette.grey[500] || '#9e9e9e' // Softer hover
             : theme.palette.grey[500],
       },
     },
@@ -443,32 +510,33 @@ export const ModalFooter = styled(Box, {
   wsSize: WSModalSize;
 }>(({ theme, wsSize }) => {
   const sizeConfig = getSizeConfig(wsSize);
+  const colors =
+    theme.palette.mode === 'dark'
+      ? getDarkModeColors(theme)
+      : getLightModeColors(theme);
 
   return {
     // === LAYOUT & SPACING ===
-    padding: `${theme.spacing(2)} ${sizeConfig.padding} ${sizeConfig.padding} ${sizeConfig.padding}`, // FIX: Better top padding
+    padding: `${theme.spacing(2)} ${sizeConfig.padding} ${sizeConfig.padding} ${sizeConfig.padding}`,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    gap: theme.spacing(2), // FIX: Increased gap between buttons
-    minHeight: wsSize === 'small' ? '60px' : '70px', // FIX: More height for breathing room
+    gap: theme.spacing(2),
+    minHeight: wsSize === 'small' ? '60px' : '70px',
 
-    // ðŸ"² SEPARATOR: Top border
-    borderTop: `1px solid ${theme.palette.divider}`,
+    // 🎨 SEPARATOR: Top border
+    borderTop: `1px solid ${colors.divider}`,
 
-    // ðŸŽ¨ BACKGROUND: Consistent vá»›i header
-    backgroundColor:
-      theme.palette.mode === 'dark'
-        ? theme.palette.background.paper
-        : theme.palette.grey[50],
+    // 🎨 BACKGROUND: Consistent với header
+    backgroundColor: colors.headerFooter,
 
     // === MOBILE RESPONSIVE ===
     [theme.breakpoints.down('sm')]: {
       flexDirection: 'column-reverse',
-      gap: theme.spacing(1.5), // FIX: Better mobile spacing
-      padding: `${theme.spacing(2)} ${theme.spacing(3)} ${theme.spacing(3)}`, // FIX: Better mobile padding
+      gap: theme.spacing(1.5),
+      padding: `${theme.spacing(2)} ${theme.spacing(3)} ${theme.spacing(3)}`,
 
-      // ðŸ" FULL WIDTH: Mobile buttons take full width
+      // 📱 FULL WIDTH: Mobile buttons take full width
       '& > *': {
         width: '100%',
       },
@@ -485,98 +553,114 @@ export const ModalFooter = styled(Box, {
 // CLOSE BUTTON - ENHANCED STYLING
 // ==============================================
 
-export const CloseButton = styled(IconButton)(({ theme }) => ({
-  // === POSITIONING ===
-  position: 'absolute',
-  top: theme.spacing(1.5),
-  right: theme.spacing(1.5),
-  zIndex: 1,
+export const CloseButton = styled(IconButton)(({ theme }) => {
+  const colors =
+    theme.palette.mode === 'dark'
+      ? getDarkModeColors(theme)
+      : getLightModeColors(theme);
 
-  // ðŸŽ¨ COLORS: Subtle but accessible
-  color: theme.palette.text.secondary,
-  backgroundColor: 'transparent',
+  return {
+    // === POSITIONING ===
+    position: 'absolute',
+    top: theme.spacing(1.5),
+    right: theme.spacing(1.5),
+    zIndex: 1,
 
-  // ðŸ" SIZE: Compact but touchable
-  width: '32px',
-  height: '32px',
+    // 🎨 COLORS: Softer but accessible
+    color: colors.secondaryText,
+    backgroundColor: 'transparent',
 
-  // === INTERACTION STATES ===
-  '&:hover': {
-    backgroundColor: theme.palette.action.hover,
-    color: theme.palette.text.primary,
-    // âœ¨ SCALE: Subtle grow effect
-    transform: 'scale(1.1)',
-  },
+    // 📏 SIZE: Compact but touchable
+    width: '32px',
+    height: '32px',
 
-  '&:active': {
-    transform: 'scale(0.95)',
-  },
+    // === INTERACTION STATES ===
+    '&:hover': {
+      backgroundColor: colors.hoverBackground,
+      color: colors.primaryText,
+      // ✨ SCALE: Subtle grow effect
+      transform: 'scale(1.1)',
+    },
 
-  // === ACCESSIBILITY ===
-  '&:focus-visible': {
-    outline: `2px solid ${theme.palette.primary.main}`,
-    outlineOffset: '2px',
-    backgroundColor: theme.palette.action.focus,
-  },
+    '&:active': {
+      transform: 'scale(0.95)',
+    },
 
-  // === TRANSITIONS ===
-  transition: theme.transitions.create(
-    ['background-color', 'color', 'transform'],
-    {
-      duration: theme.transitions.duration.shorter,
-      easing: theme.transitions.easing.easeOut,
-    }
-  ),
-}));
+    // === ACCESSIBILITY ===
+    '&:focus-visible': {
+      outline: `2px solid ${theme.palette.primary.main}`,
+      outlineOffset: '2px',
+      backgroundColor: colors.focusBackground,
+    },
+
+    // === TRANSITIONS ===
+    transition: theme.transitions.create(
+      ['background-color', 'color', 'transform'],
+      {
+        duration: theme.transitions.duration.shorter,
+        easing: theme.transitions.easing.easeOut,
+      }
+    ),
+  };
+});
 
 // ==============================================
 // LOADING OVERLAY - ENHANCED BLUR
 // ==============================================
 
-export const LoadingOverlay = styled(Box)(({ theme }) => ({
-  // === POSITIONING ===
-  position: 'absolute',
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
-  zIndex: 10,
+export const LoadingOverlay = styled(Box)(({ theme }) => {
+  return {
+    // === POSITIONING ===
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    zIndex: 10,
 
-  // === LAYOUT ===
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
+    // === LAYOUT ===
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
 
-  // ðŸŒ«ï¸ BACKDROP: Blur effect
-  backgroundColor:
-    theme.palette.mode === 'dark'
-      ? 'rgba(0, 0, 0, 0.8)'
-      : 'rgba(255, 255, 255, 0.9)',
+    // 🌙 BACKDROP: Softer blur effect
+    backgroundColor:
+      theme.palette.mode === 'dark'
+        ? 'rgba(48, 48, 48, 0.85)' // Softer dark overlay
+        : 'rgba(255, 255, 255, 0.9)',
 
-  backdropFilter: 'blur(4px)',
-  WebkitBackdropFilter: 'blur(4px)',
+    backdropFilter: 'blur(4px)',
+    WebkitBackdropFilter: 'blur(4px)',
 
-  // === TRANSITIONS ===
-  transition: theme.transitions.create(['background-color'], {
-    duration: theme.transitions.duration.short,
-  }),
-}));
+    // === TRANSITIONS ===
+    transition: theme.transitions.create(['background-color'], {
+      duration: theme.transitions.duration.short,
+    }),
+  };
+});
 
 // ==============================================
 // MODAL DIVIDER - ENHANCED SEPARATOR
 // ==============================================
 
-export const ModalDivider = styled(Box)(({ theme }) => ({
-  width: '100%',
-  height: '1px',
-  backgroundColor: theme.palette.divider,
-  margin: `${theme.spacing(3)} 0`, // Increased margin for better spacing
+export const ModalDivider = styled(Box)(({ theme }) => {
+  const colors =
+    theme.palette.mode === 'dark'
+      ? getDarkModeColors(theme)
+      : getLightModeColors(theme);
 
-  // === TRANSITIONS ===
-  transition: theme.transitions.create(['background-color'], {
-    duration: theme.transitions.duration.short,
-  }),
-}));
+  return {
+    width: '100%',
+    height: '1px',
+    backgroundColor: colors.divider,
+    margin: `${theme.spacing(3)} 0`,
+
+    // === TRANSITIONS ===
+    transition: theme.transitions.create(['background-color'], {
+      duration: theme.transitions.duration.short,
+    }),
+  };
+});
 
 // ==============================================
 // MODAL ACTION GROUP - ENHANCED LAYOUT
@@ -585,7 +669,7 @@ export const ModalDivider = styled(Box)(({ theme }) => ({
 export const ModalActionGroup = styled(Box)(({ theme }) => ({
   // === LAYOUT ===
   display: 'flex',
-  gap: theme.spacing(2), // FIX: Better spacing between buttons
+  gap: theme.spacing(2),
   alignItems: 'center',
   justifyContent: 'flex-end',
 
@@ -593,9 +677,9 @@ export const ModalActionGroup = styled(Box)(({ theme }) => ({
   [theme.breakpoints.down('sm')]: {
     flexDirection: 'column-reverse',
     width: '100%',
-    gap: theme.spacing(1.5), // FIX: Better mobile spacing
+    gap: theme.spacing(1.5),
 
-    // ðŸ" FULL WIDTH: All buttons take full width on mobile
+    // 📱 FULL WIDTH: All buttons take full width on mobile
     '& > *': {
       width: '100%',
     },
