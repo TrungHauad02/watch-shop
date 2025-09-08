@@ -177,6 +177,12 @@ export const ROUTES = {
 // ==============================================
 
 export const ERROR_CODES = {
+  // General errors
+  GENERAL_ERROR: 'GENERAL_ERROR',
+  NOT_FOUND: 'NOT_FOUND',
+  BAD_REQUEST: 'BAD_REQUEST',
+  CONFLICT: 'CONFLICT',
+  PAYLOAD_TOO_LARGE: 'PAYLOAD_TOO_LARGE',
   // Network errors
   NETWORK_ERROR: 'NETWORK_ERROR',
   TIMEOUT_ERROR: 'TIMEOUT_ERROR',
