@@ -4,6 +4,7 @@ import { User, RoleEnum } from '@/shared/types/common.types';
 import apiClient, { TokenResponse, ApiError } from '@/shared/api/axiosConfig';
 import { AUTH_CONFIG, STORAGE_KEYS } from '@/shared/constants/app.constants';
 import { useEffect } from 'react';
+import { TokenValidationDTO } from '../types/auth.types';
 
 // ==============================================
 // TYPES
@@ -67,12 +68,6 @@ interface RegisterData {
   email: string;
   password: string;
   phoneNumber?: string;
-}
-
-interface TokenValidationDTO {
-  valid: boolean;
-  email: string;
-  expiresAt: string; // ISO date string
 }
 
 // ==============================================
