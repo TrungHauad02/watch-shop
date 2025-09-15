@@ -35,10 +35,6 @@ export interface PaginationParams {
   direction?: 'ASC' | 'DESC';
 }
 
-export interface SearchParams extends PaginationParams {
-  search?: string;
-}
-
 export interface BaseFilterDTO {
   startCreatedAt?: string;
   endCreatedAt?: string;
@@ -48,25 +44,6 @@ export interface BaseFilterDTO {
 }
 
 // Product, Brand, Category, and User filters extend BaseFilterDTO
-export interface ProductFilterDTO extends BaseFilterDTO {
-  productId?: string;
-  name?: string;
-  origin?: string;
-  movement?: string;
-  glassType?: string;
-  gender?: GenderEnum;
-  brandId?: number;
-  categoryId?: number;
-  fromPrice?: number;
-  toPrice?: number;
-  fromCaseSize?: number;
-  toCaseSize?: number;
-  fromCaseThickness?: number;
-  toCaseThickness?: number;
-  fromWaterResistance?: number;
-  toWaterResistance?: number;
-}
-
 export interface UserFilterDTO extends BaseFilterDTO {
   name?: string;
   email?: string;
