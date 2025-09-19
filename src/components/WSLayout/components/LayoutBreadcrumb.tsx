@@ -1,4 +1,4 @@
-import { BRAND_COLORS } from '@/styles/colors';
+import { COLORS } from '@/styles/colors';
 import { Breadcrumbs, Link, Typography, Box } from '@mui/material';
 import {
   Home as HomeIcon,
@@ -75,7 +75,7 @@ export default function LayoutBreadcrumb({
                   alignItems: 'center',
                   gap: 0.5,
                   // CUSTOMIZE: Chỉnh sửa style của breadcrumb item active ở đây
-                  color: BRAND_COLORS.accent,
+                  color: COLORS.accent,
                   fontWeight: 600,
                 }}
               >
@@ -103,7 +103,7 @@ export default function LayoutBreadcrumb({
                 // CUSTOMIZE: Chỉnh sửa style của breadcrumb link ở đây
                 color: 'text.secondary',
                 '&:hover': {
-                  color: BRAND_COLORS.accent,
+                  color: COLORS.accent,
                   textDecoration: 'underline',
                 },
                 transition: 'color 0.2s ease',

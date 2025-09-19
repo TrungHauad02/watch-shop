@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
-import { BRAND_COLORS } from '@/styles/colors';
 import { Box, IconButton, InputBase, Paper } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
 import { searchConfig } from '../header.data';
+import COLORS from '@/styles/colors';
 
 interface HeaderSearchProps {
   onSearch: (query: string) => void;
@@ -53,7 +53,7 @@ export default function HeaderSearch({
           },
           '&:focus-within': {
             backgroundColor: 'rgba(255,255,255,0.25)',
-            border: `1px solid ${BRAND_COLORS.secondary}`,
+            border: `1px solid ${COLORS.secondary}`,
           },
           transition: 'all 0.2s ease',
         }}
@@ -81,7 +81,7 @@ export default function HeaderSearch({
             p: '8px',
             color: 'rgba(255,255,255,0.8)',
             '&:hover': {
-              color: BRAND_COLORS.secondary,
+              color: COLORS.secondary,
             },
           }}
           aria-label="Tìm kiếm"

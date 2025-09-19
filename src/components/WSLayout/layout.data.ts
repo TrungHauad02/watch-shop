@@ -1,8 +1,6 @@
-// CUSTOMIZE: Bạn có thể chỉnh sửa tất cả cấu hình layout ở file này
-
-import { BRAND_COLORS } from '@/styles/colors';
-
 // ==================== LAYOUT VARIANTS CONFIGURATION ====================
+
+import COLORS from '@/styles/colors';
 
 export interface LayoutConfig {
   showHeader: boolean;
@@ -89,7 +87,7 @@ export const LAYOUT_VARIANTS: Record<string, LayoutConfig> = {
     showFooter: false,
     useContainer: true,
     maxWidth: 'sm',
-    backgroundColor: `linear-gradient(135deg, ${BRAND_COLORS.offWhite} 0%, ${BRAND_COLORS.cream} 100%)`,
+    backgroundColor: `linear-gradient(135deg, ${COLORS.offWhite} 0%, ${COLORS.cream} 100%)`,
     showBreadcrumb: false,
     contentPadding: {
       top: { xs: 4, md: 8 },
@@ -103,7 +101,7 @@ export const LAYOUT_VARIANTS: Record<string, LayoutConfig> = {
     showFooter: false,
     useContainer: false,
     maxWidth: false,
-    backgroundColor: BRAND_COLORS.primary,
+    backgroundColor: COLORS.primary,
     showBreadcrumb: false,
     contentPadding: {
       top: 0,
@@ -261,9 +259,9 @@ export const getBackgroundStyle = (
 
   // Default gradient background
   return `linear-gradient(135deg, 
-    ${BRAND_COLORS.white} 0%, 
-    ${BRAND_COLORS.offWhite} 50%,
-    ${BRAND_COLORS.cream} 100%
+    ${COLORS.white} 0%, 
+    ${COLORS.offWhite} 50%,
+    ${COLORS.cream} 100%
   )`;
 };
 

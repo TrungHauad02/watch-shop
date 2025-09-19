@@ -1,4 +1,4 @@
-import { BRAND_COLORS } from '@/styles/colors';
+import { COLORS } from '@/styles/colors';
 import { Box, Fade, CircularProgress } from '@mui/material';
 import { layoutConfig } from '../layout.data';
 
@@ -37,7 +37,7 @@ export default function LayoutLoadingOverlay({
           thickness={3}
           sx={{
             // CUSTOMIZE: Chỉnh sửa màu sắc của spinner ở đây
-            color: BRAND_COLORS.accent,
+            color: COLORS.accent,
             '& .MuiCircularProgress-circle': {
               strokeLinecap: 'round',
             },
