@@ -1,15 +1,9 @@
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
 import * as Pages from '@/config/page';
-import { LayoutProvider } from '@/components/WSLayout/WSLayout.utils';
 import { WSLayout } from '@/components';
 import { Suspense } from 'react';
-import { COLOR_PALETTES } from '@/styles/colors';
 
-const RootLayout = () => (
-  <LayoutProvider>
-    <Outlet />
-  </LayoutProvider>
-);
+const RootLayout = () => <Outlet />;
 
 const DefaultLayout = () => (
   <WSLayout
@@ -18,10 +12,6 @@ const DefaultLayout = () => (
     showHeader={true}
     showFooter={true}
   />
-);
-
-const AuthLayout = () => (
-  <WSLayout variant="auth" backgroundColor={COLOR_PALETTES.richBlack[200]} />
 );
 
 // ==============================================
@@ -53,7 +43,7 @@ const router = createBrowserRouter([
       // Auth Pages
       {
         path: '',
-        element: <AuthLayout />,
+        element: <DefaultLayout />,
         children: [
           {
             path: 'login',
