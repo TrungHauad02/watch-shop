@@ -1,45 +1,93 @@
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { Box, Container, Fade, useTheme } from '@mui/material';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useLocation } from 'react-router-dom';
+import { SxProps, Theme } from '@mui/material/styles';
 import WSHeader from '../WSHeader';
 import WSFooter from '../WSFooter';
-import { BRAND_COLORS } from '../../styles/colors';
+import LayoutBreadcrumb, {
+  BreadcrumbItem,
+} from './components/LayoutBreadcrumb';
+import LayoutLoadingOverlay from './components/LayoutLoadingOverlay';
+import LayoutBackgroundDecorative from './components/LayoutBackgroundDecorative';
+import { UserDTO } from '@/shared/types';
 import {
-  useIsDarkMode,
-  useStableThemeActions,
-} from '../../shared/store/themeStore';
-import WSLayoutProps from './WSLayout.types';
+  LAYOUT_VARIANTS,
+  getLayoutConfig,
+  getBackgroundStyle,
+  breadcrumbLabels,
+  layoutConfig,
+  mergeLayoutConfig,
+  LayoutConfig,
+} from './layout.data';
 
-// ==============================================
-// MEMOIZED SUB-COMPONENTS
-// ==============================================
+// ==================== INTERFACES ====================
+
+interface WSLayoutProps {
+  // Header configuration
+  headerProps?: {
+    isAuthenticated?: boolean;
+    user?: UserDTO | null;
+    wishlistCount?: number;
+    onLogin?: () => void;
+    onLogout?: () => void;
+    onProfileClick?: () => void;
+  };
+
+  // Layout configuration
+  variant?: keyof typeof LAYOUT_VARIANTS;
+  showHeader?: boolean;
+  showFooter?: boolean;
+  showBreadcrumb?: boolean;
+  breadcrumbItems?: BreadcrumbItem[];
+
+  // Content configuration
+  backgroundColor?: string;
+  maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl' | false;
+  useContainer?: boolean;
+  contentPadding?: LayoutConfig['contentPadding'];
+  minHeight?: string | number;
+
+  // Features
+  isLoading?: boolean;
+  scrollRestoration?: boolean;
+  showBackgroundDecorative?: boolean;
+
+  // Styling
+  className?: string;
+  sx?: SxProps<Theme>;
+
+  // Advanced configuration
+  customLayoutConfig?: Partial<LayoutConfig>;
+}
+
+// ==================== SKIP TO CONTENT COMPONENT ====================
 
 const SkipToContent = React.memo(() => {
   const theme = useTheme();
 
-  const skipLinkStyles = useMemo(
-    () => ({
-      position: 'absolute' as const,
-      top: -40,
-      left: 6,
-      backgroundColor: BRAND_COLORS.primary,
-      color: BRAND_COLORS.secondary,
-      padding: '8px 16px',
-      textDecoration: 'none',
-      borderRadius: '0 0 4px 4px',
-      zIndex: theme.zIndex.tooltip,
-      fontSize: '0.875rem',
-      fontWeight: 600,
-      '&:focus': {
-        top: 0,
-      },
-      transition: 'top 0.3s ease',
-    }),
-    [theme.zIndex.tooltip]
-  );
-
   return (
-    <Box component="a" href="#main-content" sx={skipLinkStyles}>
+    <Box
+      component="a"
+      href="#main-content"
+      sx={{
+        position: 'absolute',
+        top: -40,
+        left: 6,
+        backgroundColor: 'primary.main',
+        color: 'primary.contrastText',
+        padding: '8px 16px',
+        textDecoration: 'none',
+        borderRadius: '0 0 4px 4px',
+        zIndex: theme.zIndex.tooltip,
+        fontSize: '0.875rem',
+        fontWeight: 600,
+        '&:focus': {
+          top: 0,
+        },
+        transition: 'top 0.3s ease',
+        // CUSTOMIZE: Chỉnh sửa style của skip link ở đây
+      }}
+    >
       Bỏ qua đến nội dung chính
     </Box>
   );
@@ -47,330 +95,267 @@ const SkipToContent = React.memo(() => {
 
 SkipToContent.displayName = 'SkipToContent';
 
-const LoadingOverlay = React.memo<{ isLoading: boolean; isDarkMode: boolean }>(
-  ({ isLoading, isDarkMode }) => {
-    const theme = useTheme();
+// ==================== MAIN LAYOUT COMPONENT ====================
 
-    const overlayStyles = useMemo(
-      () => ({
-        position: 'fixed' as const,
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        backgroundColor: isDarkMode
-          ? 'rgba(0, 0, 0, 0.8)'
-          : 'rgba(255, 255, 255, 0.8)',
-        backdropFilter: 'blur(4px)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        zIndex: theme.zIndex.modal + 1,
+export default function WSLayout({
+  headerProps,
+  variant = 'default',
+  showHeader,
+  showFooter,
+  showBreadcrumb,
+  breadcrumbItems = [],
+  backgroundColor,
+  maxWidth,
+  useContainer,
+  contentPadding,
+  minHeight = 'auto',
+  isLoading = false,
+  scrollRestoration = true,
+  showBackgroundDecorative,
+  className,
+  sx,
+  customLayoutConfig,
+}: WSLayoutProps) {
+  const theme = useTheme();
+  const location = useLocation();
+
+  // ==================== LAYOUT CONFIGURATION ====================
+
+  const finalLayoutConfig = useMemo(() => {
+    const baseConfig = getLayoutConfig(variant);
+    const mergedConfig = customLayoutConfig
+      ? mergeLayoutConfig(baseConfig, customLayoutConfig)
+      : baseConfig;
+
+    return {
+      ...mergedConfig,
+      // Override with explicit props
+      showHeader: showHeader ?? mergedConfig.showHeader,
+      showFooter: showFooter ?? mergedConfig.showFooter,
+      useContainer: useContainer ?? mergedConfig.useContainer,
+      maxWidth: maxWidth ?? mergedConfig.maxWidth,
+      contentPadding: contentPadding ?? mergedConfig.contentPadding,
+    };
+  }, [
+    variant,
+    customLayoutConfig,
+    showHeader,
+    showFooter,
+    useContainer,
+    maxWidth,
+    contentPadding,
+  ]);
+
+  // ==================== BREADCRUMB GENERATION ====================
+
+  const generatedBreadcrumbItems = useMemo(() => {
+    if (breadcrumbItems.length > 0) {
+      return breadcrumbItems;
+    }
+
+    if (!showBreadcrumb && !finalLayoutConfig.showBreadcrumb) {
+      return [];
+    }
+
+    // Auto-generate breadcrumbs from pathname
+    const pathSegments = location.pathname.split('/').filter(Boolean);
+    const breadcrumbs: BreadcrumbItem[] = [{ label: 'Trang chủ', path: '/' }];
+
+    let currentPath = '';
+    pathSegments.forEach((segment, index) => {
+      currentPath += `/${segment}`;
+      const isLast = index === pathSegments.length - 1;
+
+      const label =
+        breadcrumbLabels[segment] ||
+        segment.charAt(0).toUpperCase() + segment.slice(1);
+
+      breadcrumbs.push(
+        isLast
+          ? { label, isActive: isLast }
+          : { label, path: currentPath, isActive: isLast }
+      );
+    });
+
+    return breadcrumbs;
+  }, [
+    breadcrumbItems,
+    showBreadcrumb,
+    finalLayoutConfig.showBreadcrumb,
+    location.pathname,
+  ]);
+
+  // ==================== SCROLL RESTORATION ====================
+
+  useEffect(() => {
+    if (scrollRestoration) {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  }, [location.pathname, scrollRestoration]);
+
+  // ==================== STYLES ====================
+
+  const backgroundStyle = useMemo(() => {
+    return getBackgroundStyle(variant, backgroundColor);
+  }, [variant, backgroundColor]);
+
+  const layoutStyles = useMemo(
+    () => ({
+      minHeight: '100vh',
+      width: '100vw',
+      display: 'flex',
+      flexDirection: 'column' as const,
+      background: backgroundStyle,
+      position: 'relative' as const,
+      overflow: 'hidden' as const,
+      scrollBehavior: layoutConfig.content.scrollBehavior,
+      WebkitFontSmoothing: 'antialiased' as const,
+      MozOsxFontSmoothing: 'grayscale' as const,
+      overflowX: 'hidden' as const,
+      // CUSTOMIZE: Chỉnh sửa style tổng thể của layout ở đây
+      transition: 'background 0.3s ease',
+      ...sx,
+    }),
+    [backgroundStyle, sx]
+  );
+
+  const headerBoxStyles = useMemo(
+    () => ({
+      position: layoutConfig.header.stickyPosition
+        ? ('sticky' as const)
+        : ('relative' as const),
+      top: 0,
+      zIndex: theme.zIndex.appBar,
+      ...(layoutConfig.header.showShadow && {
+        boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
       }),
-      [isDarkMode, theme.zIndex.modal]
-    );
+    }),
+    [theme.zIndex.appBar]
+  );
 
-    const spinnerStyles = useMemo(
-      () => ({
-        width: 40,
-        height: 40,
-        border: `3px solid ${BRAND_COLORS.secondary}`,
-        borderTop: `3px solid transparent`,
-        borderRadius: '50%',
-        animation: 'spin 1s linear infinite',
-        '@keyframes spin': {
-          '0%': { transform: 'rotate(0deg)' },
-          '100%': { transform: 'rotate(360deg)' },
-        },
+  const mainContentStyles = useMemo(
+    () => ({
+      flexGrow: 1,
+      display: 'flex',
+      flexDirection: 'column' as const,
+      position: 'relative' as const,
+      minHeight: minHeight,
+    }),
+    [minHeight]
+  );
+
+  const footerBoxStyles = useMemo(
+    () => ({
+      mt: layoutConfig.footer.marginTop,
+      zIndex: 1,
+      ...(layoutConfig.footer.showShadow && {
+        boxShadow: '0 -2px 12px rgba(0, 0, 0, 0.1)',
       }),
-      []
-    );
+    }),
+    []
+  );
 
-    return (
-      <Fade in={isLoading}>
-        <Box sx={overlayStyles}>
-          <Box sx={spinnerStyles} />
-        </Box>
-      </Fade>
-    );
-  }
-);
+  // ==================== MAIN CONTENT WRAPPER ====================
 
-LoadingOverlay.displayName = 'LoadingOverlay';
-
-const BackgroundDecorative = React.memo<{ isDarkMode: boolean }>(
-  ({ isDarkMode }) => {
-    const decorativeStyles = useMemo(
-      () => ({
-        position: 'fixed' as const,
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0,
-        pointerEvents: 'none' as const,
-        zIndex: -1,
-        opacity: isDarkMode ? 0.03 : 0.02,
-        // CUSTOMIZE: Bạn có thể thay đổi decorative background tại đây
-        background: `radial-gradient(circle at 25% 25%, ${BRAND_COLORS.secondary} 0%, transparent 50%),
-                radial-gradient(circle at 75% 75%, ${BRAND_COLORS.accent} 0%, transparent 50%)`,
-        transition: 'opacity 0.3s ease',
-      }),
-      [isDarkMode]
-    );
-
-    return <Box sx={decorativeStyles} />;
-  }
-);
-
-BackgroundDecorative.displayName = 'BackgroundDecorative';
-
-// ==============================================
-// MAIN LAYOUT COMPONENT
-// ==============================================
-
-const WSLayout = React.memo<WSLayoutProps>(
-  ({
-    headerProps,
-    showHeader = true,
-    showFooter = true,
-    backgroundColor,
-    maxWidth = 'xl',
-    useContainer = true,
-    contentPadding = {
-      top: { xs: 2, sm: 3, md: 4 },
-      bottom: { xs: 2, sm: 3, md: 4 },
-      left: { xs: 1, sm: 2 },
-      right: { xs: 1, sm: 2 },
-    },
-    scrollRestoration = true,
-    minHeight = 'auto',
-    isLoading = false,
-    className,
-    sx,
-  }) => {
-    // ==============================================
-    // THEME MANAGEMENT - OPTIMIZED
-    // ==============================================
-
-    const isDarkMode = useIsDarkMode();
-    const { toggleTheme } = useStableThemeActions();
-    const theme = useTheme(); // Use theme from App.tsx ThemeProvider
-
-    // ==============================================
-    // SCROLL RESTORATION - MEMOIZED
-    // ==============================================
-
-    React.useEffect(() => {
-      if (scrollRestoration) {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    }, [scrollRestoration]);
-
-    // ==============================================
-    // BACKGROUND GRADIENT - MEMOIZED
-    // ==============================================
-
-    const backgroundStyle = useMemo(() => {
-      if (backgroundColor) {
-        return backgroundColor;
-      }
-
-      // CUSTOMIZE: Bạn có thể chỉnh sửa background gradient tại đây
-      return `linear-gradient(135deg, 
-      ${theme.palette.background.default} 0%, 
-      ${
-        isDarkMode ? `${BRAND_COLORS.primary}05` : `${BRAND_COLORS.secondary}08`
-      } 100%
-    )`;
-    }, [backgroundColor, theme.palette.background.default, isDarkMode]);
-
-    // ==============================================
-    // THEME TOGGLE HANDLER - STABLE REFERENCE
-    // ==============================================
-
-    const handleThemeToggle = useCallback(() => {
-      toggleTheme();
-    }, [toggleTheme]);
-
-    // ==============================================
-    // MAIN CONTENT WRAPPER - MEMOIZED
-    // ==============================================
-
-    const MainContentWrapper = useMemo(() => {
-      const Component: React.FC<{ children: React.ReactNode }> = ({
-        children,
-      }) => {
-        if (!useContainer) {
-          return (
-            <Box
-              component="main"
-              sx={{
-                flexGrow: 1,
-                minHeight: minHeight,
-                width: '100%',
-                position: 'relative',
-                ...(contentPadding && {
-                  pt: contentPadding.top,
-                  pb: contentPadding.bottom,
-                  pl: contentPadding.left,
-                  pr: contentPadding.right,
-                }),
-              }}
-            >
-              {children}
-            </Box>
-          );
-        }
-
-        return (
-          <Container
-            component="main"
-            maxWidth={maxWidth}
-            sx={{
-              flexGrow: 1,
-              minHeight: minHeight,
-              display: 'flex',
-              flexDirection: 'column',
-              position: 'relative',
-              ...(contentPadding && {
-                pt: contentPadding.top,
-                pb: contentPadding.bottom,
-              }),
-            }}
-          >
-            {children}
-          </Container>
-        );
-      };
-
-      Component.displayName = 'MainContentWrapper';
-      return Component;
-    }, [useContainer, minHeight, contentPadding, maxWidth]);
-
-    // ==============================================
-    // LAYOUT STYLES - MEMOIZED
-    // ==============================================
-
-    const layoutStyles = useMemo(
-      () => ({
-        minHeight: '100vh',
-        width: '100vw',
-        display: 'flex',
-        flexDirection: 'column' as const,
-        background: backgroundStyle,
-        position: 'relative' as const,
-        overflow: 'hidden' as const,
-        // Smooth scrolling
-        scrollBehavior: 'smooth' as const,
-        // Better font rendering
-        WebkitFontSmoothing: 'antialiased' as const,
-        MozOsxFontSmoothing: 'grayscale' as const,
-        // Prevent horizontal scroll
-        overflowX: 'hidden' as const,
-        // CUSTOMIZE: Bạn có thể thêm transition effects tại đây
-        transition: 'background 0.3s ease, color 0.3s ease',
-        ...sx,
-      }),
-      [backgroundStyle, sx]
-    );
-
-    const headerBoxStyles = useMemo(
-      () => ({
-        position: 'sticky' as const,
-        top: 0,
-        zIndex: theme.zIndex.appBar,
-        boxShadow: `0 2px 12px rgba(0, 0, 0, 0.1)`,
-      }),
-      [theme.zIndex.appBar]
-    );
-
-    const mainContentStyles = useMemo(
-      () => ({
+  const MainContentWrapper = useMemo(() => {
+    const Component: React.FC<{ children: React.ReactNode }> = ({
+      children,
+    }) => {
+      const commonProps = {
         flexGrow: 1,
-        display: 'flex',
-        flexDirection: 'column' as const,
-        position: 'relative' as const,
-        // Ensure content doesn't overlap with fixed headers
-        ...(showHeader && {
-          paddingTop: 0,
-        }),
-        // Smooth transitions for content changes
-        '& > *': {
-          transition: 'opacity 0.3s ease, transform 0.3s ease',
-        },
-      }),
-      [showHeader]
-    );
-
-    const contentBoxStyles = useMemo(
-      () => ({
-        width: '100%',
         minHeight: 'inherit',
         display: 'flex',
         flexDirection: 'column' as const,
-      }),
-      []
-    );
+        position: 'relative' as const,
+        ...(finalLayoutConfig.contentPadding && {
+          pt: finalLayoutConfig.contentPadding.top,
+          pb: finalLayoutConfig.contentPadding.bottom,
+          pl: finalLayoutConfig.contentPadding.left,
+          pr: finalLayoutConfig.contentPadding.right,
+        }),
+      };
 
-    const footerBoxStyles = useMemo(
-      () => ({
-        mt: 'auto',
-        zIndex: 1,
-      }),
-      []
-    );
-
-    // ==============================================
-    // MAIN RENDER
-    // ==============================================
-
-    return (
-      <Box className={className} sx={layoutStyles}>
-        {/* Accessibility: Skip to content */}
-        <SkipToContent />
-
-        {/* Header */}
-        {showHeader && (
-          <Box component="header" sx={headerBoxStyles}>
-            <WSHeader
-              isDarkMode={isDarkMode}
-              onThemeToggle={handleThemeToggle}
-              {...headerProps}
-            />
+      if (!finalLayoutConfig.useContainer) {
+        return (
+          <Box component="main" sx={commonProps}>
+            {children}
           </Box>
-        )}
+        );
+      }
 
-        {/* Main Content Area */}
-        <Box id="main-content" sx={mainContentStyles}>
-          <MainContentWrapper>
-            {/* Page Content */}
-            <Fade in={!isLoading} timeout={300}>
-              <Box sx={contentBoxStyles}>
-                <Outlet />
-              </Box>
-            </Fade>
-          </MainContentWrapper>
+      return (
+        <Container
+          component="main"
+          maxWidth={finalLayoutConfig.maxWidth}
+          sx={commonProps}
+        >
+          {children}
+        </Container>
+      );
+    };
+
+    Component.displayName = 'MainContentWrapper';
+    return Component;
+  }, [finalLayoutConfig]);
+
+  // ==================== RENDER ====================
+
+  return (
+    <Box className={className} sx={layoutStyles}>
+      {/* Accessibility: Skip to content */}
+      <SkipToContent />
+
+      {/* Header */}
+      {finalLayoutConfig.showHeader && (
+        <Box component="header" sx={headerBoxStyles}>
+          <WSHeader {...headerProps} />
         </Box>
+      )}
 
-        {/* Footer */}
-        {showFooter && (
-          <Box component="footer" sx={footerBoxStyles}>
-            <WSFooter />
-          </Box>
-        )}
+      {/* Breadcrumb */}
+      {generatedBreadcrumbItems.length > 0 && (
+        <LayoutBreadcrumb items={generatedBreadcrumbItems} />
+      )}
 
-        {/* Loading Overlay */}
-        {isLoading && (
-          <LoadingOverlay isLoading={isLoading} isDarkMode={isDarkMode} />
-        )}
-
-        {/* Background Decorative Elements */}
-        <BackgroundDecorative isDarkMode={isDarkMode} />
+      {/* Main Content Area */}
+      <Box id="main-content" sx={mainContentStyles}>
+        <MainContentWrapper>
+          <Fade
+            in={!isLoading}
+            timeout={
+              layoutConfig.content.scrollBehavior === 'smooth' ? 300 : 200
+            }
+          >
+            <Box
+              sx={{
+                width: '100%',
+                minHeight: 'inherit',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <Outlet />
+            </Box>
+          </Fade>
+        </MainContentWrapper>
       </Box>
-    );
-  }
-);
 
-WSLayout.displayName = 'WSLayout';
+      {/* Footer */}
+      {finalLayoutConfig.showFooter && (
+        <Box component="footer" sx={footerBoxStyles}>
+          <WSFooter />
+        </Box>
+      )}
 
-export default WSLayout;
+      {/* Loading Overlay */}
+      {isLoading && <LayoutLoadingOverlay isLoading={isLoading} />}
+
+      {/* Background Decorative Elements */}
+      <LayoutBackgroundDecorative
+        show={
+          showBackgroundDecorative ?? layoutConfig.background.showDecorative
+        }
+      />
+    </Box>
+  );
+}

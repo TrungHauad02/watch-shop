@@ -1,10 +1,10 @@
-import { User } from '@/shared/types/common.types';
+import { UserDTO } from '@/shared/types';
 
 export interface WSHeaderProps {
   onThemeToggle?: () => void;
   isDarkMode?: boolean;
   isAuthenticated?: boolean;
-  user?: User | null;
+  user?: UserDTO | null;
   wishlistCount?: number;
   onLogin?: () => void;
   onLogout?: () => void;

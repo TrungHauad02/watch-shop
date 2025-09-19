@@ -1,448 +1,331 @@
-interface ColorPalettes {
-  // Primary palette - Rich Black variations
-  richBlack: Record<
-    50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950,
-    string
-  >;
-  // Secondary palette - Vivid Yellow variations
-  vividYellow: Record<
-    50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950,
-    string
-  >;
-  // Complementary palettes
-  gold: Record<
-    50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950,
-    string
-  >;
-  amber: Record<
-    50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950,
-    string
-  >;
-  slate: Record<
-    50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950,
-    string
-  >;
-  neutral: Record<
-    50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950,
-    string
-  >;
-  // Status colors
-  emerald: Record<
-    50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950,
-    string
-  >;
-  red: Record<
-    50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950,
-    string
-  >;
-  orange: Record<
-    50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950,
-    string
-  >;
-  blue: Record<
-    50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950,
-    string
-  >;
-}
+// ==================== BRAND COLORS (Primary Theme) ====================
 
-// Color Palettes - Rich Black & Vivid Yellow focused
-const COLOR_PALETTES: ColorPalettes = {
-  // Rich Black palette - Primary brand color
-  richBlack: {
-    50: '#f8f9fa', // Lightest - for backgrounds
-    100: '#e9ecef', // Very light gray
-    200: '#d4d8dd', // Light gray
-    300: '#adb5bd', // Medium light gray
-    400: '#6c757d', // Medium gray
-    500: '#495057', // Dark gray
-    600: '#343a40', // Darker gray
-    700: '#212529', // Very dark gray
-    800: '#101820', // Rich Black - Main brand color
-    900: '#0a0f14', // Darker rich black
-    950: '#050a0f', // Darkest
-  },
+/**
+ * Màu chính của thương hiệu WatchStore
+ * Theme: Luxury Watch Store với tông màu vàng và đen sang trọng
+ */
+export const BRAND_COLORS = {
+  // Primary - Rich Black (Đen sang trọng)
+  primary: '#101820',
+  primaryLight: '#2c2c2c',
+  primaryDark: '#000000',
 
-  // Vivid Yellow palette - Secondary brand color
-  vividYellow: {
-    50: '#fffef7', // Cream white
-    100: '#fffbea', // Lightest yellow
-    200: '#fff4c4', // Very light yellow
-    300: '#ffe98a', // Light yellow
-    400: '#ffd93d', // Medium light yellow
-    500: '#FEE715', // Vivid Yellow - Main brand color
-    600: '#f59e0b', // Golden yellow
-    700: '#d97706', // Darker gold
-    800: '#b45309', // Dark amber
-    900: '#92400e', // Very dark amber
-    950: '#78350f', // Darkest amber
-  },
+  // Secondary - Vivid Yellow (Vàng nổi bật)
+  secondary: '#FEE715',
+  secondaryLight: '#fff44d',
+  secondaryDark: '#e6d200',
 
-  // Gold palette - Luxury complement
-  gold: {
-    50: '#fffdf2',
-    100: '#fef9e7',
-    200: '#fef2cd',
-    300: '#fde68a',
-    400: '#fcd34d',
-    500: '#f59e0b', // Main gold
-    600: '#d97706',
-    700: '#b45309',
-    800: '#92400e',
-    900: '#78350f',
-    950: '#451a03',
-  },
+  // Accent - Luxury Gold (Vàng luxury)
+  accent: '#f59e0b',
+  accentLight: '#fbbf24',
+  accentDark: '#d97706',
 
-  // Amber palette - Warm complement
-  amber: {
-    50: '#fffbeb',
-    100: '#fef3c7',
-    200: '#fde68a',
-    300: '#fcd34d',
-    400: '#fbbf24',
-    500: '#f59e0b',
-    600: '#d97706',
-    700: '#b45309',
-    800: '#92400e',
-    900: '#78350f',
-    950: '#451a03',
-  },
-
-  // Slate palette - Cool neutrals
-  slate: {
-    50: '#f8fafc',
-    100: '#f1f5f9',
-    200: '#e2e8f0',
-    300: '#cbd5e1',
-    400: '#94a3b8',
-    500: '#64748b',
-    600: '#475569',
-    700: '#334155',
-    800: '#1e293b',
-    900: '#0f172a',
-    950: '#020617',
-  },
-
-  // Neutral palette - Warm neutrals
-  neutral: {
-    50: '#fafaf9',
-    100: '#f5f5f4',
-    200: '#e7e5e4',
-    300: '#d6d3d1',
-    400: '#a8a29e',
-    500: '#78716c',
-    600: '#57534e',
-    700: '#44403c',
-    800: '#292524',
-    900: '#1c1917',
-    950: '#0c0a09',
-  },
-
-  // Emerald palette - Success colors
-  emerald: {
-    50: '#ecfdf5',
-    100: '#d1fae5',
-    200: '#a7f3d0',
-    300: '#6ee7b7',
-    400: '#34d399',
-    500: '#10b981',
-    600: '#059669',
-    700: '#047857',
-    800: '#065f46',
-    900: '#064e3b',
-    950: '#022c22',
-  },
-
-  // Red palette - Error colors
-  red: {
-    50: '#fef2f2',
-    100: '#fee2e2',
-    200: '#fecaca',
-    300: '#fca5a5',
-    400: '#f87171',
-    500: '#ef4444',
-    600: '#dc2626',
-    700: '#b91c1c',
-    800: '#991b1b',
-    900: '#7f1d1d',
-    950: '#450a0a',
-  },
-
-  // Orange palette - Warning colors
-  orange: {
-    50: '#fff7ed',
-    100: '#ffedd5',
-    200: '#fed7aa',
-    300: '#fdba74',
-    400: '#fb923c',
-    500: '#f97316',
-    600: '#ea580c',
-    700: '#c2410c',
-    800: '#9a3412',
-    900: '#7c2d12',
-    950: '#431407',
-  },
-
-  // Blue palette - Info colors
-  blue: {
-    50: '#eff6ff',
-    100: '#dbeafe',
-    200: '#bfdbfe',
-    300: '#93c5fd',
-    400: '#60a5fa',
-    500: '#3b82f6',
-    600: '#2563eb',
-    700: '#1d4ed8',
-    800: '#1e40af',
-    900: '#1e3a8a',
-    950: '#172554',
-  },
+  // White variations
+  white: '#FFFFFF',
+  offWhite: '#FAFAFA',
+  cream: '#F5F5F0',
 } as const;
 
-interface BrandColors {
-  primary: string;
-  primaryLight: string;
-  primaryDark: string;
-  secondary: string;
-  secondaryLight: string;
-  secondaryDark: string;
-  accent: string;
-  accentLight: string;
-  accentDark: string;
-}
+// ==================== GRAY SCALE COLORS ====================
 
-// Brand Colors - WatchStore luxury theme
-const BRAND_COLORS: BrandColors = {
-  primary: '#101820', // Rich Black - Main brand
-  primaryLight: '#212529', // Lighter rich black
-  primaryDark: '#050a0f', // Darker rich black
-  secondary: '#FEE715', // Vivid Yellow - Secondary brand
-  secondaryLight: '#fff4c4', // Lighter vivid yellow
-  secondaryDark: '#f59e0b', // Darker vivid yellow
-  accent: '#f59e0b', // Gold accent - luxury feel
-  accentLight: '#fcd34d', // Lighter gold
-  accentDark: '#d97706', // Darker gold
+export const GRAY_COLORS = {
+  gray50: '#F9FAFB',
+  gray100: '#F3F4F6',
+  gray200: '#E5E7EB',
+  gray300: '#D1D5DB',
+  gray400: '#9CA3AF',
+  gray500: '#6B7280',
+  gray600: '#4B5563',
+  gray700: '#374151',
+  gray800: '#1F2937',
+  gray900: '#111827',
 } as const;
 
-interface SemanticColors {
-  success: string;
-  warning: string;
-  error: string;
-  info: string;
-  // Dark mode variants
-  successDark: string;
-  warningDark: string;
-  errorDark: string;
-  infoDark: string;
-}
+// ==================== SEMANTIC COLORS ====================
 
-// Semantic Colors - Status and feedback
-const SEMANTIC_COLORS: SemanticColors = {
-  success: COLOR_PALETTES.emerald[600], // Success green
-  warning: COLOR_PALETTES.orange[500], // Warning orange
-  error: COLOR_PALETTES.red[600], // Error red
-  info: COLOR_PALETTES.blue[600], // Info blue
-  successDark: COLOR_PALETTES.emerald[400], // Success green for dark mode
-  warningDark: COLOR_PALETTES.orange[400], // Warning orange for dark mode
-  errorDark: COLOR_PALETTES.red[400], // Error red for dark mode
-  infoDark: COLOR_PALETTES.blue[400], // Info blue for dark mode
+export const SEMANTIC_COLORS = {
+  // Success - Green variations
+  success50: '#F0FDF4',
+  success100: '#DCFCE7',
+  success200: '#BBF7D0',
+  success300: '#86EFAC',
+  success400: '#4ADE80',
+  success500: '#22C55E', // Main success
+  success600: '#16A34A',
+  success700: '#15803D',
+  success800: '#166534',
+  success900: '#14532D',
+
+  // Warning - Amber variations
+  warning50: '#FFFBEB',
+  warning100: '#FEF3C7',
+  warning200: '#FDE68A',
+  warning300: '#FCD34D',
+  warning400: '#FBBF24',
+  warning500: '#F59E0B', // Main warning
+  warning600: '#D97706',
+  warning700: '#B45309',
+  warning800: '#92400E',
+  warning900: '#78350F',
+
+  // Error - Red variations
+  error50: '#FEF2F2',
+  error100: '#FEE2E2',
+  error200: '#FECACA',
+  error300: '#FCA5A5',
+  error400: '#F87171',
+  error500: '#EF4444', // Main error
+  error600: '#DC2626',
+  error700: '#B91C1C',
+  error800: '#991B1B',
+  error900: '#7F1D1D',
+
+  // Info - Blue variations
+  info50: '#EFF6FF',
+  info100: '#DBEAFE',
+  info200: '#BFDBFE',
+  info300: '#93C5FD',
+  info400: '#60A5FA',
+  info500: '#3B82F6', // Main info
+  info600: '#2563EB',
+  info700: '#1D4ED8',
+  info800: '#1E40AF',
+  info900: '#1E3A8A',
 } as const;
 
-interface ActionColors {
-  save: string;
-  edit: string;
-  delete: string;
-  view: string;
-  create: string;
-  update: string;
-  cancel: string;
-  submit: string;
-  submitHover: string;
-  reset: string;
-}
+// ==================== SPECIALIZED COLORS ====================
 
-// Action Colors - User actions and states
-const ACTION_COLORS: ActionColors = {
-  save: COLOR_PALETTES.emerald[600], // Green save
-  edit: COLOR_PALETTES.vividYellow[600], // Yellow edit
-  delete: COLOR_PALETTES.red[600], // Red delete
-  view: COLOR_PALETTES.blue[600], // Blue view
-  create: COLOR_PALETTES.emerald[500], // Green create
-  update: COLOR_PALETTES.amber[600], // Amber update
-  cancel: COLOR_PALETTES.slate[500], // Gray cancel
-  submit: COLOR_PALETTES.richBlack[800], // Black submit
-  submitHover: COLOR_PALETTES.richBlack[700], // Lighter black hover
-  reset: COLOR_PALETTES.neutral[500], // Neutral reset
+export const LUXURY_COLORS = {
+  // Gold variations for premium features
+  gold50: '#FFFBF0',
+  gold100: '#FEF7E0',
+  gold200: '#FDECC4',
+  gold300: '#FBDB9B',
+  gold400: '#F8C572',
+  gold500: '#F59E0B', // Main luxury gold
+  gold600: '#D97706',
+  gold700: '#B45309',
+  gold800: '#92400E',
+  gold900: '#78350F',
+
+  // Black variations for premium UI
+  black50: '#F8F8F8',
+  black100: '#F1F1F1',
+  black200: '#E8E8E8',
+  black300: '#D1D1D1',
+  black400: '#9A9A9A',
+  black500: '#6B6B6B',
+  black600: '#4A4A4A',
+  black700: '#2C2C2C',
+  black800: '#1A1A1A',
+  black900: '#101820', // Main brand black
 } as const;
 
-interface ThemeColors {
-  background: {
-    primary: string;
-    secondary: string;
-    paper: string;
-    elevated: string;
-  };
-  surface: {
-    primary: string;
-    secondary: string;
-    tertiary: string;
-    elevated: string;
-  };
-  text: {
-    primary: string;
-    secondary: string;
-    tertiary: string;
-    disabled: string;
-    inverse: string;
-  };
-  border: {
-    primary: string;
-    secondary: string;
-    tertiary: string;
-    focus: string;
-    hover: string;
-  };
-  shadow: {
-    primary: string;
-    secondary: string;
-    elevated: string;
-  };
-  overlay: {
-    light: string;
-    medium: string;
-    dark: string;
-  };
-}
+// ==================== PRODUCT SPECIFIC COLORS ====================
 
-// Light Theme Colors
-const LIGHT_THEME: ThemeColors = {
-  background: {
-    primary: '#ffffff', // Pure white
-    secondary: COLOR_PALETTES.neutral[50], // Warm off-white
-    paper: '#ffffff', // White paper
-    elevated: COLOR_PALETTES.neutral[50], // Slightly off-white
-  },
-  surface: {
-    primary: COLOR_PALETTES.vividYellow[50], // Cream surface
-    secondary: COLOR_PALETTES.neutral[100], // Light neutral
-    tertiary: COLOR_PALETTES.gold[50], // Light gold
-    elevated: '#ffffff', // White elevated
-  },
-  text: {
-    primary: COLOR_PALETTES.richBlack[800], // Rich black text
-    secondary: COLOR_PALETTES.richBlack[600], // Medium black
-    tertiary: COLOR_PALETTES.neutral[600], // Light gray text
-    disabled: COLOR_PALETTES.neutral[400], // Disabled gray
-    inverse: COLOR_PALETTES.vividYellow[500], // Yellow inverse text
-  },
-  border: {
-    primary: COLOR_PALETTES.richBlack[200], // Light border
-    secondary: COLOR_PALETTES.neutral[200], // Lighter border
-    tertiary: COLOR_PALETTES.vividYellow[200], // Yellow border
-    focus: COLOR_PALETTES.vividYellow[500], // Yellow focus
-    hover: COLOR_PALETTES.vividYellow[300], // Yellow hover
-  },
-  shadow: {
-    primary: `${COLOR_PALETTES.richBlack[800]}15`, // 15% black shadow
-    secondary: `${COLOR_PALETTES.richBlack[800]}08`, // 8% black shadow
-    elevated: `${COLOR_PALETTES.richBlack[800]}25`, // 25% black shadow
-  },
-  overlay: {
-    light: `${COLOR_PALETTES.richBlack[800]}10`, // 10% overlay
-    medium: `${COLOR_PALETTES.richBlack[800]}50`, // 50% overlay
-    dark: `${COLOR_PALETTES.richBlack[800]}80`, // 80% overlay
-  },
+export const PRODUCT_COLORS = {
+  // Price colors
+  priceRegular: '#1F2937',
+  priceDiscount: '#DC2626',
+  priceSale: '#059669',
+
+  // Stock status
+  stockAvailable: '#059669',
+  stockLow: '#F59E0B',
+  stockOut: '#DC2626',
+
+  // Rating colors
+  ratingFilled: '#FEE715',
+  ratingEmpty: '#E5E7EB',
+
+  // Badge colors
+  badgeNew: '#10B981',
+  badgeSale: '#F59E0B',
+  badgeBestSeller: '#8B5CF6',
+  badgeLimited: '#EF4444',
 } as const;
 
-// Dark Theme Colors
-const DARK_THEME: ThemeColors = {
-  background: {
-    primary: COLOR_PALETTES.richBlack[950], // Darkest black
-    secondary: COLOR_PALETTES.richBlack[900], // Very dark black
-    paper: COLOR_PALETTES.richBlack[800], // Rich black paper
-    elevated: COLOR_PALETTES.richBlack[700], // Lighter black
-  },
-  surface: {
-    primary: COLOR_PALETTES.richBlack[800], // Rich black surface
-    secondary: COLOR_PALETTES.richBlack[700], // Lighter surface
-    tertiary: COLOR_PALETTES.neutral[800], // Dark neutral
-    elevated: COLOR_PALETTES.richBlack[600], // Elevated surface
-  },
-  text: {
-    primary: COLOR_PALETTES.vividYellow[500], // Vivid yellow text
-    secondary: COLOR_PALETTES.vividYellow[300], // Lighter yellow
-    tertiary: COLOR_PALETTES.neutral[400], // Gray text
-    disabled: COLOR_PALETTES.neutral[600], // Disabled gray
-    inverse: COLOR_PALETTES.richBlack[800], // Black inverse text
-  },
-  border: {
-    primary: COLOR_PALETTES.vividYellow[700], // Gold border
-    secondary: COLOR_PALETTES.neutral[700], // Gray border
-    tertiary: COLOR_PALETTES.vividYellow[800], // Darker gold
-    focus: COLOR_PALETTES.vividYellow[500], // Bright yellow focus
-    hover: COLOR_PALETTES.vividYellow[600], // Yellow hover
-  },
-  shadow: {
-    primary: `${COLOR_PALETTES.richBlack[950]}40`, // 40% black shadow
-    secondary: `${COLOR_PALETTES.richBlack[950]}20`, // 20% black shadow
-    elevated: `${COLOR_PALETTES.richBlack[950]}60`, // 60% black shadow
-  },
-  overlay: {
-    light: `${COLOR_PALETTES.richBlack[950]}20`, // 20% overlay
-    medium: `${COLOR_PALETTES.richBlack[950]}60`, // 60% overlay
-    dark: `${COLOR_PALETTES.richBlack[950]}90`, // 90% overlay
-  },
+// ==================== UI COMPONENT COLORS ====================
+
+export const UI_COLORS = {
+  // Background variations
+  backgroundPrimary: '#FFFFFF',
+  backgroundSecondary: '#F9FAFB',
+  backgroundTertiary: '#F3F4F6',
+  backgroundDark: '#101820',
+  backgroundOverlay: 'rgba(16, 24, 32, 0.75)',
+
+  // Border colors
+  borderLight: '#E5E7EB',
+  borderMedium: '#D1D5DB',
+  borderDark: '#9CA3AF',
+  borderFocus: '#FEE715',
+
+  // Text colors
+  textPrimary: '#101820',
+  textSecondary: '#4B5563',
+  textTertiary: '#9CA3AF',
+  textInverse: '#FFFFFF',
+  textDisabled: '#D1D5DB',
+
+  // Shadow colors
+  shadow: 'rgba(16, 24, 32, 0.1)',
+  shadowMedium: 'rgba(16, 24, 32, 0.15)',
+  shadowStrong: 'rgba(16, 24, 32, 0.25)',
 } as const;
 
-// ==============================================
-// UTILITY CONSTANTS
-// ==============================================
+// ==================== ALPHA/OPACITY VARIATIONS ====================
 
-const UTILITY_COLORS = {
-  white: '#ffffff',
-  black: '#000000',
-  transparent: 'transparent',
-  inherit: 'inherit',
-  current: 'currentColor',
+export const ALPHA_COLORS = {
+  // Brand colors with alpha
+  primaryAlpha10: 'rgba(16, 24, 32, 0.1)',
+  primaryAlpha20: 'rgba(16, 24, 32, 0.2)',
+  primaryAlpha50: 'rgba(16, 24, 32, 0.5)',
+  primaryAlpha75: 'rgba(16, 24, 32, 0.75)',
+
+  secondaryAlpha10: 'rgba(254, 231, 21, 0.1)',
+  secondaryAlpha20: 'rgba(254, 231, 21, 0.2)',
+  secondaryAlpha50: 'rgba(254, 231, 21, 0.5)',
+  secondaryAlpha75: 'rgba(254, 231, 21, 0.75)',
+
+  // White with alpha for overlays
+  whiteAlpha10: 'rgba(255, 255, 255, 0.1)',
+  whiteAlpha20: 'rgba(255, 255, 255, 0.2)',
+  whiteAlpha50: 'rgba(255, 255, 255, 0.5)',
+  whiteAlpha75: 'rgba(255, 255, 255, 0.75)',
+  whiteAlpha90: 'rgba(255, 255, 255, 0.9)',
 } as const;
 
-// Common color combinations for quick access
-const COLOR_COMBINATIONS = {
-  luxury: {
-    background: BRAND_COLORS.primary,
-    text: BRAND_COLORS.secondary,
-    accent: BRAND_COLORS.accent,
-  },
-  premium: {
-    background: BRAND_COLORS.secondary,
-    text: BRAND_COLORS.primary,
-    accent: BRAND_COLORS.accent,
-  },
-  elegant: {
-    background: COLOR_PALETTES.neutral[50],
-    text: BRAND_COLORS.primary,
-    accent: BRAND_COLORS.secondary,
-  },
+// ==================== GRADIENT COLORS ====================
+
+export const GRADIENT_COLORS = {
+  // Brand gradients
+  primaryGradient: 'linear-gradient(135deg, #101820 0%, #2c2c2c 100%)',
+  secondaryGradient: 'linear-gradient(135deg, #FEE715 0%, #f59e0b 100%)',
+  luxuryGradient:
+    'linear-gradient(135deg, #f59e0b 0%, #FEE715 50%, #d97706 100%)',
+
+  // Overlay gradients
+  overlayGradient:
+    'linear-gradient(180deg, transparent 0%, rgba(16, 24, 32, 0.7) 100%)',
+  heroGradient:
+    'linear-gradient(135deg, rgba(16, 24, 32, 0.8) 0%, rgba(245, 158, 11, 0.1) 100%)',
+
+  // Semantic gradients
+  successGradient: 'linear-gradient(135deg, #22C55E 0%, #16A34A 100%)',
+  warningGradient: 'linear-gradient(135deg, #F59E0B 0%, #D97706 100%)',
+  errorGradient: 'linear-gradient(135deg, #EF4444 0%, #DC2626 100%)',
 } as const;
 
-// ==============================================
-// EXPORTS
-// ==============================================
+// ==================== COLOR UTILITIES ====================
 
-export type {
-  ColorPalettes,
-  BrandColors,
-  SemanticColors,
-  ActionColors,
-  ThemeColors,
+/**
+ * Utility functions để làm việc với colors
+ */
+export const colorUtils = {
+  // Convert hex to rgba
+  hexToRgba: (hex: string, alpha: number = 1): string => {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  },
+
+  // Get color with alpha
+  withAlpha: (color: string, alpha: number): string => {
+    if (color.startsWith('#')) {
+      return colorUtils.hexToRgba(color, alpha);
+    }
+    return color.replace(/rgba?\([^)]+\)/, '') + `, ${alpha})`;
+  },
+
+  // Check if color is dark
+  isDark: (hex: string): boolean => {
+    const r = parseInt(hex.slice(1, 3), 16);
+    const g = parseInt(hex.slice(3, 5), 16);
+    const b = parseInt(hex.slice(5, 7), 16);
+    const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+    return brightness < 128;
+  },
 };
 
-export {
-  COLOR_PALETTES,
-  BRAND_COLORS,
-  SEMANTIC_COLORS,
-  ACTION_COLORS,
-  LIGHT_THEME,
-  DARK_THEME,
-  UTILITY_COLORS,
-  COLOR_COMBINATIONS,
-};
+// ==================== EXPORT ALL COLORS ====================
+
+export const COLORS = {
+  ...BRAND_COLORS,
+  ...GRAY_COLORS,
+  ...SEMANTIC_COLORS,
+  ...LUXURY_COLORS,
+  ...PRODUCT_COLORS,
+  ...UI_COLORS,
+  ...ALPHA_COLORS,
+  ...GRADIENT_COLORS,
+} as const;
+
+// ==================== TYPE DEFINITIONS ====================
+
+export type BrandColorKeys = keyof typeof BRAND_COLORS;
+export type GrayColorKeys = keyof typeof GRAY_COLORS;
+export type SemanticColorKeys = keyof typeof SEMANTIC_COLORS;
+export type LuxuryColorKeys = keyof typeof LUXURY_COLORS;
+export type ProductColorKeys = keyof typeof PRODUCT_COLORS;
+export type UIColorKeys = keyof typeof UI_COLORS;
+export type AlphaColorKeys = keyof typeof ALPHA_COLORS;
+export type GradientColorKeys = keyof typeof GRADIENT_COLORS;
+
+export type ColorKeys = keyof typeof COLORS;
+
+// ==================== COLOR PALETTE FOR MUI THEME ====================
+
+export const MUI_COLOR_PALETTE = {
+  primary: {
+    main: BRAND_COLORS.primary,
+    light: BRAND_COLORS.primaryLight,
+    dark: BRAND_COLORS.primaryDark,
+    contrastText: BRAND_COLORS.white,
+  },
+  secondary: {
+    main: BRAND_COLORS.secondary,
+    light: BRAND_COLORS.secondaryLight,
+    dark: BRAND_COLORS.secondaryDark,
+    contrastText: BRAND_COLORS.primary,
+  },
+  success: {
+    main: SEMANTIC_COLORS.success500,
+    light: SEMANTIC_COLORS.success300,
+    dark: SEMANTIC_COLORS.success700,
+    contrastText: BRAND_COLORS.white,
+  },
+  warning: {
+    main: SEMANTIC_COLORS.warning500,
+    light: SEMANTIC_COLORS.warning300,
+    dark: SEMANTIC_COLORS.warning700,
+    contrastText: BRAND_COLORS.white,
+  },
+  error: {
+    main: SEMANTIC_COLORS.error500,
+    light: SEMANTIC_COLORS.error300,
+    dark: SEMANTIC_COLORS.error700,
+    contrastText: BRAND_COLORS.white,
+  },
+  info: {
+    main: SEMANTIC_COLORS.info500,
+    light: SEMANTIC_COLORS.info300,
+    dark: SEMANTIC_COLORS.info700,
+    contrastText: BRAND_COLORS.white,
+  },
+  grey: {
+    50: GRAY_COLORS.gray50,
+    100: GRAY_COLORS.gray100,
+    200: GRAY_COLORS.gray200,
+    300: GRAY_COLORS.gray300,
+    400: GRAY_COLORS.gray400,
+    500: GRAY_COLORS.gray500,
+    600: GRAY_COLORS.gray600,
+    700: GRAY_COLORS.gray700,
+    800: GRAY_COLORS.gray800,
+    900: GRAY_COLORS.gray900,
+  },
+} as const;
+
+export default COLORS;
