@@ -1,12 +1,11 @@
-import { BRAND_COLORS } from '@/styles/colors';
-import { Box, Stack, Typography, alpha } from '@mui/material';
+import { Box, Stack, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { footerBottomLinks } from '../footer.data';
+import COLORS, { colorUtils } from '@/styles/colors';
 
 interface FooterBottomProps {
   companyName: string;
   copyrightYear: number;
-  // Không cần bottomLinks prop nữa vì lấy từ data
 }
 
 export default function FooterBottom({
@@ -61,12 +60,11 @@ export default function FooterBottom({
             transition: 'all 0.2s ease',
             // CUSTOMIZE: Chỉnh sửa hiệu ứng hover của bottom links ở đây
             '&:hover': {
-              color: BRAND_COLORS.accent,
-              backgroundColor: alpha(BRAND_COLORS.accent, 0.1),
+              color: COLORS.accent,
+              backgroundColor: colorUtils.hexToRgba(COLORS.accent, 0.1),
             },
-            // Focus styles cho accessibility
             '&:focus-visible': {
-              outline: `2px solid ${BRAND_COLORS.accent}`,
+              outline: `2px solid ${COLORS.accent}`,
               outlineOffset: '2px',
             },
           },

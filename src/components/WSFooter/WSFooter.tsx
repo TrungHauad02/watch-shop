@@ -1,13 +1,5 @@
-import { BRAND_COLORS } from '@/styles/colors';
-import {
-  Box,
-  Container,
-  Grid,
-  SxProps,
-  Theme,
-  Divider,
-  alpha,
-} from '@mui/material';
+import COLORS, { colorUtils, GRADIENT_COLORS } from '@/styles/colors';
+import { Box, Container, Grid, SxProps, Theme, Divider } from '@mui/material';
 import {
   FooterCompanyInfo,
   FooterLinkSection,
@@ -73,14 +65,13 @@ export default function WSFooter({
     <Box
       component="footer"
       sx={{
-        backgroundColor: 'background.paper',
-        borderTop: `3px solid ${BRAND_COLORS.secondary}`,
+        backgroundColor: COLORS.backgroundPrimary,
+        borderTop: `3px solid ${GRADIENT_COLORS.secondaryGradient}`,
         mt: 'auto',
         width: '100%',
         position: 'relative',
         overflow: 'hidden',
-        boxShadow: `0 -4px 20px ${alpha(BRAND_COLORS.primary, 0.08)}`,
-        // CUSTOMIZE: Bạn có thể chỉnh sửa style tổng thể của footer ở đây
+        boxShadow: `0 -4px 20px ${colorUtils.hexToRgba(COLORS.primary, 0.08)}`,
         ...sx,
       }}
     >
@@ -135,7 +126,7 @@ export default function WSFooter({
         {/* Divider */}
         <Divider
           sx={{
-            borderColor: alpha(BRAND_COLORS.secondary, 0.2),
+            borderColor: COLORS.borderMedium,
             borderWidth: '1px',
           }}
         />

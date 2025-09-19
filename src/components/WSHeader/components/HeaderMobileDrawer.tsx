@@ -1,4 +1,3 @@
-import { BRAND_COLORS } from '@/styles/colors';
 import {
   Drawer,
   Box,
@@ -29,6 +28,7 @@ import {
   headerConfig,
   userMenuActions,
 } from '../header.data';
+import { COLORS, ALPHA_COLORS, SEMANTIC_COLORS } from '@/styles/colors';
 
 interface HeaderMobileDrawerProps {
   open: boolean;
@@ -69,7 +69,16 @@ export default function HeaderMobileDrawer({
         return <Person />;
       case 'wishlist':
         return (
-          <Badge badgeContent={wishlistCount} color="error">
+          <Badge
+            badgeContent={wishlistCount}
+            sx={{
+              '& .MuiBadge-badge': {
+                backgroundColor: COLORS.accent,
+                color: COLORS.primary,
+                fontWeight: 'bold',
+              },
+            }}
+          >
             <FavoriteOutlined />
           </Badge>
         );
@@ -91,8 +100,9 @@ export default function HeaderMobileDrawer({
         '& .MuiDrawer-paper': {
           boxSizing: 'border-box',
           width: headerConfig.drawer.width,
-          // CUSTOMIZE: Chỉnh sửa style của mobile drawer ở đây
-          backgroundColor: 'background.paper',
+          backgroundColor: COLORS.backgroundPrimary,
+          backgroundImage:
+            'linear-gradient(to bottom, rgba(255,255,255,0.98), rgba(250,250,250,0.97))',
         },
       }}
     >
@@ -103,19 +113,20 @@ export default function HeaderMobileDrawer({
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
-          borderBottom: '1px solid',
-          borderColor: 'divider',
+          borderBottom: `1px solid ${COLORS.borderLight}`,
+          backgroundColor: COLORS.primary,
+          color: COLORS.white,
         }}
       >
-        <Typography variant="h6" fontWeight={600} color="primary">
+        <Typography variant="h6" fontWeight={700} color={COLORS.secondary}>
           {companyData.name}
         </Typography>
-        <IconButton onClick={onClose}>
+        <IconButton onClick={onClose} sx={{ color: COLORS.white }}>
           <CloseIcon />
         </IconButton>
       </Box>
 
-      <List>
+      <List sx={{ py: 1 }}>
         {/* Navigation Items */}
         {navigationItems.map((item) => (
           <ListItem key={item.path} disablePadding>
@@ -123,26 +134,36 @@ export default function HeaderMobileDrawer({
               onClick={() => handleNavigation(item.path)}
               selected={location.pathname === item.path}
               sx={{
-                // CUSTOMIZE: Chỉnh sửa style của navigation items trong mobile drawer ở đây
+                mx: 1,
+                my: 0.5,
+                borderRadius: '8px',
+                '&:hover': {
+                  backgroundColor: ALPHA_COLORS.primaryAlpha10,
+                },
                 '&.Mui-selected': {
-                  backgroundColor: `${BRAND_COLORS.secondary}20`,
+                  backgroundColor: ALPHA_COLORS.secondaryAlpha20,
                   '& .MuiListItemIcon-root': {
-                    color: BRAND_COLORS.accent,
+                    color: COLORS.accent,
                   },
                   '& .MuiListItemText-primary': {
-                    color: BRAND_COLORS.accent,
+                    color: COLORS.primary,
                     fontWeight: 600,
                   },
                 },
               }}
             >
-              <ListItemIcon>{item.icon}</ListItemIcon>
-              <ListItemText primary={item.label} />
+              <ListItemIcon sx={{ color: COLORS.textSecondary }}>
+                {item.icon}
+              </ListItemIcon>
+              <ListItemText
+                primary={item.label}
+                sx={{ color: COLORS.textPrimary }}
+              />
             </ListItemButton>
           </ListItem>
         ))}
 
-        <Divider sx={{ my: 1 }} />
+        <Divider sx={{ my: 1, borderColor: COLORS.borderLight }} />
 
         {/* User Section */}
         {isAuthenticated ? (
@@ -150,11 +171,15 @@ export default function HeaderMobileDrawer({
             {/* User Info */}
             {user && (
               <ListItem>
-                <Box sx={{ p: 1 }}>
-                  <Typography variant="subtitle2" fontWeight={600}>
+                <Box sx={{ p: 1, width: '100%' }}>
+                  <Typography
+                    variant="subtitle2"
+                    fontWeight={600}
+                    color={COLORS.textPrimary}
+                  >
                     {user.name}
                   </Typography>
-                  <Typography variant="caption" color="text.secondary">
+                  <Typography variant="caption" color={COLORS.textSecondary}>
                     {user.email}
                   </Typography>
                 </Box>
@@ -164,23 +189,46 @@ export default function HeaderMobileDrawer({
             {/* User Actions */}
             {userMenuActions.map((action) => (
               <ListItem key={action.key} disablePadding>
-                <ListItemButton onClick={() => handleUserAction(action.key)}>
-                  <ListItemIcon>{getUserActionIcon(action.key)}</ListItemIcon>
-                  <ListItemText primary={action.label} />
+                <ListItemButton
+                  onClick={() => handleUserAction(action.key)}
+                  sx={{
+                    mx: 1,
+                    my: 0.5,
+                    borderRadius: '8px',
+                    '&:hover': {
+                      backgroundColor: ALPHA_COLORS.primaryAlpha10,
+                    },
+                  }}
+                >
+                  <ListItemIcon sx={{ color: COLORS.textSecondary }}>
+                    {getUserActionIcon(action.key)}
+                  </ListItemIcon>
+                  <ListItemText
+                    primary={action.label}
+                    sx={{ color: COLORS.textPrimary }}
+                  />
                 </ListItemButton>
               </ListItem>
             ))}
 
-            <Divider sx={{ my: 1 }} />
+            <Divider sx={{ my: 1, borderColor: COLORS.borderLight }} />
 
             {/* Logout */}
             <ListItem disablePadding>
               <ListItemButton
                 onClick={() => handleUserAction('logout')}
-                sx={{ color: 'error.main' }}
+                sx={{
+                  mx: 1,
+                  my: 0.5,
+                  borderRadius: '8px',
+                  color: SEMANTIC_COLORS.error500,
+                  '&:hover': {
+                    backgroundColor: ALPHA_COLORS.secondaryAlpha10,
+                  },
+                }}
               >
-                <ListItemIcon>
-                  <Logout sx={{ color: 'error.main' }} />
+                <ListItemIcon sx={{ color: SEMANTIC_COLORS.error500 }}>
+                  <Logout />
                 </ListItemIcon>
                 <ListItemText primary="Đăng xuất" />
               </ListItemButton>
@@ -189,11 +237,24 @@ export default function HeaderMobileDrawer({
         ) : (
           // Login button for unauthenticated users
           <ListItem disablePadding>
-            <ListItemButton onClick={() => handleNavigation('/login')}>
-              <ListItemIcon>
+            <ListItemButton
+              onClick={() => handleNavigation('/login')}
+              sx={{
+                mx: 1,
+                my: 0.5,
+                borderRadius: '8px',
+                '&:hover': {
+                  backgroundColor: ALPHA_COLORS.secondaryAlpha20,
+                },
+              }}
+            >
+              <ListItemIcon sx={{ color: COLORS.textSecondary }}>
                 <Login />
               </ListItemIcon>
-              <ListItemText primary="Đăng nhập" />
+              <ListItemText
+                primary="Đăng nhập"
+                sx={{ color: COLORS.textPrimary, fontWeight: 500 }}
+              />
             </ListItemButton>
           </ListItem>
         )}

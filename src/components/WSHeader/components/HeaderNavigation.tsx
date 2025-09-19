@@ -1,7 +1,7 @@
-import { BRAND_COLORS } from '@/styles/colors';
 import { Box, Button } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import { NavigationItem } from '../header.data';
+import { COLORS } from '@/styles/colors';
 
 interface HeaderNavigationProps {
   navigationItems: NavigationItem[];
@@ -15,25 +15,57 @@ export default function HeaderNavigation({
   const location = useLocation();
 
   return (
-    <Box sx={{ display: { xs: 'none', md: 'flex' }, ml: 2, gap: 1 }}>
+    <Box
+      sx={{
+        display: { xs: 'none', md: 'flex' },
+        ml: 2,
+        py: 0.5,
+        gap: 0.5,
+        alignItems: 'center',
+      }}
+    >
       {navigationItems.map((item) => (
         <Button
           key={item.path}
           color="inherit"
           onClick={() => onNavigate(item.path)}
           sx={{
-            // CUSTOMIZE: Chỉnh sửa style của navigation items ở đây
             color:
+              location.pathname === item.path ? COLORS.gray100 : COLORS.gray300,
+            backgroundColor:
               location.pathname === item.path
-                ? BRAND_COLORS.secondary
-                : 'rgba(255,255,255,0.8)',
-            fontWeight: location.pathname === item.path ? 600 : 400,
+                ? `${COLORS.gray200}15`
+                : 'transparent',
+            fontWeight: location.pathname === item.path ? 900 : 600,
+            fontSize: '0.9rem',
             px: 2,
+            py: 0.6,
+            borderRadius: '6px',
+            textTransform: 'capitalize',
+            letterSpacing: '0.2px',
+            position: 'relative',
+            minHeight: '32px',
+
+            // Smooth transition
+            transition: 'all 0.25s cubic-bezier(0.4, 0, 0.2, 1)',
+
+            // Hover effects
             '&:hover': {
-              color: BRAND_COLORS.secondary,
-              backgroundColor: 'rgba(254,231,21,0.1)',
+              backgroundColor: `${COLORS.gray100}20`,
+              transform: 'translateY(-1px)',
             },
-            transition: 'all 0.2s ease',
+
+            // Active press state
+            '&:active': {
+              transform: 'translateY(0)',
+              transition: 'all 0.1s ease',
+            },
+
+            // Focus accessibility
+            '&:focus-visible': {
+              outline: `2px solid ${COLORS.gold400}`,
+              outlineOffset: '2px',
+            },
           }}
         >
           {item.label}

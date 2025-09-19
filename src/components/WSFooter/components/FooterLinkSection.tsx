@@ -1,4 +1,4 @@
-import { BRAND_COLORS } from '@/styles/colors';
+import COLORS from '@/styles/colors';
 import { Box, Link, Stack, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
@@ -29,11 +29,10 @@ export default function FooterLinkSection({
         gutterBottom
         sx={{
           fontWeight: 700,
-          color: 'text.primary',
+          color: COLORS.textPrimary,
           mb: 3,
           position: 'relative',
           fontSize: '1.1rem',
-          // CUSTOMIZE: Chỉnh sửa màu sắc và kích thước underline ở đây
           '&::after': {
             content: '""',
             position: 'absolute',
@@ -41,7 +40,7 @@ export default function FooterLinkSection({
             left: 0,
             width: '40px',
             height: '3px',
-            backgroundColor: BRAND_COLORS.secondary,
+            backgroundColor: COLORS.secondary, // Sử dụng màu secondary từ colors.ts
             borderRadius: '2px',
           },
         }}
@@ -57,7 +56,7 @@ export default function FooterLinkSection({
             onClick={() => handleLinkClick(link.path)}
             sx={{
               textAlign: 'left',
-              color: 'text.secondary',
+              color: COLORS.textSecondary, // Sử dụng màu textSecondary từ colors.ts
               textDecoration: 'none',
               fontSize: '0.9rem',
               border: 'none',
@@ -67,9 +66,8 @@ export default function FooterLinkSection({
               borderRadius: '4px',
               transition: 'all 0.3s ease',
               position: 'relative',
-              // CUSTOMIZE: Chỉnh sửa hiệu ứng hover và animation ở đây
               '&:hover': {
-                color: BRAND_COLORS.accent,
+                color: COLORS.accent, // Sử dụng màu accent từ colors.ts
                 transform: 'translateX(8px)',
                 '&::before': {
                   opacity: 1,
@@ -84,7 +82,7 @@ export default function FooterLinkSection({
                 transform: 'translateY(-50%) scaleX(0)',
                 width: '4px',
                 height: '4px',
-                backgroundColor: BRAND_COLORS.accent,
+                backgroundColor: COLORS.accent, // Sử dụng màu accent từ colors.ts
                 borderRadius: '50%',
                 transition: 'all 0.3s ease',
                 opacity: 0,

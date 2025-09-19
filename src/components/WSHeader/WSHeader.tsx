@@ -8,7 +8,6 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import { Menu as MenuIcon } from '@mui/icons-material';
-import { BRAND_COLORS } from '@/styles/colors';
 import { UserDTO } from '@/shared/types';
 import HeaderLogo from './components/HeaderLogo';
 import HeaderNavigation from './components/HeaderNavigation';
@@ -21,6 +20,7 @@ import {
   headerConfig,
   getNavigationItems,
 } from './header.data';
+import COLORS from '@/styles/colors';
 
 // ==================== INTERFACES ====================
 
@@ -140,8 +140,7 @@ export default function WSHeader({
           headerConfig.features.enableStickyHeader ? 'sticky' : 'static'
         }
         sx={{
-          // CUSTOMIZE: Chỉnh sửa style tổng thể của header ở đây
-          backgroundColor: BRAND_COLORS.primary,
+          backgroundColor: COLORS.gray900,
           boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
           backdropFilter: 'blur(10px)',
           width: '100%',
@@ -166,7 +165,7 @@ export default function WSHeader({
               onClick={handleMobileMenuToggle}
               sx={{
                 mr: 1,
-                color: BRAND_COLORS.secondary,
+                color: COLORS.secondary,
               }}
               aria-label="Mở menu"
             >

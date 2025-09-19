@@ -1,6 +1,6 @@
-import { BRAND_COLORS } from '@/styles/colors';
 import { Box } from '@mui/material';
 import { layoutConfig } from '../layout.data';
+import COLORS from '@/styles/colors';
 
 interface LayoutBackgroundDecorativeProps {
   opacity?: number;
@@ -28,9 +28,9 @@ export default function LayoutBackgroundDecorative({
         opacity: opacity,
         // CUSTOMIZE: Chỉnh sửa decorative background pattern ở đây
         background: `
-          radial-gradient(circle at 25% 25%, ${BRAND_COLORS.secondary} 0%, transparent 50%),
-          radial-gradient(circle at 75% 75%, ${BRAND_COLORS.accent} 0%, transparent 50%),
-          linear-gradient(45deg, transparent 40%, ${BRAND_COLORS.secondary}10 50%, transparent 60%)
+          radial-gradient(circle at 25% 25%, ${COLORS.secondary} 0%, transparent 50%),
+          radial-gradient(circle at 75% 75%, ${COLORS.accent} 0%, transparent 50%),
+          linear-gradient(45deg, transparent 40%, ${COLORS.secondary}10 50%, transparent 60%)
         `,
         transition: 'opacity 0.3s ease',
         '&::before': {
@@ -45,15 +45,15 @@ export default function LayoutBackgroundDecorative({
               90deg,
               transparent,
               transparent 100px,
-              ${BRAND_COLORS.accent}05 100px,
-              ${BRAND_COLORS.accent}05 102px
+              ${COLORS.accent}05 100px,
+              ${COLORS.accent}05 102px
             ),
             repeating-linear-gradient(
               0deg,
               transparent,
               transparent 100px,
-              ${BRAND_COLORS.secondary}03 100px,
-              ${BRAND_COLORS.secondary}03 102px
+              ${COLORS.secondary}03 100px,
+              ${COLORS.secondary}03 102px
             )
           `,
         },

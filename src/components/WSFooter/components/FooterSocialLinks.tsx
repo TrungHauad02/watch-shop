@@ -1,6 +1,6 @@
-import { BRAND_COLORS } from '@/styles/colors';
 import { Box, IconButton, Stack, Typography, alpha } from '@mui/material';
 import { ReactNode } from 'react';
+import { COLORS } from '@/styles/colors';
 
 interface SocialLink {
   icon: ReactNode;
@@ -27,9 +27,20 @@ export default function FooterSocialLinks({
         variant="subtitle1"
         sx={{
           fontWeight: 600,
-          color: 'text.primary',
+          color: COLORS.textPrimary,
           mb: 2,
-          // CUSTOMIZE: Chỉnh sửa style của tiêu đề social links ở đây
+          position: 'relative',
+          display: 'inline-block',
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            bottom: '-6px',
+            left: 0,
+            width: '30px',
+            height: '2px',
+            backgroundColor: COLORS.secondary,
+            borderRadius: '1px',
+          },
         }}
       >
         {title}
@@ -42,22 +53,23 @@ export default function FooterSocialLinks({
             onClick={() => handleSocialClick(social.url)}
             aria-label={`Theo dõi chúng tôi trên ${social.name}`}
             sx={{
-              // CUSTOMIZE: Chỉnh sửa style và hiệu ứng hover của social buttons ở đây
-              backgroundColor: alpha(BRAND_COLORS.primary, 0.1),
-              color: BRAND_COLORS.primary,
+              backgroundColor: alpha(COLORS.primary, 0.08),
+              color: COLORS.primary,
               width: 48,
               height: 48,
               borderRadius: '12px',
               transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+              border: `1px solid ${alpha(COLORS.primary, 0.1)}`,
               '&:hover': {
-                backgroundColor: BRAND_COLORS.secondary,
-                color: BRAND_COLORS.primary,
-                transform: 'translateY(-6px) scale(1.1)',
-                boxShadow: `0 10px 25px ${alpha(BRAND_COLORS.secondary, 0.4)}`,
+                backgroundColor: COLORS.secondary,
+                color: COLORS.primaryDark,
+                transform: 'translateY(-4px) scale(1.05)',
+                boxShadow: `0 8px 20px ${alpha(COLORS.secondary, 0.3)}`,
+                borderColor: COLORS.secondaryLight,
               },
               // Focus styles cho accessibility
               '&:focus-visible': {
-                outline: `2px solid ${BRAND_COLORS.accent}`,
+                outline: `2px solid ${COLORS.accent}`,
                 outlineOffset: '2px',
               },
             }}

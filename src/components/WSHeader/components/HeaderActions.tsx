@@ -1,4 +1,3 @@
-import { BRAND_COLORS } from '@/styles/colors';
 import {
   Box,
   IconButton,
@@ -8,6 +7,7 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import { FavoriteOutlined, AccountCircle, Login } from '@mui/icons-material';
+import { COLORS } from '@/styles/colors';
 
 interface HeaderActionsProps {
   isAuthenticated: boolean;
@@ -37,15 +37,26 @@ export default function HeaderActions({
           color="inherit"
           onClick={onWishlistClick}
           sx={{
-            // CUSTOMIZE: Chỉnh sửa style của wishlist button ở đây
-            color: 'rgba(255,255,255,0.8)',
+            color: COLORS.white,
+            transition: 'all 0.3s ease',
             '&:hover': {
-              color: BRAND_COLORS.secondary,
+              color: COLORS.secondary,
+              transform: 'scale(1.1)',
             },
           }}
           aria-label="Danh sách yêu thích"
         >
-          <Badge badgeContent={wishlistCount} color="error">
+          <Badge
+            badgeContent={wishlistCount}
+            color="error"
+            sx={{
+              '& .MuiBadge-badge': {
+                backgroundColor: COLORS.accent,
+                color: COLORS.primary,
+                fontWeight: 'bold',
+              },
+            }}
+          >
             <FavoriteOutlined />
           </Badge>
         </IconButton>
@@ -57,10 +68,11 @@ export default function HeaderActions({
           color="inherit"
           onClick={onAccountClick}
           sx={{
-            // CUSTOMIZE: Chỉnh sửa style của account button ở đây
-            color: 'rgba(255,255,255,0.8)',
+            color: COLORS.white,
+            transition: 'all 0.3s ease',
             '&:hover': {
-              color: BRAND_COLORS.secondary,
+              color: COLORS.secondary,
+              transform: 'scale(1.1)',
             },
           }}
           aria-label="Tài khoản"
@@ -73,14 +85,21 @@ export default function HeaderActions({
           startIcon={<Login />}
           onClick={onLoginClick}
           sx={{
-            // CUSTOMIZE: Chỉnh sửa style của login button ở đây
-            color: BRAND_COLORS.secondary,
-            borderColor: BRAND_COLORS.secondary,
+            color: COLORS.secondary,
+            borderColor: COLORS.secondary,
+            backgroundColor: 'rgba(254, 231, 21, 0.1)',
             fontSize: { xs: '0.75rem', sm: '0.875rem' },
             px: { xs: 1, sm: 2 },
+            py: { xs: 0.5, sm: 1 },
+            borderRadius: '8px',
+            fontWeight: 600,
+            transition: 'all 0.3s ease',
             '&:hover': {
-              backgroundColor: 'rgba(254,231,21,0.1)',
-              borderColor: BRAND_COLORS.secondary,
+              backgroundColor: COLORS.secondary,
+              color: COLORS.primary,
+              borderColor: COLORS.secondary,
+              boxShadow: `0 4px 12px ${COLORS.secondary}33`,
+              transform: 'translateY(-2px)',
             },
           }}
           variant="outlined"

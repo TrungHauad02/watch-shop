@@ -1,4 +1,4 @@
-import { BRAND_COLORS } from '@/styles/colors';
+import { COLORS, GRADIENT_COLORS } from '@/styles/colors';
 import { Box, Typography } from '@mui/material';
 import FooterSocialLinks from './FooterSocialLinks';
 import { getSocialMediaLinks } from '../footer.data';
@@ -38,7 +38,8 @@ export default function FooterCompanyInfo({
         sx={{
           fontWeight: 800,
           // CUSTOMIZE: Chỉnh sửa gradient và typography của tên công ty ở đây
-          background: `linear-gradient(135deg, ${BRAND_COLORS.primary} 0%, ${BRAND_COLORS.accent} 100%)`,
+          background: GRADIENT_COLORS.luxuryGradient,
+
           backgroundClip: 'text',
           WebkitBackgroundClip: 'text',
           WebkitTextFillColor: 'transparent',
@@ -53,7 +54,7 @@ export default function FooterCompanyInfo({
       <Typography
         variant="body1"
         sx={{
-          color: 'text.secondary',
+          color: COLORS.textSecondary,
           lineHeight: 1.8,
           mb: 4,
           fontSize: '1.05rem',
