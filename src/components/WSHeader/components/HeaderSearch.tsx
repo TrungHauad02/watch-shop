@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, IconButton, InputBase, Paper } from '@mui/material';
 import { Search as SearchIcon } from '@mui/icons-material';
 import { searchConfig } from '../header.data';
-import COLORS from '@/styles/colors';
+import { COLORS, ALPHA_COLORS } from '@/styles/colors';
 
 interface HeaderSearchProps {
   onSearch: (query: string) => void;
@@ -41,20 +41,25 @@ export default function HeaderSearch({
       <Paper
         elevation={0}
         sx={{
-          p: '2px 4px',
+          p: '4px 8px',
           display: 'flex',
           alignItems: 'center',
-          // CUSTOMIZE: Chỉnh sửa style của search box ở đây
-          backgroundColor: 'rgba(255,255,255,0.15)',
+          // CUSTOMIZE: Simple glass effect với minimal styling
+          backgroundColor: ALPHA_COLORS.whiteAlpha20,
           backdropFilter: 'blur(10px)',
-          border: '1px solid rgba(255,255,255,0.2)',
+          border: `1px solid ${ALPHA_COLORS.whiteAlpha20}`,
+          borderRadius: '10px',
+
           '&:hover': {
-            backgroundColor: 'rgba(255,255,255,0.2)',
+            backgroundColor: ALPHA_COLORS.whiteAlpha25,
+            border: `1px solid ${ALPHA_COLORS.whiteAlpha30}`,
           },
+
           '&:focus-within': {
-            backgroundColor: 'rgba(255,255,255,0.25)',
-            border: `1px solid ${COLORS.secondary}`,
+            backgroundColor: ALPHA_COLORS.whiteAlpha30,
+            border: `1px solid ${COLORS.gold400}`,
           },
+
           transition: 'all 0.2s ease',
         }}
       >
@@ -65,11 +70,12 @@ export default function HeaderSearch({
           sx={{
             ml: 1,
             flex: 1,
-            color: 'white',
+            color: COLORS.white,
             '& .MuiInputBase-input': {
-              padding: '8px 0',
+              padding: '10px 4px',
+              fontSize: '0.9rem',
               '&::placeholder': {
-                color: 'rgba(255,255,255,0.7)',
+                color: ALPHA_COLORS.whiteAlpha75,
                 opacity: 1,
               },
             },
@@ -79,14 +85,15 @@ export default function HeaderSearch({
           type="submit"
           sx={{
             p: '8px',
-            color: 'rgba(255,255,255,0.8)',
+            color: ALPHA_COLORS.whiteAlpha75,
             '&:hover': {
-              color: COLORS.secondary,
+              color: COLORS.gold300,
+              backgroundColor: ALPHA_COLORS.whiteAlpha20,
             },
           }}
           aria-label="Tìm kiếm"
         >
-          <SearchIcon />
+          <SearchIcon fontSize="small" />
         </IconButton>
       </Paper>
     </Box>

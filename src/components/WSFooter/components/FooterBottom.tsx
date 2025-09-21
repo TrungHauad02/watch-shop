@@ -1,7 +1,7 @@
 import { Box, Stack, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { footerBottomLinks } from '../footer.data';
-import COLORS, { colorUtils } from '@/styles/colors';
+import { COLORS, SEMANTIC_COLORS } from '@/styles/colors';
 
 interface FooterBottomProps {
   companyName: string;
@@ -33,7 +33,7 @@ export default function FooterBottom({
       <Typography
         variant="body2"
         sx={{
-          color: 'text.secondary',
+          color: COLORS.gray600,
           fontWeight: 500,
           fontSize: '0.95rem',
           // CUSTOMIZE: Chỉnh sửa style của copyright text ở đây
@@ -48,7 +48,7 @@ export default function FooterBottom({
         spacing={3}
         sx={{
           '& button': {
-            color: 'text.secondary',
+            color: COLORS.gray600,
             textDecoration: 'none',
             fontSize: '0.9rem',
             fontWeight: 500,
@@ -60,11 +60,11 @@ export default function FooterBottom({
             transition: 'all 0.2s ease',
             // CUSTOMIZE: Chỉnh sửa hiệu ứng hover của bottom links ở đây
             '&:hover': {
-              color: COLORS.accent,
-              backgroundColor: colorUtils.hexToRgba(COLORS.accent, 0.1),
+              color: SEMANTIC_COLORS.info600,
+              backgroundColor: SEMANTIC_COLORS.info100,
             },
             '&:focus-visible': {
-              outline: `2px solid ${COLORS.accent}`,
+              outline: `2px solid ${SEMANTIC_COLORS.info500}`,
               outlineOffset: '2px',
             },
           },

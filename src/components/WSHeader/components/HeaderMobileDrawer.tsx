@@ -28,7 +28,12 @@ import {
   headerConfig,
   userMenuActions,
 } from '../header.data';
-import { COLORS, ALPHA_COLORS, SEMANTIC_COLORS } from '@/styles/colors';
+import {
+  COLORS,
+  ALPHA_COLORS,
+  SEMANTIC_COLORS,
+  GRADIENT_COLORS,
+} from '@/styles/colors';
 
 interface HeaderMobileDrawerProps {
   open: boolean;
@@ -100,9 +105,8 @@ export default function HeaderMobileDrawer({
         '& .MuiDrawer-paper': {
           boxSizing: 'border-box',
           width: headerConfig.drawer.width,
-          backgroundColor: COLORS.backgroundPrimary,
-          backgroundImage:
-            'linear-gradient(to bottom, rgba(255,255,255,0.98), rgba(250,250,250,0.97))',
+          background: COLORS.gray100,
+          backdropFilter: 'blur(20px)',
         },
       }}
     >
@@ -114,11 +118,36 @@ export default function HeaderMobileDrawer({
           justifyContent: 'space-between',
           alignItems: 'center',
           borderBottom: `1px solid ${COLORS.borderLight}`,
-          backgroundColor: COLORS.primary,
+          // CUSTOMIZE: Luxury header background
+          background: GRADIENT_COLORS.primaryGradient,
           color: COLORS.white,
+          position: 'relative',
+
+          // Subtle pattern overlay
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: `radial-gradient(circle at 30% 30%, ${ALPHA_COLORS.secondaryAlpha10} 0%, transparent 50%)`,
+            pointerEvents: 'none',
+          },
         }}
       >
-        <Typography variant="h6" fontWeight={700} color={COLORS.secondary}>
+        <Typography
+          variant="h6"
+          fontWeight={800}
+          sx={{
+            background: GRADIENT_COLORS.luxuryGradient,
+            backgroundClip: 'text',
+            WebkitBackgroundClip: 'text',
+            color: 'transparent',
+            position: 'relative',
+            zIndex: 1,
+          }}
+        >
           {companyData.name}
         </Typography>
         <IconButton onClick={onClose} sx={{ color: COLORS.white }}>
@@ -136,18 +165,29 @@ export default function HeaderMobileDrawer({
               sx={{
                 mx: 1,
                 my: 0.5,
-                borderRadius: '8px',
+                borderRadius: '12px',
+                // CUSTOMIZE: Luxury list item style
+                background:
+                  location.pathname === item.path
+                    ? `linear-gradient(135deg, ${ALPHA_COLORS.secondaryAlpha20}, ${ALPHA_COLORS.secondaryAlpha30})`
+                    : 'transparent',
+                border:
+                  location.pathname === item.path
+                    ? `1px solid ${COLORS.gold400}40`
+                    : '1px solid transparent',
+
                 '&:hover': {
-                  backgroundColor: ALPHA_COLORS.primaryAlpha10,
+                  background: `linear-gradient(135deg, ${ALPHA_COLORS.primaryAlpha10}, ${ALPHA_COLORS.primaryAlpha20})`,
+                  border: `1px solid ${ALPHA_COLORS.primaryAlpha30}`,
                 },
+
                 '&.Mui-selected': {
-                  backgroundColor: ALPHA_COLORS.secondaryAlpha20,
                   '& .MuiListItemIcon-root': {
-                    color: COLORS.accent,
+                    color: COLORS.gold500,
                   },
                   '& .MuiListItemText-primary': {
                     color: COLORS.primary,
-                    fontWeight: 600,
+                    fontWeight: 700,
                   },
                 },
               }}
