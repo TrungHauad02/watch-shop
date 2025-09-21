@@ -67,6 +67,18 @@ const router = createBrowserRouter([
               </Suspense>
             ),
           },
+          {
+            path: 'register',
+            element: (
+              <Suspense
+                fallback={
+                  <Pages.LoadingPage message="Đang tải trang đăng ký..." />
+                }
+              >
+                <Pages.RegisterPage />
+              </Suspense>
+            ),
+          },
         ],
       },
     ],

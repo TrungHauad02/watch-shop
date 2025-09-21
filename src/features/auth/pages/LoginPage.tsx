@@ -14,7 +14,7 @@ export default function LoginPage() {
   return (
     <Box
       sx={{
-        minHeight: '100vh',
+        minHeight: '95vh',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
@@ -43,7 +43,7 @@ export default function LoginPage() {
             variant="h2"
             sx={{
               fontWeight: 800,
-              background: `linear-gradient(135deg, ${COLORS.white}, ${COLORS.gold300})`,
+              background: `linear-gradient(135deg, ${COLORS.gray100}, ${COLORS.amber400})`,
               backgroundClip: 'text',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',

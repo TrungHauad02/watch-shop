@@ -65,7 +65,7 @@ export default function WSFooter({
     <Box
       component="footer"
       sx={{
-        backgroundColor: COLORS.backgroundPrimary,
+        backgroundColor: COLORS.gray800,
         borderTop: `3px solid ${GRADIENT_COLORS.secondaryGradient}`,
         mt: 'auto',
         width: '100%',

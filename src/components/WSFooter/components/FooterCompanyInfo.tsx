@@ -38,7 +38,7 @@ export default function FooterCompanyInfo({
         sx={{
           fontWeight: 800,
           // CUSTOMIZE: Chỉnh sửa gradient và typography của tên công ty ở đây
-          background: GRADIENT_COLORS.luxuryGradient,
+          background: GRADIENT_COLORS.amberGradient,
 
           backgroundClip: 'text',
           WebkitBackgroundClip: 'text',
@@ -54,7 +54,7 @@ export default function FooterCompanyInfo({
       <Typography
         variant="body1"
         sx={{
-          color: COLORS.textSecondary,
+          color: COLORS.white,
           lineHeight: 1.8,
           mb: 4,
           fontSize: '1.05rem',

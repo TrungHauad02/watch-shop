@@ -20,6 +20,7 @@ export const COLORS = {
 
   // White variations
   white: '#FFFFFF',
+  black: '#000000',
   offWhite: '#FAFAFA',
   cream: '#F5F5F0',
 
@@ -165,6 +166,7 @@ export const GRADIENT_COLORS = {
   secondaryGradient: 'linear-gradient(135deg, #FEE715 0%, #f59e0b 100%)',
   luxuryGradient:
     'linear-gradient(135deg, #f59e0b 0%, #FEE715 50%, #d97706 100%)',
+  amberGradient: 'linear-gradient(135deg, #D97706 0%, #FCD34D 100%)',
 
   // Overlay gradients
   overlayGradient:
@@ -182,7 +184,9 @@ export const GRADIENT_COLORS = {
 
 export const ALPHA_COLORS = {
   // Primary colors with alpha
+  primaryAlpha05: 'rgba(16, 24, 32, 0.05)',
   primaryAlpha10: 'rgba(16, 24, 32, 0.1)',
+  primaryAlpha15: 'rgba(16, 24, 32, 0.15)',
   primaryAlpha20: 'rgba(16, 24, 32, 0.2)',
   primaryAlpha30: 'rgba(16, 24, 32, 0.3)',
   primaryAlpha40: 'rgba(16, 24, 32, 0.4)',
