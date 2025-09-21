@@ -11,11 +11,11 @@ export const getInputStyles = (
   const baseStyles = {
     '& .MuiInputLabel-root': {
       fontWeight: 500,
-      color: COLORS.gray600,
+      color: COLORS.textSecondary,
       fontSize: '0.9rem',
 
       '&.Mui-focused': {
-        color: COLORS.primary,
+        color: COLORS.black900,
       },
 
       '&.Mui-error': {
@@ -26,18 +26,18 @@ export const getInputStyles = (
     '& .MuiInputBase-root': {
       backgroundColor: COLORS.white,
       borderRadius: theme.shape.borderRadius,
-      transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
+      transition: 'all 0.2s ease',
       fontWeight: 400,
 
       '&:hover:not(.Mui-disabled):not(.Mui-error)': {
         '& .MuiOutlinedInput-notchedOutline': {
-          borderColor: COLORS.gray400,
+          borderColor: COLORS.borderDark,
         },
       },
 
       '&.Mui-focused': {
         '& .MuiOutlinedInput-notchedOutline': {
-          borderColor: COLORS.primary,
+          borderColor: COLORS.gold500,
           borderWidth: '2px',
         },
       },
@@ -50,20 +50,20 @@ export const getInputStyles = (
 
       '&.Mui-disabled': {
         backgroundColor: COLORS.gray50,
-        color: COLORS.gray400,
+        color: COLORS.textDisabled,
         '& .MuiOutlinedInput-notchedOutline': {
-          borderColor: COLORS.gray200,
+          borderColor: COLORS.borderLight,
         },
       },
     },
 
     '& .MuiOutlinedInput-notchedOutline': {
-      borderColor: COLORS.gray300,
+      borderColor: COLORS.borderMedium,
     },
 
     '& .MuiInputBase-input': {
       '&::placeholder': {
-        color: COLORS.gray400,
+        color: COLORS.textTertiary,
         opacity: 1,
       },
 
@@ -75,6 +75,7 @@ export const getInputStyles = (
     '& .MuiFormHelperText-root': {
       marginTop: theme.spacing(0.5),
       fontSize: '0.75rem',
+      color: COLORS.textSecondary,
 
       '&.Mui-error': {
         color: SEMANTIC_COLORS.error500,
@@ -156,35 +157,35 @@ export const getInputStyles = (
     },
   };
 
+  // CUSTOMIZE: Simple variant styles
   const variantStyles = {
     outlined: {
       '& .MuiInputBase-root': {
         '&:hover:not(.Mui-disabled):not(.Mui-error)': {
-          backgroundColor: COLORS.gray50,
+          backgroundColor: COLORS.backgroundSecondary,
         },
 
         '&.Mui-focused': {
           backgroundColor: COLORS.white,
-          boxShadow: `0 0 0 3px ${COLORS.primary}20`,
         },
       },
     },
 
     filled: {
       '& .MuiInputBase-root': {
-        backgroundColor: COLORS.gray100,
+        backgroundColor: COLORS.backgroundSecondary,
         border: 'none',
 
         '&:before': {
-          borderBottom: `1px solid ${COLORS.gray300}`,
+          borderBottom: `1px solid ${COLORS.borderMedium}`,
         },
 
         '&:hover:not(.Mui-disabled):before': {
-          borderBottom: `1px solid ${COLORS.gray400}`,
+          borderBottom: `1px solid ${COLORS.borderDark}`,
         },
 
         '&.Mui-focused:after': {
-          borderBottom: `2px solid ${COLORS.primary}`,
+          borderBottom: `2px solid ${COLORS.gold500}`,
         },
       },
     },
@@ -194,15 +195,15 @@ export const getInputStyles = (
         backgroundColor: 'transparent',
 
         '&:before': {
-          borderBottom: `1px solid ${COLORS.gray300}`,
+          borderBottom: `1px solid ${COLORS.borderMedium}`,
         },
 
         '&:hover:not(.Mui-disabled):before': {
-          borderBottom: `1px solid ${COLORS.gray400}`,
+          borderBottom: `1px solid ${COLORS.borderDark}`,
         },
 
         '&.Mui-focused:after': {
-          borderBottom: `2px solid ${COLORS.primary}`,
+          borderBottom: `2px solid ${COLORS.gold500}`,
         },
       },
     },

@@ -22,7 +22,7 @@ export default function FooterContactInfo({
         variant="h6"
         sx={{
           fontWeight: 600,
-          color: COLORS.primary,
+          color: COLORS.white,
           mb: 2.5,
           fontSize: '1rem',
           // CUSTOMIZE: Có thể thay đổi màu title và font size tại đây
@@ -42,14 +42,14 @@ export default function FooterContactInfo({
               gap: 1.5,
               p: 1.5,
               borderRadius: 1.5,
-              backgroundColor: SEMANTIC_COLORS.info50,
-              border: `1px solid ${SEMANTIC_COLORS.info200}`,
+              backgroundColor: COLORS.gray200,
+              border: `1px solid ${COLORS.gray300}`,
               transition: 'all 0.2s ease',
               // CUSTOMIZE: Có thể thay đổi màu nền và border tại đây
 
               '&:hover': {
-                backgroundColor: SEMANTIC_COLORS.info100,
-                borderColor: SEMANTIC_COLORS.info300,
+                backgroundColor: COLORS.gray100,
+                borderColor: COLORS.gray200,
                 // CUSTOMIZE: Có thể tùy chỉnh hiệu ứng hover tại đây
               },
             }}
@@ -63,7 +63,7 @@ export default function FooterContactInfo({
                 width: 36,
                 height: 36,
                 borderRadius: 1.5,
-                backgroundColor: SEMANTIC_COLORS.info500,
+                backgroundColor: SEMANTIC_COLORS.info600,
                 color: COLORS.white,
                 flexShrink: 0,
                 // CUSTOMIZE: Có thể thay đổi màu và kích thước icon tại đây
@@ -90,7 +90,7 @@ export default function FooterContactInfo({
               <Typography
                 variant="body2"
                 sx={{
-                  color: COLORS.gray600,
+                  color: COLORS.gray900,
                   fontSize: '0.8rem',
                   lineHeight: 1.4,
                   wordBreak: 'break-word',

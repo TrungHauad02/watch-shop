@@ -28,7 +28,7 @@ export default function FooterSocialLinks({
         sx={{
           fontWeight: 600,
           // Khớp với màu title ở FooterLinkSection
-          color: COLORS.primary,
+          color: COLORS.white,
           mb: 2.5,
           position: 'relative',
           display: 'inline-block',
@@ -74,7 +74,7 @@ export default function FooterSocialLinks({
 
               // Hover effects đẹp mắt
               '&:hover': {
-                background: `linear-gradient(135deg, ${SEMANTIC_COLORS.info500}, ${SEMANTIC_COLORS.info600})`,
+                background: `linear-gradient(135deg, ${COLORS.amber600}, ${COLORS.amber300})`,
                 color: COLORS.white,
                 transform: 'translateY(-2px) scale(1.02)',
                 boxShadow: `0 6px 20px ${SEMANTIC_COLORS.info500}40`,

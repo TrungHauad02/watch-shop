@@ -125,7 +125,7 @@ export default function LoginForm({
             fontWeight: 700,
             color: COLORS.primary,
             mb: 1,
-            background: `linear-gradient(135deg, ${COLORS.primary}, ${COLORS.gold600})`,
+            background: COLORS.gray900,
             backgroundClip: 'text',
             WebkitBackgroundClip: 'text',
             WebkitTextFillColor: 'transparent',

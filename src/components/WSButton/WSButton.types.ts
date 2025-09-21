@@ -1,18 +1,21 @@
 import { ButtonProps as MuiButtonProps } from '@mui/material/Button';
 import { ReactNode } from 'react';
 
+// CUSTOMIZE: Thêm luxury variant
 export type WSButtonVariant =
   | 'primary'
   | 'secondary'
   | 'outline'
   | 'text'
-  | 'danger';
+  | 'danger'
+  | 'luxury';
+
 export type WSButtonSize = 'small' | 'medium' | 'large';
 
 export interface WSButtonProps
   extends Omit<MuiButtonProps, 'variant' | 'size' | 'color'> {
   /**
-   * Variant của button
+   * CUSTOMIZE: Variant của button
    * @default 'primary'
    */
   variant?: WSButtonVariant;

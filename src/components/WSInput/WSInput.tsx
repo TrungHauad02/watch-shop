@@ -10,7 +10,7 @@ import { forwardRef, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 import { WSInputProps } from './WSInput.types';
 import { getInputStyles } from './WSInput.styles';
-import COLORS, { SEMANTIC_COLORS } from '@/styles/colors';
+import { COLORS, SEMANTIC_COLORS } from '@/styles/colors';
 
 const WSInput = forwardRef<HTMLDivElement, WSInputProps>(
   (
@@ -86,7 +86,9 @@ const WSInput = forwardRef<HTMLDivElement, WSInputProps>(
               <InputAdornment position="start">
                 <Box
                   sx={{
-                    color: hasError ? SEMANTIC_COLORS.error500 : 'inherit',
+                    color: hasError
+                      ? SEMANTIC_COLORS.error500
+                      : COLORS.textSecondary,
                   }}
                 >
                   {startIcon}
@@ -105,10 +107,10 @@ const WSInput = forwardRef<HTMLDivElement, WSInputProps>(
                     sx={{
                       color: hasError
                         ? SEMANTIC_COLORS.error500
-                        : COLORS.gray500,
+                        : COLORS.textSecondary,
                       '&:hover': {
                         backgroundColor: 'transparent',
-                        color: COLORS.primary,
+                        color: COLORS.gold500,
                       },
                     }}
                   >
@@ -117,7 +119,9 @@ const WSInput = forwardRef<HTMLDivElement, WSInputProps>(
                 ) : endIcon ? (
                   <Box
                     sx={{
-                      color: hasError ? SEMANTIC_COLORS.error500 : 'inherit',
+                      color: hasError
+                        ? SEMANTIC_COLORS.error500
+                        : COLORS.textSecondary,
                     }}
                   >
                     {endIcon}
@@ -145,7 +149,9 @@ const WSInput = forwardRef<HTMLDivElement, WSInputProps>(
             <Typography
               variant="caption"
               sx={{
-                color: hasError ? SEMANTIC_COLORS.error500 : COLORS.gray500,
+                color: hasError
+                  ? SEMANTIC_COLORS.error500
+                  : COLORS.textSecondary,
                 fontSize: '0.75rem',
                 // CUSTOMIZE: Bạn có thể chỉnh sửa style của character count tại đây
               }}

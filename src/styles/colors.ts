@@ -165,6 +165,7 @@ export const GRADIENT_COLORS = {
   secondaryGradient: 'linear-gradient(135deg, #FEE715 0%, #f59e0b 100%)',
   luxuryGradient:
     'linear-gradient(135deg, #f59e0b 0%, #FEE715 50%, #d97706 100%)',
+  amberGradient: 'linear-gradient(135deg, #D97706 0%, #FCD34D 100%)',
 
   // Overlay gradients
   overlayGradient:

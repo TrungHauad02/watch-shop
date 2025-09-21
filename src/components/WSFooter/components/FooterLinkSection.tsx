@@ -30,7 +30,7 @@ export default function FooterLinkSection({
         sx={{
           fontWeight: 600,
           // Màu title sang trọng với deep blue
-          color: COLORS.primary,
+          color: COLORS.white,
           mb: 3,
           position: 'relative',
           fontSize: '1.05rem',
@@ -64,7 +64,7 @@ export default function FooterLinkSection({
             sx={{
               textAlign: 'left',
               // Màu link tinh tế
-              color: COLORS.gray600,
+              color: COLORS.gray100,
               textDecoration: 'none',
               fontSize: '0.875rem',
               border: 'none',
@@ -78,7 +78,7 @@ export default function FooterLinkSection({
 
               '&:hover': {
                 // Hover với màu blue đẹp
-                color: SEMANTIC_COLORS.info600,
+                color: COLORS.amber400,
                 transform: 'translateX(6px)',
                 fontWeight: 500,
 
