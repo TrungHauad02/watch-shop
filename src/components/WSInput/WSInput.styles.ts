@@ -15,7 +15,7 @@ export const getInputStyles = (
       fontSize: '0.9rem',
 
       '&.Mui-focused': {
-        color: COLORS.black900,
+        color: COLORS.gold500,
       },
 
       '&.Mui-error': {
@@ -69,6 +69,37 @@ export const getInputStyles = (
 
       '&:focus': {
         outline: 'none',
+      },
+
+      // CUSTOMIZE: Fix autofill styling - override browser defaults
+      '&:-webkit-autofill': {
+        WebkitBoxShadow: `0 0 0 1000px ${COLORS.white} inset !important`,
+        WebkitTextFillColor: `${COLORS.textPrimary} !important`,
+        caretColor: COLORS.textPrimary,
+        borderRadius: 'inherit',
+      },
+      '&:-webkit-autofill:hover': {
+        WebkitBoxShadow: `0 0 0 1000px ${COLORS.white} inset !important`,
+        WebkitTextFillColor: `${COLORS.textPrimary} !important`,
+      },
+      '&:-webkit-autofill:focus': {
+        WebkitBoxShadow: `0 0 0 1000px ${COLORS.white} inset !important`,
+        WebkitTextFillColor: `${COLORS.textPrimary} !important`,
+      },
+      '&:-webkit-autofill:active': {
+        WebkitBoxShadow: `0 0 0 1000px ${COLORS.white} inset !important`,
+        WebkitTextFillColor: `${COLORS.textPrimary} !important`,
+      },
+
+      // CUSTOMIZE: Firefox autofill
+      '&:-moz-autofill': {
+        backgroundColor: `${COLORS.white} !important`,
+        color: `${COLORS.textPrimary} !important`,
+      },
+
+      // CUSTOMIZE: Edge/IE autofill
+      '&:-ms-input-placeholder': {
+        color: COLORS.textTertiary,
       },
     },
 
@@ -187,6 +218,11 @@ export const getInputStyles = (
         '&.Mui-focused:after': {
           borderBottom: `2px solid ${COLORS.gold500}`,
         },
+
+        // CUSTOMIZE: Autofill cho filled variant
+        '& .MuiInputBase-input:-webkit-autofill': {
+          WebkitBoxShadow: `0 0 0 1000px ${COLORS.backgroundSecondary} inset !important`,
+        },
       },
     },
 
@@ -204,6 +240,11 @@ export const getInputStyles = (
 
         '&.Mui-focused:after': {
           borderBottom: `2px solid ${COLORS.gold500}`,
+        },
+
+        // CUSTOMIZE: Autofill cho standard variant
+        '& .MuiInputBase-input:-webkit-autofill': {
+          WebkitBoxShadow: `0 0 0 1000px transparent inset !important`,
         },
       },
     },

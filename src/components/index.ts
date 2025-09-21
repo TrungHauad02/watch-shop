@@ -7,6 +7,7 @@ export { default as WSFooter } from './WSFooter';
 
 // Display Components
 export { default as WSButton } from './WSButton';
+export { default as WSCard } from './WSCard';
 export { default as WSInput } from './WSInput';
 export { default as WSLoading } from './WSLoading';
 export { default as WSModal } from './WSModal';
