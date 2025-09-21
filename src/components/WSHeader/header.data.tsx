@@ -74,7 +74,7 @@ export const headerConfig = {
     showWishlist: true,
     showSearch: true,
     showUserMenu: true,
-    enableStickyHeader: true,
+    enableStickyHeader: false,
   },
   // Mobile drawer width
   drawer: {

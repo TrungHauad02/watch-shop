@@ -14,6 +14,16 @@ const DefaultLayout = () => (
   />
 );
 
+const AuthLayout = () => (
+  <WSLayout
+    variant="default"
+    sx={{
+      overflow: 'auto',
+      overflowX: 'hidden',
+    }}
+  />
+);
+
 // ==============================================
 // ROUTER CONFIGURATION
 // ==============================================
@@ -43,7 +53,7 @@ const router = createBrowserRouter([
       // Auth Pages
       {
         path: '',
-        element: <DefaultLayout />,
+        element: <AuthLayout />,
         children: [
           {
             path: 'login',

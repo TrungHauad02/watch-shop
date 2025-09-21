@@ -46,6 +46,17 @@ export const COLORS = {
   gold800: '#92400E',
   gold900: '#78350F',
 
+  amber50: '#FFFBEB',
+  amber100: '#FEF3C7',
+  amber200: '#FDE68A',
+  amber300: '#FCD34D',
+  amber400: '#FBBF24',
+  amber500: '#F59E0B', // Main amber
+  amber600: '#D97706',
+  amber700: '#B45309',
+  amber800: '#92400E',
+  amber900: '#78350F',
+
   // Black variations for premium UI
   black50: '#F8F8F8',
   black100: '#F1F1F1',

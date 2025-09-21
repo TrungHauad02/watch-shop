@@ -332,6 +332,8 @@ export default function WSLayout({
                 minHeight: 'inherit',
                 display: 'flex',
                 flexDirection: 'column',
+                flexGrow: 1,
+                overflow: 'visible',
               }}
             >
               <Outlet />
