@@ -19,57 +19,60 @@ export default function HeaderLogo({
       sx={{
         flexGrow: 0,
         mr: 2,
-        // Vàng đẹp với gradient tinh tế
-        background: `linear-gradient(135deg, ${COLORS.gold400} 0%, ${COLORS.gold500} 50%, ${COLORS.gold600} 100%)`,
+        // CUSTOMIZE: Luxury gold gradient giống LoginPage
+        background: `linear-gradient(135deg, ${COLORS.white} 0%, ${COLORS.gold300} 50%, ${COLORS.gold400} 100%)`,
         backgroundClip: 'text',
         WebkitBackgroundClip: 'text',
         color: 'transparent',
-        fontWeight: 700,
+        fontWeight: 800,
         fontSize: {
-          xs: '1.3rem',
-          sm: '1.5rem',
-          md: '1.7rem',
+          xs: '1.4rem',
+          sm: '1.6rem',
+          md: '1.8rem',
         },
         cursor: 'pointer',
         userSelect: 'none',
-        letterSpacing: '0.8px',
+        letterSpacing: '1px',
         textTransform: 'uppercase',
         position: 'relative',
         display: 'inline-block',
 
-        // Animation đơn giản
-        transition: 'all 0.3s ease',
+        // Premium shadow effect
+        filter: `drop-shadow(0 2px 4px ${ALPHA_COLORS.primaryAlpha20})`,
+        textShadow: `0 2px 4px ${COLORS.primary}40`,
 
-        // Shadow nhẹ
-        filter: `drop-shadow(0 2px 4px ${ALPHA_COLORS.primaryAlpha10})`,
+        // Smooth transition
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
 
-        // Hover đơn giản
+        // Hover effects giống LoginPage
         '&:hover': {
-          transform: 'translateY(-1px)',
-          // Vàng sáng hơn khi hover
-          background: `linear-gradient(135deg, ${COLORS.gold300} 0%, ${COLORS.gold400} 50%, ${COLORS.gold500} 100%)`,
+          transform: 'translateY(-2px)',
+          background: `linear-gradient(135deg, ${COLORS.gold200} 0%, ${COLORS.gold400} 50%, ${COLORS.gold500} 100%)`,
           backgroundClip: 'text',
           WebkitBackgroundClip: 'text',
-          filter: `drop-shadow(0 4px 8px ${ALPHA_COLORS.primaryAlpha20})`,
+          filter: `drop-shadow(0 4px 8px ${ALPHA_COLORS.primaryAlpha30})`,
+          textShadow: `0 4px 8px ${COLORS.primary}60`,
 
-          // Underline hiện ra
+          // Underline animation
           '&::after': {
             width: '100%',
+            background: `linear-gradient(135deg, ${COLORS.gold400}, ${COLORS.gold600})`,
           },
         },
 
-        // Underline đơn giản
+        // Luxury underline
         '&::after': {
           content: '""',
           position: 'absolute',
-          bottom: '-4px',
+          bottom: '-6px',
           left: '50%',
           transform: 'translateX(-50%)',
           width: '0%',
-          height: '2px',
-          background: COLORS.gold500,
-          transition: 'width 0.3s ease',
-          borderRadius: '1px',
+          height: '3px',
+          background: `linear-gradient(135deg, ${COLORS.gold500}, ${COLORS.gold700})`,
+          borderRadius: '2px',
+          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+          boxShadow: `0 2px 8px ${ALPHA_COLORS.secondaryAlpha30}`,
         },
 
         // Active state
@@ -78,11 +81,11 @@ export default function HeaderLogo({
           transition: 'all 0.1s ease',
         },
 
-        // Focus cho accessibility
+        // Focus accessibility
         '&:focus-visible': {
-          outline: `2px solid ${COLORS.gold400}`,
-          outlineOffset: '3px',
-          borderRadius: '4px',
+          outline: `3px solid ${COLORS.gold400}`,
+          outlineOffset: '4px',
+          borderRadius: '6px',
         },
       }}
     >

@@ -184,19 +184,31 @@ export const ALPHA_COLORS = {
   // Primary colors with alpha
   primaryAlpha10: 'rgba(16, 24, 32, 0.1)',
   primaryAlpha20: 'rgba(16, 24, 32, 0.2)',
+  primaryAlpha30: 'rgba(16, 24, 32, 0.3)',
+  primaryAlpha40: 'rgba(16, 24, 32, 0.4)',
   primaryAlpha50: 'rgba(16, 24, 32, 0.5)',
   primaryAlpha75: 'rgba(16, 24, 32, 0.75)',
 
   // Secondary colors with alpha
   secondaryAlpha10: 'rgba(254, 231, 21, 0.1)',
+  secondaryAlpha15: 'rgba(254, 231, 21, 0.15)',
   secondaryAlpha20: 'rgba(254, 231, 21, 0.2)',
+  secondaryAlpha25: 'rgba(254, 231, 21, 0.25)',
+  secondaryAlpha30: 'rgba(254, 231, 21, 0.3)',
+  secondaryAlpha40: 'rgba(254, 231, 21, 0.4)',
   secondaryAlpha50: 'rgba(254, 231, 21, 0.5)',
   secondaryAlpha75: 'rgba(254, 231, 21, 0.75)',
 
   // White with alpha for overlays
+  whiteAlpha05: 'rgba(255, 255, 255, 0.05)',
   whiteAlpha10: 'rgba(255, 255, 255, 0.1)',
+  whiteAlpha15: 'rgba(255, 255, 255, 0.15)',
   whiteAlpha20: 'rgba(255, 255, 255, 0.2)',
+  whiteAlpha25: 'rgba(255, 255, 255, 0.25)',
+  whiteAlpha30: 'rgba(255, 255, 255, 0.3)',
+  whiteAlpha40: 'rgba(255, 255, 255, 0.4)',
   whiteAlpha50: 'rgba(255, 255, 255, 0.5)',
+  whiteAlpha60: 'rgba(255, 255, 255, 0.6)',
   whiteAlpha75: 'rgba(255, 255, 255, 0.75)',
   whiteAlpha90: 'rgba(255, 255, 255, 0.9)',
 } as const;

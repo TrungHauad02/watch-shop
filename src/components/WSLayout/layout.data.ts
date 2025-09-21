@@ -83,17 +83,17 @@ export const LAYOUT_VARIANTS: Record<string, LayoutConfig> = {
     },
   },
   auth: {
-    showHeader: false,
-    showFooter: false,
-    useContainer: true,
-    maxWidth: 'sm',
+    showHeader: true,
+    showFooter: true,
+    useContainer: false,
+    maxWidth: false,
     backgroundColor: `linear-gradient(135deg, ${COLORS.offWhite} 0%, ${COLORS.cream} 100%)`,
     showBreadcrumb: false,
     contentPadding: {
-      top: { xs: 4, md: 8 },
-      bottom: { xs: 4, md: 8 },
-      left: { xs: 2, md: 3 },
-      right: { xs: 2, md: 3 },
+      top: 0,
+      bottom: 0,
+      left: 0,
+      right: 0,
     },
   },
   fullscreen: {
@@ -169,7 +169,7 @@ export const layoutConfig = {
   // Header configuration
   header: {
     height: { xs: 56, sm: 64 },
-    stickyPosition: true,
+    stickyPosition: false,
     showShadow: true,
   },
   // Footer configuration

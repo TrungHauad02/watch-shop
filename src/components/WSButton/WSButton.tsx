@@ -1,9 +1,10 @@
-import { Button, CircularProgress } from '@mui/material';
 import { forwardRef } from 'react';
-import { useTheme } from '@mui/material/styles';
-import { WSButtonProps } from './WSButton.types';
+import { Button, CircularProgress } from '@mui/material';
 import { getButtonStyles } from './WSButton.styles';
+import { WSButtonProps } from './WSButton.types';
+import { useTheme } from '@mui/material/styles';
 
+// CUSTOMIZE: Component WSButton với style đã được tối ưu
 const WSButton = forwardRef<HTMLButtonElement, WSButtonProps>(
   (
     {
@@ -13,10 +14,10 @@ const WSButton = forwardRef<HTMLButtonElement, WSButtonProps>(
       endIcon,
       iconOnly = false,
       loading = false,
-      loadingText,
+      loadingText = 'Loading...',
       fullWidth = false,
-      disabled = false,
       children,
+      disabled,
       sx,
       ...props
     },
@@ -24,54 +25,46 @@ const WSButton = forwardRef<HTMLButtonElement, WSButtonProps>(
   ) => {
     const theme = useTheme();
 
-    // CUSTOMIZE: Bạn có thể chỉnh sửa logic loading và disabled tại đây
-    const isDisabled = disabled || loading;
+    // Fix: Đơn giản hóa logic render
+    const renderContent = () => {
+      if (loading) {
+        return (
+          <>
+            <CircularProgress
+              size={16}
+              color="inherit"
+              sx={{ mr: children ? 1 : 0 }}
+            />
+            {children && !iconOnly && loadingText}
+          </>
+        );
+      }
 
-    // CUSTOMIZE: Bạn có thể chỉnh sửa size của loading spinner tại đây
-    const spinnerSize = {
-      small: 16,
-      medium: 18,
-      large: 20,
-    }[size];
+      if (iconOnly) {
+        return startIcon || endIcon;
+      }
 
-    const buttonStyles = getButtonStyles(theme, variant, size);
+      return (
+        <>
+          {startIcon}
+          {children}
+          {endIcon}
+        </>
+      );
+    };
 
     return (
       <Button
         ref={ref}
-        disabled={isDisabled}
+        disabled={disabled || loading}
         fullWidth={fullWidth}
-        startIcon={
-          loading ? (
-            <CircularProgress
-              size={spinnerSize}
-              color="inherit"
-              // CUSTOMIZE: Bạn có thể chỉnh sửa style của loading spinner tại đây
-            />
-          ) : (
-            startIcon
-          )
-        }
-        endIcon={!loading ? endIcon : undefined}
         sx={{
-          ...buttonStyles,
-          // Icon only button
-          ...(iconOnly && {
-            minWidth: buttonStyles.minHeight,
-            padding: 0,
-            aspectRatio: '1',
-          }),
-          // Custom sx override
+          ...getButtonStyles(theme, variant, size),
           ...sx,
         }}
         {...props}
       >
-        {/* Content */}
-        {iconOnly
-          ? startIcon || endIcon || children
-          : loading && loadingText
-            ? loadingText
-            : children}
+        {renderContent()}
       </Button>
     );
   }

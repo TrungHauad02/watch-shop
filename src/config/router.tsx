@@ -16,7 +16,7 @@ const DefaultLayout = () => (
 
 const AuthLayout = () => (
   <WSLayout
-    variant="default"
+    variant="auth"
     sx={{
       overflow: 'auto',
       overflowX: 'hidden',

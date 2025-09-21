@@ -20,9 +20,6 @@ export default function LoginPage() {
         justifyContent: 'center',
         background: GRADIENT_COLORS.heroGradient,
         position: 'relative',
-        // CUSTOMIZE: Bạn có thể chỉnh sửa background của login page tại đây
-
-        // Decorative elements
         '&::before': {
           content: '""',
           position: 'absolute',
@@ -79,21 +76,6 @@ export default function LoginPage() {
           error={error?.message ?? null}
           onErrorDismiss={clearError}
         />
-
-        {/* Footer */}
-        <Box sx={{ textAlign: 'center', mt: 4 }}>
-          <Typography
-            variant="body2"
-            sx={{
-              color: COLORS.white,
-              opacity: 0.7,
-              fontSize: '0.8rem',
-              // CUSTOMIZE: Bạn có thể chỉnh sửa style của footer text tại đây
-            }}
-          >
-            © 2024 Minh Nhật Watch. Tất cả quyền được bảo lưu.
-          </Typography>
-        </Box>
       </Container>
     </Box>
   );

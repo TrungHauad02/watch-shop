@@ -1,5 +1,5 @@
 import { Theme } from '@mui/material/styles';
-import { COLORS, SEMANTIC_COLORS } from '@/styles/colors';
+import { COLORS, SEMANTIC_COLORS, ALPHA_COLORS } from '@/styles/colors';
 import { WSButtonVariant, WSButtonSize } from './WSButton.types';
 
 // CUSTOMIZE: Bạn có thể chỉnh sửa màu sắc và style của button tại đây
@@ -15,9 +15,11 @@ export const getButtonStyles = (
     transition: 'all 0.2s cubic-bezier(0.4, 0, 0.2, 1)',
     position: 'relative' as const,
     overflow: 'hidden' as const,
+    // Fix: Thêm will-change để tối ưu performance
+    willChange: 'transform, box-shadow',
 
     '&:focus-visible': {
-      outline: `2px solid ${COLORS.primary}`,
+      outline: `2px solid ${COLORS.borderFocus}`,
       outlineOffset: '2px',
     },
 
@@ -25,6 +27,11 @@ export const getButtonStyles = (
       opacity: 0.6,
       cursor: 'not-allowed',
       pointerEvents: 'none',
+      color: COLORS.textDisabled,
+      backgroundColor: COLORS.gray200,
+      borderColor: COLORS.borderLight,
+      transform: 'none !important', // Fix: Prevent transform on disabled
+      boxShadow: 'none !important', // Fix: Remove shadow on disabled
     },
   };
 
@@ -61,89 +68,124 @@ export const getButtonStyles = (
     },
   };
 
+  // Fix: Đơn giản hóa variant styles để tránh conflict
   const variantStyles = {
     primary: {
-      backgroundColor: COLORS.primary,
-      color: COLORS.white,
-      border: `1px solid ${COLORS.primary}`,
+      backgroundColor: COLORS.black900,
+      color: COLORS.textInverse,
+      border: `1px solid ${COLORS.black900}`,
+      boxShadow: `0 2px 8px ${ALPHA_COLORS.primaryAlpha20}`,
 
-      '&:hover': {
-        backgroundColor: COLORS.primaryDark,
-        borderColor: COLORS.primaryDark,
+      '&:hover:not(:disabled)': {
+        backgroundColor: COLORS.black800,
+        borderColor: COLORS.black800,
         transform: 'translateY(-1px)',
-        boxShadow: `0 4px 12px ${COLORS.primary}40`,
+        boxShadow: `0 4px 12px ${ALPHA_COLORS.primaryAlpha50}`,
       },
 
-      '&:active': {
+      '&:active:not(:disabled)': {
         transform: 'translateY(0)',
-        boxShadow: `0 2px 8px ${COLORS.primary}60`,
+        backgroundColor: COLORS.black700,
+        boxShadow: `0 2px 8px ${ALPHA_COLORS.primaryAlpha75}`,
       },
     },
 
     secondary: {
       backgroundColor: COLORS.secondary,
-      color: COLORS.primary,
+      color: COLORS.textPrimary,
       border: `1px solid ${COLORS.secondary}`,
+      boxShadow: `0 2px 8px ${ALPHA_COLORS.secondaryAlpha20}`,
 
-      '&:hover': {
+      '&:hover:not(:disabled)': {
         backgroundColor: COLORS.secondaryDark,
         borderColor: COLORS.secondaryDark,
         transform: 'translateY(-1px)',
-        boxShadow: `0 4px 12px ${COLORS.secondary}40`,
+        boxShadow: `0 4px 12px ${ALPHA_COLORS.secondaryAlpha50}`,
       },
 
-      '&:active': {
+      '&:active:not(:disabled)': {
         transform: 'translateY(0)',
-        boxShadow: `0 2px 8px ${COLORS.secondary}60`,
+        backgroundColor: COLORS.amber700,
+        boxShadow: `0 2px 8px ${ALPHA_COLORS.secondaryAlpha75}`,
       },
     },
 
     outline: {
       backgroundColor: 'transparent',
-      color: COLORS.primary,
-      border: `1px solid ${COLORS.gray300}`,
+      color: COLORS.textPrimary,
+      border: `1px solid ${COLORS.borderMedium}`,
+      boxShadow: 'none',
 
-      '&:hover': {
-        backgroundColor: COLORS.gray50,
-        borderColor: COLORS.primary,
-        color: COLORS.primary,
+      '&:hover:not(:disabled)': {
+        backgroundColor: COLORS.backgroundSecondary,
+        borderColor: COLORS.black700,
+        color: COLORS.textPrimary,
+        boxShadow: `0 2px 8px ${COLORS.shadow}`,
       },
 
-      '&:active': {
-        backgroundColor: COLORS.gray100,
+      '&:active:not(:disabled)': {
+        backgroundColor: COLORS.backgroundTertiary,
+        borderColor: COLORS.black800,
       },
     },
 
     text: {
       backgroundColor: 'transparent',
-      color: COLORS.primary,
+      color: COLORS.textSecondary,
       border: '1px solid transparent',
+      boxShadow: 'none',
 
-      '&:hover': {
-        backgroundColor: COLORS.gray50,
-        color: COLORS.primaryDark,
+      '&:hover:not(:disabled)': {
+        backgroundColor: COLORS.backgroundSecondary,
+        color: COLORS.textPrimary,
       },
 
-      '&:active': {
-        backgroundColor: COLORS.gray100,
+      '&:active:not(:disabled)': {
+        backgroundColor: COLORS.backgroundTertiary,
+        color: COLORS.textPrimary,
       },
     },
 
     danger: {
       backgroundColor: SEMANTIC_COLORS.error500,
-      color: COLORS.white,
+      color: COLORS.textInverse,
       border: `1px solid ${SEMANTIC_COLORS.error500}`,
+      boxShadow: `0 2px 8px rgba(239, 68, 68, 0.2)`,
 
-      '&:hover': {
+      '&:hover:not(:disabled)': {
         backgroundColor: SEMANTIC_COLORS.error600,
         borderColor: SEMANTIC_COLORS.error600,
         transform: 'translateY(-1px)',
-        boxShadow: `0 4px 12px ${SEMANTIC_COLORS.error500}40`,
+        boxShadow: `0 4px 12px rgba(239, 68, 68, 0.4)`,
       },
 
-      '&:active': {
+      '&:active:not(:disabled)': {
         transform: 'translateY(0)',
-        boxShadow: `0 2px 8px ${SEMANTIC_COLORS.error500}60`,
+        backgroundColor: SEMANTIC_COLORS.error700,
+        boxShadow: `0 2px 8px rgba(239, 68, 68, 0.6)`,
+      },
+    },
+
+    // Fix: Đơn giản hóa luxury variant
+    luxury: {
+      backgroundColor: COLORS.gold500,
+      color: COLORS.textPrimary,
+      border: `1px solid ${COLORS.gold500}`,
+      boxShadow: `0 2px 8px ${ALPHA_COLORS.secondaryAlpha20}`,
+      fontWeight: 700,
+
+      '&:hover:not(:disabled)': {
+        backgroundColor: COLORS.gold600,
+        borderColor: COLORS.gold600,
+        color: COLORS.textInverse,
+        transform: 'translateY(-1px)',
+        boxShadow: `0 4px 12px ${ALPHA_COLORS.secondaryAlpha50}`,
+      },
+
+      '&:active:not(:disabled)': {
+        transform: 'translateY(0)',
+        backgroundColor: COLORS.gold700,
+        boxShadow: `0 2px 8px ${ALPHA_COLORS.secondaryAlpha75}`,
       },
     },
   };
@@ -153,4 +195,23 @@ export const getButtonStyles = (
     ...sizeStyles[size],
     ...variantStyles[variant],
   };
+};
+
+// Fix: Bỏ các animation phức tạp gây conflict
+export const buttonUtils = {
+  // Simple hover effect
+  simpleHover: {
+    '&:hover': {
+      transform: 'translateY(-1px)',
+      transition: 'transform 0.2s ease',
+    },
+  },
+
+  // Subtle shadow
+  subtleShadow: {
+    boxShadow: `0 2px 8px ${ALPHA_COLORS.primaryAlpha10}`,
+    '&:hover': {
+      boxShadow: `0 4px 12px ${ALPHA_COLORS.primaryAlpha20}`,
+    },
+  },
 };
