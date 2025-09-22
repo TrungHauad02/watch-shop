@@ -52,7 +52,7 @@ const router = createBrowserRouter([
       },
       // Auth Pages
       {
-        path: '',
+        path: '/auth',
         element: <AuthLayout />,
         children: [
           {

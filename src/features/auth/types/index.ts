@@ -1,5 +1,7 @@
 // ==================== LOGIN TYPES ====================
 
+import { UserDTO } from '@/shared/types';
+
 export interface LoginFormData {
   email: string;
   password: string;
@@ -9,16 +11,35 @@ export interface LoginFormData {
 export interface LoginResponse {
   accessToken: string;
   refreshToken: string;
-  user: {
-    id: string;
-    name: string;
-    email: string;
-    role: string;
-  };
+  user: UserDTO;
 }
 
 export interface LoginError {
   field?: 'email' | 'password' | 'general';
+  message: string;
+}
+
+// ==================== REGISTER TYPES ====================
+
+export interface RegisterFormData {
+  name: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+}
+
+export interface RegisterResponse {
+  user: UserDTO;
+}
+
+export interface RegisterError {
+  field?:
+    | 'name'
+    | 'email'
+    | 'phoneNumber'
+    | 'password'
+    | 'confirmPassword'
+    | 'general';
   message: string;
 }
 
@@ -36,4 +57,11 @@ export interface AuthState {
 export interface LoginValidationErrors {
   email?: string;
   password?: string;
+}
+
+export interface RegisterValidationErrors {
+  name?: string;
+  email?: string;
+  password?: string;
+  confirmPassword?: string;
 }
