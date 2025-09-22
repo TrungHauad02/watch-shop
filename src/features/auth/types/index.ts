@@ -43,6 +43,21 @@ export interface RegisterError {
   message: string;
 }
 
+// ==================== FORGET PASSWORD TYPES ====================
+
+export interface ForgetPasswordFormData {
+  email: string;
+}
+
+export interface ForgetPasswordResponse {
+  message: string;
+  success: boolean;
+}
+
+export interface ForgetPasswordError {
+  field?: 'email' | 'general';
+  message: string;
+}
 // ==================== AUTH STATE TYPES ====================
 
 export interface AuthState {
@@ -64,4 +79,8 @@ export interface RegisterValidationErrors {
   email?: string;
   password?: string;
   confirmPassword?: string;
+}
+
+export interface ForgetPasswordValidationErrors {
+  email?: string;
 }

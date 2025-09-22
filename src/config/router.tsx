@@ -79,6 +79,18 @@ const router = createBrowserRouter([
               </Suspense>
             ),
           },
+          {
+            path: 'forget-password',
+            element: (
+              <Suspense
+                fallback={
+                  <Pages.LoadingPage message="Đang tải trang quên mật khẩu..." />
+                }
+              >
+                <Pages.ForgetPasswordPage />
+              </Suspense>
+            ),
+          },
         ],
       },
     ],

@@ -88,7 +88,6 @@ export default function LoginForm({
       setFormData((prev) => ({ ...prev, [field]: value }));
     };
 
-  // Create Alert props conditionally - không include onClose nếu không có handler
   const alertProps = {
     severity: 'error' as const,
     sx: {
@@ -214,7 +213,7 @@ export default function LoginForm({
 
         <MuiLink
           component={Link}
-          to="/auth/forgot-password"
+          to="/auth/forget-password"
           sx={{
             fontSize: '0.875rem',
             color: COLORS.primary,
