@@ -52,7 +52,7 @@ const router = createBrowserRouter([
       },
       // Auth Pages
       {
-        path: '',
+        path: '/auth',
         element: <AuthLayout />,
         children: [
           {
@@ -76,6 +76,18 @@ const router = createBrowserRouter([
                 }
               >
                 <Pages.RegisterPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'forget-password',
+            element: (
+              <Suspense
+                fallback={
+                  <Pages.LoadingPage message="Đang tải trang quên mật khẩu..." />
+                }
+              >
+                <Pages.ForgetPasswordPage />
               </Suspense>
             ),
           },

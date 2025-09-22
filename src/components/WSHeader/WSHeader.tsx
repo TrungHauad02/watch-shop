@@ -94,7 +94,7 @@ export default function WSHeader({
     if (onLogin) {
       onLogin();
     } else {
-      navigate('/login');
+      navigate('/auth/login');
     }
   };
 

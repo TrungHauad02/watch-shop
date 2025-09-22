@@ -1,3 +1,4 @@
+import { RoleEnum } from '@/shared/types';
 import { LoginFormData, LoginResponse } from '../types';
 
 // ==================== MOCK DATA ====================
@@ -8,28 +9,28 @@ const MOCK_USERS = [
     name: 'Nguyễn Văn Admin',
     email: 'admin@minhnhatwatch.com',
     password: 'admin123',
-    role: 'ADMIN',
+    role: RoleEnum.ADMIN,
   },
   {
     id: '11234567-89ab-cdef-0123-456789abcdef',
     name: 'Trần Thị Manager',
     email: 'manager@minhnhatwatch.com',
     password: 'manager123',
-    role: 'MANAGER',
+    role: RoleEnum.MANAGER,
   },
   {
     id: '21234567-89ab-cdef-0123-456789abcdef',
     name: 'Lê Văn User',
     email: 'user@minhnhatwatch.com',
     password: 'user123',
-    role: 'USER',
+    role: RoleEnum.USER,
   },
   {
     id: '31234567-89ab-cdef-0123-456789abcdef',
     name: 'Phạm Thị Khách',
     email: 'customer@gmail.com',
     password: '123456',
-    role: 'USER',
+    role: RoleEnum.USER,
   },
 ] as const;
 
@@ -85,6 +86,9 @@ class AuthService {
           name: user.name,
           email: user.email,
           role: user.role,
+          status: true,
+          createdAt: Date.now().toString(),
+          updatedAt: Date.now().toString(),
         },
       };
 
@@ -110,6 +114,20 @@ class AuthService {
 
       throw new Error('Đăng nhập thất bại. Vui lòng thử lại.');
     }
+  }
+
+  async register(formData: {
+    name: string;
+    email: string;
+    password: string;
+  }): Promise<void> {
+    // Simulate network delay
+    console.log('📝 Mock Register Request:', {
+      name: formData.name,
+      email: formData.email,
+      timestamp: new Date().toISOString(),
+    });
+    await this.delay(1500);
   }
 
   /**

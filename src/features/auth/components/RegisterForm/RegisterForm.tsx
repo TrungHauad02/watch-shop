@@ -1,42 +1,41 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { useState, useEffect } from 'react';
-import {
-  Box,
-  Typography,
-  FormControlLabel,
-  Checkbox,
-  Alert,
-  Link as MuiLink,
-} from '@mui/material';
+import { Box, Typography, Alert, Link as MuiLink } from '@mui/material';
 import { Link } from 'react-router-dom';
-import { Email, Lock } from '@mui/icons-material';
+import { Person, Email, Lock } from '@mui/icons-material';
 import { WSButton, WSInput } from '@/components';
 import { COLORS } from '@/styles/colors';
-import { LoginFormProps, LoginFormState } from './LoginForm.types';
-import { LoginValidationErrors } from '../../types';
+import { RegisterFormProps, RegisterFormState } from './RegisterForm.types';
+import { RegisterValidationErrors } from '../../types';
 
-export default function LoginForm({
+export default function RegisterForm({
   onSubmit,
   isLoading = false,
   error,
   onErrorDismiss,
-}: LoginFormProps) {
-  const [formData, setFormData] = useState<LoginFormState>({
+}: RegisterFormProps) {
+  const [formData, setFormData] = useState<RegisterFormState>({
+    name: '',
     email: '',
     password: '',
-    rememberMe: false,
+    confirmPassword: '',
     showPassword: false,
   });
 
   const [validationErrors, setValidationErrors] =
-    useState<LoginValidationErrors>({});
+    useState<RegisterValidationErrors>({});
 
   // Clear validation errors when user starts typing
   useEffect(() => {
     if (Object.keys(validationErrors).length > 0) {
       setValidationErrors({});
     }
-  }, [formData.email, formData.password]);
+  }, [
+    formData.name,
+    formData.email,
+    formData.password,
+    formData.confirmPassword,
+  ]);
 
   // Clear error when dismissed
   useEffect(() => {
@@ -50,7 +49,16 @@ export default function LoginForm({
   }, [error, onErrorDismiss]);
 
   const validateForm = (): boolean => {
-    const errors: LoginValidationErrors = {};
+    const errors: RegisterValidationErrors = {};
+
+    // Name validation
+    if (!formData.name.trim()) {
+      errors.name = 'Họ tên không được để trống';
+    } else if (formData.name.trim().length < 2) {
+      errors.name = 'Họ tên phải có ít nhất 2 ký tự';
+    } else if (formData.name.trim().length > 50) {
+      errors.name = 'Họ tên không được quá 50 ký tự';
+    }
 
     // Email validation
     if (!formData.email.trim()) {
@@ -62,8 +70,18 @@ export default function LoginForm({
     // Password validation
     if (!formData.password) {
       errors.password = 'Mật khẩu không được để trống';
-    } else if (formData.password.length < 6) {
-      errors.password = 'Mật khẩu phải có ít nhất 6 ký tự';
+    } else if (formData.password.length < 8) {
+      errors.password = 'Mật khẩu phải có ít nhất 8 ký tự';
+    } else if (!/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/.test(formData.password)) {
+      errors.password =
+        'Mật khẩu phải có ít nhất 1 chữ hoa, 1 chữ thường và 1 số';
+    }
+
+    // Confirm password validation
+    if (!formData.confirmPassword) {
+      errors.confirmPassword = 'Xác nhận mật khẩu không được để trống';
+    } else if (formData.password !== formData.confirmPassword) {
+      errors.confirmPassword = 'Mật khẩu xác nhận không khớp';
     }
 
     setValidationErrors(errors);
@@ -81,13 +99,13 @@ export default function LoginForm({
   };
 
   const handleInputChange =
-    (field: keyof LoginFormState) =>
+    (field: keyof RegisterFormState) =>
     (e: React.ChangeEvent<HTMLInputElement>) => {
-      const value =
-        e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+      const value = e.target.value;
       setFormData((prev) => ({ ...prev, [field]: value }));
     };
 
+  // Create Alert props conditionally
   const alertProps = {
     severity: 'error' as const,
     sx: {
@@ -131,7 +149,7 @@ export default function LoginForm({
             // CUSTOMIZE: Bạn có thể chỉnh sửa style của tiêu đề tại đây
           }}
         >
-          Đăng Nhập
+          Đăng Ký
         </Typography>
         <Typography
           variant="body2"
@@ -140,12 +158,28 @@ export default function LoginForm({
             fontSize: '0.95rem',
           }}
         >
-          Chào mừng bạn trở lại với Minh Nhật Watch
+          Tạo tài khoản mới để trải nghiệm dịch vụ tốt nhất
         </Typography>
       </Box>
 
       {/* Error Alert */}
       {error && <Alert {...alertProps}>{error}</Alert>}
+
+      {/* Name Input */}
+      <WSInput
+        fullWidth
+        label="Họ và tên"
+        type="text"
+        placeholder="Nhập họ và tên đầy đủ"
+        value={formData.name}
+        onChange={handleInputChange('name')}
+        error={!!validationErrors.name}
+        {...(validationErrors.name && { errorText: validationErrors.name })}
+        startIcon={<Person />}
+        autoFocus
+        disabled={isLoading}
+        sx={{ mb: 3 }}
+      />
 
       {/* Email Input */}
       <WSInput
@@ -158,7 +192,6 @@ export default function LoginForm({
         error={!!validationErrors.email}
         {...(validationErrors.email && { errorText: validationErrors.email })}
         startIcon={<Email />}
-        autoFocus
         disabled={isLoading}
         sx={{ mb: 3 }}
       />
@@ -168,7 +201,7 @@ export default function LoginForm({
         fullWidth
         label="Mật khẩu"
         type="password"
-        placeholder="Nhập mật khẩu của bạn"
+        placeholder="Nhập mật khẩu mạnh"
         value={formData.password}
         onChange={handleInputChange('password')}
         error={!!validationErrors.password}
@@ -177,57 +210,26 @@ export default function LoginForm({
         })}
         startIcon={<Lock />}
         disabled={isLoading}
+        helperText="Ít nhất 8 ký tự, có chữ hoa, chữ thường và số"
         sx={{ mb: 3 }}
       />
 
-      {/* Remember Me & Forgot Password */}
-      <Box
-        sx={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-          mb: 4,
-        }}
-      >
-        <FormControlLabel
-          control={
-            <Checkbox
-              checked={formData.rememberMe}
-              onChange={handleInputChange('rememberMe')}
-              disabled={isLoading}
-              sx={{
-                color: COLORS.gray400,
-                '&.Mui-checked': {
-                  color: COLORS.primary,
-                },
-                // CUSTOMIZE: Bạn có thể chỉnh sửa style của checkbox tại đây
-              }}
-            />
-          }
-          label={
-            <Typography variant="body2" sx={{ color: COLORS.gray600 }}>
-              Ghi nhớ đăng nhập
-            </Typography>
-          }
-        />
-
-        <MuiLink
-          component={Link}
-          to="/auth/forget-password"
-          sx={{
-            fontSize: '0.875rem',
-            color: COLORS.primary,
-            textDecoration: 'none',
-            '&:hover': {
-              textDecoration: 'underline',
-              color: COLORS.gold600,
-            },
-            // CUSTOMIZE: Bạn có thể chỉnh sửa style của forgot password link tại đây
-          }}
-        >
-          Quên mật khẩu?
-        </MuiLink>
-      </Box>
+      {/* Confirm Password Input */}
+      <WSInput
+        fullWidth
+        label="Xác nhận mật khẩu"
+        type="password"
+        placeholder="Nhập lại mật khẩu"
+        value={formData.confirmPassword}
+        onChange={handleInputChange('confirmPassword')}
+        error={!!validationErrors.confirmPassword}
+        {...(validationErrors.confirmPassword && {
+          errorText: validationErrors.confirmPassword,
+        })}
+        startIcon={<Lock />}
+        disabled={isLoading}
+        sx={{ mb: 4 }}
+      />
 
       {/* Submit Button */}
       <WSButton
@@ -236,20 +238,20 @@ export default function LoginForm({
         size="large"
         fullWidth
         loading={isLoading}
-        loadingText="Đang đăng nhập..."
+        loadingText="Đang tạo tài khoản..."
         disabled={isLoading}
         sx={{ mb: 3 }}
       >
-        Đăng Nhập
+        Đăng Ký
       </WSButton>
 
-      {/* Register Link */}
+      {/* Login Link */}
       <Box sx={{ textAlign: 'center' }}>
         <Typography variant="body2" sx={{ color: COLORS.gray600 }}>
-          Chưa có tài khoản?{' '}
+          Đã có tài khoản?{' '}
           <MuiLink
             component={Link}
-            to="/auth/register"
+            to="/auth/login"
             sx={{
               color: COLORS.primary,
               textDecoration: 'none',
@@ -258,10 +260,10 @@ export default function LoginForm({
                 textDecoration: 'underline',
                 color: COLORS.gold600,
               },
-              // CUSTOMIZE: Bạn có thể chỉnh sửa style của register link tại đây
+              // CUSTOMIZE: Bạn có thể chỉnh sửa style của login link tại đây
             }}
           >
-            Đăng ký ngay
+            Đăng nhập ngay
           </MuiLink>
         </Typography>
       </Box>

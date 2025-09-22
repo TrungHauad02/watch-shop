@@ -1,14 +1,24 @@
-import COLORS, { GRADIENT_COLORS } from '@/styles/colors';
 import { Box, Container, Typography } from '@mui/material';
-import { useRegister } from '../hooks/useRegister';
-import { RegisterFormData } from '../types';
-import RegisterForm from '../components/RegisterForm/RegisterForm';
+import { ForgetPasswordForm } from '../components';
+import { useForgetPassword } from '../hooks/useForgetPassword';
+import { COLORS, GRADIENT_COLORS } from '@/styles/colors';
+import { ForgetPasswordFormData } from '../types';
 
-export default function RegisterPage() {
-  const { register, isLoading, error, clearError } = useRegister();
+export default function ForgetPasswordPage() {
+  const {
+    sendResetEmail,
+    isLoading,
+    error,
+    clearError,
+    isSuccess,
+    successEmail,
+    backToLogin,
+  } = useForgetPassword();
 
-  const handleRegister = async (formData: RegisterFormData): Promise<void> => {
-    await register(formData);
+  const handleSubmit = async (
+    formData: ForgetPasswordFormData
+  ): Promise<void> => {
+    await sendResetEmail(formData);
   };
 
   return (
@@ -65,16 +75,19 @@ export default function RegisterPage() {
               // CUSTOMIZE: Bạn có thể chỉnh sửa style của brand subtitle tại đây
             }}
           >
-            Thế giới đồng hồ cao cấp
+            Khôi phục tài khoản của bạn
           </Typography>
         </Box>
 
-        {/* Register Form */}
-        <RegisterForm
-          onSubmit={handleRegister}
+        {/* Forget Password Form */}
+        <ForgetPasswordForm
+          onSubmit={handleSubmit}
+          onBackToLogin={backToLogin}
           isLoading={isLoading}
           error={error?.message ?? null}
           onErrorDismiss={clearError}
+          isSuccess={isSuccess}
+          successEmail={successEmail}
         />
       </Container>
     </Box>
