@@ -78,6 +78,18 @@ const router = createBrowserRouter([
               </Suspense>
             ),
           },
+          {
+            path: 'products/:productId',
+            element: (
+              <Suspense
+                fallback={
+                  <Pages.LoadingPage message="Đang tải trang cá nhân..." />
+                }
+              >
+                <Pages.ProductDetailPage />
+              </Suspense>
+            ),
+          },
         ],
       },
 
