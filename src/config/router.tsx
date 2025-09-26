@@ -13,6 +13,10 @@ const DefaultLayout = () => (
     scrollRestoration={true}
     showHeader={true}
     showFooter={true}
+    sx={{
+      overflow: 'auto',
+      overflowX: 'hidden',
+    }}
   />
 );
 
@@ -59,6 +63,18 @@ const router = createBrowserRouter([
                 }
               >
                 <Pages.ProfilePage />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'wishlist',
+            element: (
+              <Suspense
+                fallback={
+                  <Pages.LoadingPage message="Đang tải trang cá nhân..." />
+                }
+              >
+                <Pages.WishlistPage />
               </Suspense>
             ),
           },

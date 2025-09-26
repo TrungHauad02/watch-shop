@@ -1,5 +1,6 @@
 export { default as HomePage } from '@/features/home/pages/HomePage';
 export { default as ProfilePage } from '@/features/users/pages/ProfilePage';
+export { default as WishlistPage } from '@/features/wishlist/pages/WishlistPage';
 
 export { default as LoginPage } from '@/features/auth/pages/LoginPage';
 export { default as RegisterPage } from '@/features/auth/pages/RegisterPage';
