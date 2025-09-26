@@ -7,6 +7,8 @@ const RootLayout = () => <Outlet />;
 
 const DefaultLayout = () => (
   <WSLayout
+    useContainer={false}
+    contentPadding={{ top: 0, bottom: 0, left: 0, right: 0 }}
     variant="default"
     scrollRestoration={true}
     showHeader={true}
@@ -48,8 +50,21 @@ const router = createBrowserRouter([
               </Suspense>
             ),
           },
+          {
+            path: 'profile',
+            element: (
+              <Suspense
+                fallback={
+                  <Pages.LoadingPage message="Đang tải trang cá nhân..." />
+                }
+              >
+                <Pages.ProfilePage />
+              </Suspense>
+            ),
+          },
         ],
       },
+
       // Auth Pages
       {
         path: '/auth',

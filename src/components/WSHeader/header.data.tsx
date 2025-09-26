@@ -96,11 +96,6 @@ export const userMenuActions = [
     path: '/wishlist',
   },
   {
-    key: 'orders',
-    label: 'Đơn hàng',
-    path: '/orders',
-  },
-  {
     key: 'settings',
     label: 'Cài đặt',
     path: '/settings',

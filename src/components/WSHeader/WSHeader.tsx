@@ -38,7 +38,7 @@ interface WSHeaderProps {
 // ==================== MAIN COMPONENT ====================
 
 export default function WSHeader({
-  isAuthenticated = false,
+  isAuthenticated = true,
   user = null,
   wishlistCount = 0,
   onLogin,
