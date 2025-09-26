@@ -91,6 +91,18 @@ const router = createBrowserRouter([
               </Suspense>
             ),
           },
+          {
+            path: 'reset-password/:token',
+            element: (
+              <Suspense
+                fallback={
+                  <Pages.LoadingPage message="Đang tải trang đặt lại mật khẩu..." />
+                }
+              >
+                <Pages.ResetPasswordPage />
+              </Suspense>
+            ),
+          },
         ],
       },
     ],
