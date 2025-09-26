@@ -95,16 +95,6 @@ export const userMenuActions = [
     label: 'Danh sách yêu thích',
     path: '/wishlist',
   },
-  {
-    key: 'orders',
-    label: 'Đơn hàng',
-    path: '/orders',
-  },
-  {
-    key: 'settings',
-    label: 'Cài đặt',
-    path: '/settings',
-  },
 ] as const;
 
 // ==================== HELPER FUNCTIONS ====================

@@ -7,10 +7,16 @@ const RootLayout = () => <Outlet />;
 
 const DefaultLayout = () => (
   <WSLayout
+    useContainer={false}
+    contentPadding={{ top: 0, bottom: 0, left: 0, right: 0 }}
     variant="default"
     scrollRestoration={true}
     showHeader={true}
     showFooter={true}
+    sx={{
+      overflow: 'auto',
+      overflowX: 'hidden',
+    }}
   />
 );
 
@@ -48,8 +54,45 @@ const router = createBrowserRouter([
               </Suspense>
             ),
           },
+          {
+            path: 'profile',
+            element: (
+              <Suspense
+                fallback={
+                  <Pages.LoadingPage message="Đang tải trang cá nhân..." />
+                }
+              >
+                <Pages.ProfilePage />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'wishlist',
+            element: (
+              <Suspense
+                fallback={
+                  <Pages.LoadingPage message="Đang tải trang cá nhân..." />
+                }
+              >
+                <Pages.WishlistPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'products/:productId',
+            element: (
+              <Suspense
+                fallback={
+                  <Pages.LoadingPage message="Đang tải trang cá nhân..." />
+                }
+              >
+                <Pages.ProductDetailPage />
+              </Suspense>
+            ),
+          },
         ],
       },
+
       // Auth Pages
       {
         path: '/auth',
@@ -88,6 +131,18 @@ const router = createBrowserRouter([
                 }
               >
                 <Pages.ForgetPasswordPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'reset-password/:token',
+            element: (
+              <Suspense
+                fallback={
+                  <Pages.LoadingPage message="Đang tải trang đặt lại mật khẩu..." />
+                }
+              >
+                <Pages.ResetPasswordPage />
               </Suspense>
             ),
           },

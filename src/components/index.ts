@@ -11,6 +11,7 @@ export { default as WSCard } from './WSCard';
 export { default as WSInput } from './WSInput';
 export { default as WSLoading } from './WSLoading';
 export { default as WSModal } from './WSModal';
+export { default as WSDecorativeBackground } from './WSDecorativeBackground/WSDecorativeBackground';
 
 // Export types for all components
 export type * from './WSLayout/WSLayout.types';

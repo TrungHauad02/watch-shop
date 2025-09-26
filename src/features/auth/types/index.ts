@@ -58,6 +58,24 @@ export interface ForgetPasswordError {
   field?: 'email' | 'general';
   message: string;
 }
+
+// ==================== RESET PASSWORD TYPES ====================
+
+export interface ResetPasswordFormData {
+  password: string;
+  confirmPassword: string;
+}
+
+export interface ResetPasswordValidationErrors {
+  password?: string;
+  confirmPassword?: string;
+}
+
+export interface ResetPasswordError {
+  field: 'general' | 'password' | 'confirmPassword';
+  message: string;
+}
+
 // ==================== AUTH STATE TYPES ====================
 
 export interface AuthState {

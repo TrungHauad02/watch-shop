@@ -1,6 +1,8 @@
 import { ThemeProvider, CssBaseline, GlobalStyles } from '@mui/material';
 import { theme } from '@/styles/theme';
 import AppRouter from './config/router';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 // ==================== MAIN APP COMPONENT ====================
 const globalStyles = (
@@ -77,6 +79,14 @@ export default function App() {
 
       {/* Main Application Router */}
       <AppRouter />
+      <ToastContainer
+        position="top-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={true}
+        closeOnClick={true}
+        rtl={false}
+      />
     </ThemeProvider>
   );
 }
