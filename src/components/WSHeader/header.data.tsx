@@ -24,7 +24,7 @@ export const navigationItems: NavigationItem[] = [
   },
   {
     label: 'Thương hiệu',
-    path: '#',
+    path: '/brands',
     icon: <Watch />,
   },
   {

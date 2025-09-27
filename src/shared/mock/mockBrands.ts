@@ -8,7 +8,7 @@ const mockBrands: BrandDTO[] = [
     updatedAt: '2025-09-26T12:00:00Z',
     name: 'Rolex',
     image:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1b/Rolex_logo.svg/1024px-Rolex_logo.svg.png',
+      'https://images.unsplash.com/photo-1575077659190-fa71c1cdc56d?q=80&w=1471&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     description:
       'Rolex is a Swiss luxury watchmaker known for its high-quality, precision-crafted watches.',
   },
@@ -19,7 +19,7 @@ const mockBrands: BrandDTO[] = [
     updatedAt: '2025-09-26T12:00:00Z',
     name: 'Omega',
     image:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Omega_logo.svg/800px-Omega_logo.svg.png',
+      'https://images.unsplash.com/photo-1594534475808-b18fc33b045e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
     description:
       'Omega is a Swiss watchmaker renowned for its precision and technological innovations.',
   },
@@ -30,7 +30,7 @@ const mockBrands: BrandDTO[] = [
     updatedAt: '2025-09-26T12:00:00Z',
     name: 'Tag Heuer',
     image:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/5/59/Tag_Heuer_logo.svg/800px-Tag_Heuer_logo.svg.png',
+      'https://images.unsplash.com/photo-1533139502658-0198f920d8e8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
     description:
       'Tag Heuer is known for its sport watches and chronographs, combining style with precision.',
   },
@@ -41,7 +41,7 @@ const mockBrands: BrandDTO[] = [
     updatedAt: '2025-09-26T12:00:00Z',
     name: 'Patek Philippe',
     image:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Patek_Philippe_logo.svg/800px-Patek_Philippe_logo.svg.png',
+      'https://images.unsplash.com/photo-1589988574803-455587b19171?q=80&w=773&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     description:
       'Patek Philippe is a Swiss luxury watch manufacturer known for its traditional and high-end timepieces.',
   },
@@ -52,7 +52,7 @@ const mockBrands: BrandDTO[] = [
     updatedAt: '2025-09-26T12:00:00Z',
     name: 'Audemars Piguet',
     image:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/0/0d/Audemars_Piguet_Logo.svg/800px-Audemars_Piguet_Logo.svg.png',
+      'https://images.unsplash.com/photo-1611930022073-b7a4ba5fcccd?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
     description:
       'Audemars Piguet is a Swiss luxury watchmaker famous for its innovative designs and mechanical expertise.',
   },
@@ -63,7 +63,7 @@ const mockBrands: BrandDTO[] = [
     updatedAt: '2025-09-26T12:00:00Z',
     name: 'Seiko',
     image:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/5/58/Seiko_logo.svg/800px-Seiko_logo.svg.png',
+      'https://images.unsplash.com/photo-1434056886845-dac89ffe9b56?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
     description:
       'Seiko is a Japanese brand known for its precision, affordability, and long history of innovation.',
   },
@@ -74,7 +74,7 @@ const mockBrands: BrandDTO[] = [
     updatedAt: '2025-09-26T12:00:00Z',
     name: 'Casio',
     image:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Casio_Logo.svg/1024px-Casio_Logo.svg.png',
+      'https://images.unsplash.com/photo-1542496658-e33a6d0d50f6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
     description:
       'Casio is famous for its durable, affordable, and innovative watches, especially digital models.',
   },
@@ -85,7 +85,7 @@ const mockBrands: BrandDTO[] = [
     updatedAt: '2025-09-26T12:00:00Z',
     name: 'IWC Schaffhausen',
     image:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/IWC_logo.svg/800px-IWC_logo.svg.png',
+      'https://images.unsplash.com/photo-1579684912150-f9a99d300cea?q=80&w=1374&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     description:
       'IWC Schaffhausen is known for its precision and luxury mechanical watches, blending tradition with innovation.',
   },
@@ -96,7 +96,7 @@ const mockBrands: BrandDTO[] = [
     updatedAt: '2025-09-26T12:00:00Z',
     name: 'Breitling',
     image:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/1/1a/Breitling_Logo.svg/1024px-Breitling_Logo.svg.png',
+      'https://images.unsplash.com/photo-1547996160-81dfa63595aa?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
     description:
       'Breitling is a luxury watch brand known for its aviation-inspired designs and precise chronographs.',
   },
@@ -107,7 +107,7 @@ const mockBrands: BrandDTO[] = [
     updatedAt: '2025-09-26T12:00:00Z',
     name: 'Cartier',
     image:
-      'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6f/Cartier_logo.svg/800px-Cartier_logo.svg.png',
+      'https://images.unsplash.com/photo-1524592094714-0f0654e20314?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=800&q=80',
     description:
       'Cartier is a French luxury brand that is well-known for its elegant and timeless watch designs.',
   },
