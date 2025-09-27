@@ -156,7 +156,7 @@ export default function ProductDetailPage() {
       density="medium"
       animated={true}
       sx={{
-        background: `linear-gradient(45deg, ${COLORS.gray50} 0%, ${COLORS.white} 50%, ${COLORS.gold50} 100%)`,
+        background: `linear-gradient(45deg, ${COLORS.gray600} 0%, ${COLORS.gray300} 50%, ${COLORS.gray50} 100%)`,
       }}
     >
       <Container
@@ -168,7 +168,7 @@ export default function ProductDetailPage() {
           sx={{
             mb: 3,
             p: 2,
-            backgroundColor: `${COLORS.white}90`, // Semi-transparent white
+            backgroundColor: `${COLORS.white}`, // Semi-transparent white
             backdropFilter: 'blur(10px)',
             borderRadius: 2,
             boxShadow: `0 2px 8px ${COLORS.shadow}`,
@@ -235,7 +235,7 @@ export default function ProductDetailPage() {
         {/* Main Content */}
         <Box
           sx={{
-            backgroundColor: `${COLORS.white}95`, // Semi-transparent white
+            backgroundColor: `${COLORS.white}`, // Semi-transparent white
             backdropFilter: 'blur(15px)',
             borderRadius: 3,
             overflow: 'hidden',
@@ -326,7 +326,7 @@ export default function ProductDetailPage() {
           sx={{
             mb: 6,
             p: 4,
-            backgroundColor: `${COLORS.white}90`,
+            backgroundColor: `${COLORS.white}`,
             backdropFilter: 'blur(10px)',
             borderRadius: 3,
             boxShadow: `0 4px 24px ${COLORS.shadow}`,
@@ -341,7 +341,7 @@ export default function ProductDetailPage() {
           <Box
             sx={{
               p: 4,
-              backgroundColor: `${COLORS.white}90`,
+              backgroundColor: `${COLORS.white}`,
               backdropFilter: 'blur(10px)',
               borderRadius: 3,
               boxShadow: `0 4px 24px ${COLORS.shadow}`,

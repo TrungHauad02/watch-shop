@@ -2,6 +2,7 @@ export { default as HomePage } from '@/features/home/pages/HomePage';
 export { default as ProfilePage } from '@/features/users/pages/ProfilePage';
 export { default as WishlistPage } from '@/features/wishlist/pages/WishlistPage';
 export { default as ProductDetailPage } from '@/features/products/pages/ProductDetailPage';
+export { default as ProductsPage } from '@/features/products/pages/ProductsPage';
 
 export { default as LoginPage } from '@/features/auth/pages/LoginPage';
 export { default as RegisterPage } from '@/features/auth/pages/RegisterPage';

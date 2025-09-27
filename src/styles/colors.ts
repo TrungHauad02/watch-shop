@@ -104,6 +104,29 @@ export const COLORS = {
   stockOut: '#DC2626',
   ratingFilled: '#FEE715',
   ratingEmpty: '#E5E7EB',
+
+  blue50: '#EFF6FF',
+  blue100: '#DBEAFE',
+  blue200: '#BFDBFE',
+  blue300: '#93C5FD',
+  blue400: '#60A5FA',
+  blue500: '#3B82F6', // Main blue
+  blue600: '#2563EB',
+  blue700: '#1D4ED8',
+  blue800: '#1E40AF',
+  blue900: '#1E3A8A',
+
+  // Pink variations
+  pink50: '#FDF2F8',
+  pink100: '#FCE7F3',
+  pink200: '#FBCFE8',
+  pink300: '#F9A8D4',
+  pink400: '#F472B6',
+  pink500: '#EC4899', // Main pink
+  pink600: '#DB2777',
+  pink700: '#BE185D',
+  pink800: '#9D174D',
+  pink900: '#831843',
 } as const;
 
 // ==================== SEMANTIC COLORS ====================

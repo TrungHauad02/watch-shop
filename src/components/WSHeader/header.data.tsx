@@ -19,7 +19,7 @@ export const navigationItems: NavigationItem[] = [
   },
   {
     label: 'Sản phẩm',
-    path: '#',
+    path: '/products',
     icon: <Watch />,
   },
   {
