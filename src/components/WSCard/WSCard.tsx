@@ -4,7 +4,6 @@ import { useTheme } from '@mui/material/styles';
 import { WSCardProps } from './WSCard.types';
 import { getCardStyles } from './WSCard.styles';
 
-// CUSTOMIZE: Component WSCard với style clean và đơn giản
 const WSCard = forwardRef<HTMLDivElement, WSCardProps>(
   (
     {

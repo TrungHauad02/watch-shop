@@ -81,7 +81,7 @@ export const mockProducts: ProductDTO[] = [
     view: 675,
     name: 'Cartier Tank Must',
     productId: 'CTR-TNK-003',
-    quantity: 12,
+    quantity: 0,
     images: [
       {
         id: '3-1',

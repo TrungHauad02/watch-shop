@@ -79,6 +79,18 @@ const router = createBrowserRouter([
             ),
           },
           {
+            path: 'products',
+            element: (
+              <Suspense
+                fallback={
+                  <Pages.LoadingPage message="Đang tải trang sản phẩm..." />
+                }
+              >
+                <Pages.ProductsPage />
+              </Suspense>
+            ),
+          },
+          {
             path: 'products/:productId',
             element: (
               <Suspense
@@ -87,6 +99,30 @@ const router = createBrowserRouter([
                 }
               >
                 <Pages.ProductDetailPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'brands',
+            element: (
+              <Suspense
+                fallback={
+                  <Pages.LoadingPage message="Đang tải trang thương hiệu..." />
+                }
+              >
+                <Pages.BrandsPage />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'categories',
+            element: (
+              <Suspense
+                fallback={
+                  <Pages.LoadingPage message="Đang tải trang danh mục..." />
+                }
+              >
+                <Pages.CategoriesPage />
               </Suspense>
             ),
           },

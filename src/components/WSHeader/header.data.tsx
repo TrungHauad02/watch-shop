@@ -19,17 +19,17 @@ export const navigationItems: NavigationItem[] = [
   },
   {
     label: 'Sản phẩm',
-    path: '#',
+    path: '/products',
     icon: <Watch />,
   },
   {
     label: 'Thương hiệu',
-    path: '#',
+    path: '/brands',
     icon: <Watch />,
   },
   {
     label: 'Danh mục',
-    path: '#',
+    path: '/categories',
     icon: <Category />,
   },
   {
