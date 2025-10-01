@@ -114,6 +114,18 @@ const router = createBrowserRouter([
               </Suspense>
             ),
           },
+          {
+            path: 'categories',
+            element: (
+              <Suspense
+                fallback={
+                  <Pages.LoadingPage message="Đang tải trang danh mục..." />
+                }
+              >
+                <Pages.CategoriesPage />
+              </Suspense>
+            ),
+          },
         ],
       },
 

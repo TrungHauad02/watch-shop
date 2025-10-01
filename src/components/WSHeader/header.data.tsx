@@ -29,7 +29,7 @@ export const navigationItems: NavigationItem[] = [
   },
   {
     label: 'Danh mục',
-    path: '#',
+    path: '/categories',
     icon: <Category />,
   },
   {

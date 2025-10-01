@@ -4,6 +4,7 @@ export { default as WishlistPage } from '@/features/wishlist/pages/WishlistPage'
 export { default as ProductDetailPage } from '@/features/products/pages/ProductDetailPage';
 export { default as ProductsPage } from '@/features/products/pages/ProductsPage';
 export { default as BrandsPage } from '@/features/brands/pages/BrandsPage';
+export { default as CategoriesPage } from '@/features/categories/pages/CategoriesPage';
 
 export { default as LoginPage } from '@/features/auth/pages/LoginPage';
 export { default as RegisterPage } from '@/features/auth/pages/RegisterPage';
