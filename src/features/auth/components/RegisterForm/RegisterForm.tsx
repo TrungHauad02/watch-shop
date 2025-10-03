@@ -46,6 +46,7 @@ export default function RegisterForm({
 
       return () => clearTimeout(timer);
     }
+    return;
   }, [error, onErrorDismiss]);
 
   const validateForm = (): boolean => {

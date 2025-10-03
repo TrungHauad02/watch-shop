@@ -50,6 +50,7 @@ export default function ForgetPasswordForm({
 
       return () => clearTimeout(timer);
     }
+    return;
   }, [error, onErrorDismiss]);
 
   const validateForm = (): boolean => {

@@ -47,6 +47,7 @@ export default function LoginForm({
 
       return () => clearTimeout(timer);
     }
+    return;
   }, [error, onErrorDismiss]);
 
   const validateForm = (): boolean => {

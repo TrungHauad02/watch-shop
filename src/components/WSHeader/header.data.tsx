@@ -117,10 +117,8 @@ export const getNavigationItems = (
  * Get user menu actions based on features
  */
 export const getUserMenuActions = () => {
-  return userMenuActions.filter((action) => {
-    // Add any conditional logic here if needed
-    return true;
-  });
+  // In a real application, you might want to filter actions based on user roles or permissions
+  return true;
 };
 
 export default {

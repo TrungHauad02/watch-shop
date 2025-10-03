@@ -177,7 +177,7 @@ export const getModalVariantStyles = (
 };
 
 // CUSTOMIZE: Bạn có thể chỉnh sửa backdrop styles tại đây
-export const getBackdropStyles = (theme: Theme) => ({
+export const getBackdropStyles = (_theme: Theme) => ({
   backgroundColor: `${COLORS.primary}85`,
   backdropFilter: 'blur(8px)',
   animation: `${modalAnimations.fadeIn} 0.2s ease-out`,

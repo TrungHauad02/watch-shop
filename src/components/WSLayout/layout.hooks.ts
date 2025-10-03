@@ -211,6 +211,7 @@ export const useScrollRestoration = (enabled: boolean = true) => {
     } else {
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
+    return;
   }, [location.pathname, scrollPositions, enabled]);
 
   const scrollToTop = useCallback(() => {
