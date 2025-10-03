@@ -288,13 +288,6 @@ class AuthService {
     // Could store this in localStorage for persistence
     localStorage.setItem('mockErrorSimulation', enabled.toString());
   }
-
-  /**
-   * Check if error simulation is enabled
-   */
-  private isErrorSimulationEnabled(): boolean {
-    return localStorage.getItem('mockErrorSimulation') === 'true';
-  }
 }
 
 export const authService = new AuthService();

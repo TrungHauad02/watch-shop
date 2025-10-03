@@ -40,6 +40,7 @@ export default function WSLoading({
     } else {
       setShouldShow(true);
     }
+    return;
   }, [visible, delay]);
 
   if (!shouldShow || !visible) {

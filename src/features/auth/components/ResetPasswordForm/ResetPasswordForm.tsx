@@ -42,6 +42,7 @@ export default function ResetPasswordForm({
 
       return () => clearTimeout(timer);
     }
+    return;
   }, [error, onErrorDismiss]);
 
   // CUSTOMIZE: Bạn có thể chỉnh sửa validation rules tại đây
