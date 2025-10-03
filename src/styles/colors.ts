@@ -238,6 +238,20 @@ export const ALPHA_COLORS = {
   whiteAlpha60: 'rgba(255, 255, 255, 0.6)',
   whiteAlpha75: 'rgba(255, 255, 255, 0.75)',
   whiteAlpha90: 'rgba(255, 255, 255, 0.9)',
+
+  // Black with alpha for overlays
+  blackAlpha05: 'rgba(0, 0, 0, 0.05)',
+  blackAlpha08: 'rgba(0, 0, 0, 0.08)',
+  blackAlpha10: 'rgba(0, 0, 0, 0.1)',
+  blackAlpha12: 'rgba(0, 0, 0, 0.12)',
+  blackAlpha15: 'rgba(0, 0, 0, 0.15)',
+  blackAlpha20: 'rgba(0, 0, 0, 0.2)',
+  blackAlpha30: 'rgba(0, 0, 0, 0.3)',
+  blackAlpha40: 'rgba(0, 0, 0, 0.4)',
+  blackAlpha50: 'rgba(0, 0, 0, 0.5)',
+  blackAlpha60: 'rgba(0, 0, 0, 0.6)',
+  blackAlpha75: 'rgba(0, 0, 0, 0.75)',
+  blackAlpha90: 'rgba(0, 0, 0, 0.9)',
 } as const;
 
 // ==================== COLOR UTILITIES ====================
